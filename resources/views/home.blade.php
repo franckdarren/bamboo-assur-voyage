@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>BambooAssur-voyage</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -911,32 +911,9 @@
         <div class="relative min-h-screen flex selection:bg-[#FF2D20] selection:text-white">
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl mx-auto">
                 <div class="flex items-center">
-                    <header class="gap-2 pt-1 lg:grid-cols-3">
+                    <header class="gap-2 pt-3 lg:grid-cols-3">
                         <img src="/logo.png" alt="logo" class="h-[50px]">
                     </header>
-
-                    @if (Route::has('login'))
-                        <nav class="flex flex-1 justify-end">
-                            @auth
-                                {{-- <a href="{{ url('/dashboard') }}"
-                                    class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                                    Dashboard
-                                </a> --}}
-                            @else
-                                <a href="{{ route('login') }}"
-                                    class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                                    Se connecter
-                                </a>
-
-                                @if (Route::has('register'))
-                                    <a href="{{ route('register') }}"
-                                        class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                                        Créer un compte
-                                    </a>
-                                @endif
-                            @endauth
-                        </nav>
-                    @endif
                 </div>
 
                 <main class="flex justify-center">

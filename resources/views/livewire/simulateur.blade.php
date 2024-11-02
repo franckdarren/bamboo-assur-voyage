@@ -1,4 +1,4 @@
-<div class="mt-10 max-w-2xl mx-auto p-8 bg-white shadow-lg rounded-lg border border-gray-200">
+<div class="mt-2 max-w-2xl mx-auto p-8 bg-white shadow-lg rounded-lg border border-gray-200">
     <h2 class="text-2xl font-semibold text-gray-800 text-center mb-6">Simulation de Cotation</h2>
     <form wire:submit.prevent="submit" class="space-y-6">
         <!-- Destination -->
@@ -19,7 +19,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
                 <label for="voyageurs" class="block text-sm font-medium text-gray-700">Nombre de voyageur(s)</label>
-                <input type="number" min="1" wire:model.live="voyageurs" id="voyageurs"
+                <input type="number" min="1" wire:model.lazy="voyageurs" id="voyageurs"
                     class="mt-2 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                     required />
                 @error('voyageurs')
