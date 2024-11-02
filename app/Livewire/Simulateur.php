@@ -15,8 +15,21 @@ class Simulateur extends Component
     public $montant = 0;
     public $nombreJoursStocke = 0;
 
+    public function updatedVoyageurs($value)
+    {
+        // Vérifiez si la date de retour est définie avant de calculer
+        if ($this->retour) {
+            $this->calculateDays();
+        }
+    }
 
-
+    public function updatedDestination($value)
+    {
+        // Vérifiez si la date de retour est définie avant de calculer
+        if ($this->retour) {
+            $this->calculateDays();
+        }
+    }
 
     public function updatedDepart($value)
     {
