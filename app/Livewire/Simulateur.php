@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class Simulateur extends Component
 {
     public $destination = "";
-    public $voyageurs = 0;
+    public $voyageurs = 1;
     public $depart;
     public $retour;
     public $nombreJours = 0;
