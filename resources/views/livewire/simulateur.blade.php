@@ -6,9 +6,128 @@
             <label for="destination" class="block text-sm font-medium text-gray-700">Destination</label>
             <select wire:model.live="destination" id="destination"
                 class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                <option>Choisir une destination</option>
-                <option value="afrique-schengen">Afrique - Schengen</option>
-                <option value="monde">Monde entier</option>
+                <option>Sélectionnez une destination</option>
+                <option value="monde">Afghanistan</option>
+                <option value="afrique-shengen">Afrique du Sud</option>
+                <option value="monde">Albanie</option>
+                <option value="afrique-shengen">Algérie</option>
+                <option value="afrique-shengen">Allemagne</option>
+                <option value="afrique-shengen">Angola</option>
+                <option value="monde">Arabie Saoudite</option>
+                <option value="monde">Argentine</option>
+                <option value="monde">Arménie</option>
+                <option value="monde">Australie</option>
+                <option value="afrique-shengen">Autriche</option>
+                <option value="monde">Azerbaïdjan</option>
+                <option value="monde">Bangladesh</option>
+                <option value="afrique-shengen">Belgique</option>
+                <option value="afrique-shengen">Bénin</option>
+                <option value="monde">Biélorussie</option>
+                <option value="afrique-shengen">Botswana</option>
+                <option value="monde">Brésil</option>
+                <option value="afrique-shengen">Burkina Faso</option>
+                <option value="afrique-shengen">Burundi</option>
+                <option value="afrique-shengen">Cameroun</option>
+                <option value="monde">Canada</option>
+                <option value="afrique-shengen">Cap-Vert</option>
+                <option value="monde">Chili</option>
+                <option value="monde">Chine</option>
+                <option value="monde">Colombie</option>
+                <option value="monde">Corée du Sud</option>
+                <option value="monde">Costa Rica</option>
+                <option value="afrique-shengen">République centrafricaine</option>
+                <option value="afrique-shengen">Tchad</option>
+                <option value="afrique-shengen">Comores</option>
+                <option value="afrique-shengen">Congo</option>
+                <option value="afrique-shengen">République Démocratique du Congo</option>
+                <option value="afrique-shengen">Côte d'Ivoire</option>
+                <option value="afrique-shengen">Djibouti</option>
+                <option value="afrique-shengen">Danemark</option>
+                <option value="afrique-shengen">Égypte</option>
+                <option value="monde">Émirats Arabes Unis</option>
+                <option value="afrique-shengen">Érythrée</option>
+                <option value="afrique-shengen">Espagne</option>
+                <option value="afrique-shengen">Estonie</option>
+                <option value="afrique-shengen">Eswatini</option>
+                <option value="monde">États-Unis</option>
+                <option value="afrique-shengen">Éthiopie</option>
+                <option value="afrique-shengen">Finlande</option>
+                <option value="afrique-shengen">France</option>
+                <option value="afrique-shengen">Gabon</option>
+                <option value="afrique-shengen">Gambie</option>
+                <option value="monde">Géorgie</option>
+                <option value="afrique-shengen">Ghana</option>
+                <option value="afrique-shengen">Grèce</option>
+                <option value="afrique-shengen">Guinée</option>
+                <option value="afrique-shengen">Guinée-Bissau</option>
+                <option value="afrique-shengen">Guinée équatoriale</option>
+                <option value="afrique-shengen">Hongrie</option>
+                <option value="monde">Inde</option>
+                <option value="monde">Indonésie</option>
+                <option value="monde">Iran</option>
+                <option value="monde">Irak</option>
+                <option value="afrique-shengen">Islande</option>
+                <option value="monde">Israël</option>
+                <option value="afrique-shengen">Italie</option>
+                <option value="monde">Japon</option>
+                <option value="monde">Jordanie</option>
+                <option value="monde">Kazakhstan</option>
+                <option value="monde">Kirghizistan</option>
+                <option value="afrique-shengen">Kenya</option>
+                <option value="monde">Liban</option>
+                <option value="afrique-shengen">Lesotho</option>
+                <option value="afrique-shengen">Lettonie</option>
+                <option value="afrique-shengen">Lituanie</option>
+                <option value="afrique-shengen">Luxembourg</option>
+                <option value="afrique-shengen">Madagascar</option>
+                <option value="afrique-shengen">Malawi</option>
+                <option value="monde">Malaisie</option>
+                <option value="afrique-shengen">Mali</option>
+                <option value="afrique-shengen">Malte</option>
+                <option value="afrique-shengen">Maroc</option>
+                <option value="afrique-shengen">Maurice</option>
+                <option value="afrique-shengen">Mauritanie</option>
+                <option value="monde">Mexique</option>
+                <option value="monde">Mongolie</option>
+                <option value="afrique-shengen">Mozambique</option>
+                <option value="afrique-shengen">Namibie</option>
+                <option value="afrique-shengen">Niger</option>
+                <option value="afrique-shengen">Nigéria</option>
+                <option value="afrique-shengen">Norvège</option>
+                <option value="monde">Nouvelle-Zélande</option>
+                <option value="afrique-shengen">Ouganda</option>
+                <option value="monde">Pakistan</option>
+                <option value="afrique-shengen">Pays-Bas</option>
+                <option value="monde">Pérou</option>
+                <option value="monde">Philippines</option>
+                <option value="afrique-shengen">Portugal</option>
+                <option value="monde">Qatar</option>
+                <option value="monde">Russie</option>
+                <option value="afrique-shengen">Rwanda</option>
+                <option value="afrique-shengen">Sénégal</option>
+                <option value="monde">Serbie</option>
+                <option value="afrique-shengen">Seychelles</option>
+                <option value="afrique-shengen">Sierra Leone</option>
+                <option value="monde">Singapour</option>
+                <option value="afrique-shengen">Slovaquie</option>
+                <option value="afrique-shengen">Slovénie</option>
+                <option value="afrique-shengen">Somalie</option>
+                <option value="afrique-shengen">Soudan</option>
+                <option value="monde">Sri Lanka</option>
+                <option value="afrique-shengen">Suède</option>
+                <option value="afrique-shengen">Suisse</option>
+                <option value="afrique-shengen">Tanzanie</option>
+                <option value="monde">Thaïlande</option>
+                <option value="afrique-shengen">Togo</option>
+                <option value="afrique-shengen">Tunisie</option>
+                <option value="monde">Turquie</option>
+                <option value="monde">Ukraine</option>
+                <option value="monde">Uruguay</option>
+                <option value="monde">Venezuela</option>
+                <option value="monde">Vietnam</option>
+                <option value="afrique-shengen">Zambie</option>
+                <option value="afrique-shengen">Zimbabwe</option>
+
             </select>
             @error('destination')
                 <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -60,7 +179,7 @@
             <div>
                 <label for="montant" class="block text-sm font-medium text-gray-700">Tarif d'assurances</label>
                 <div class="mt-2 p-3 bg-gray-100 rounded-md text-gray-700">
-                    <span>{{ $montant }} FCFA</span>
+                    <span>{{ number_format($montant, 0, ',', ' ') }} FCFA</span>
                 </div>
             </div>
         </div>

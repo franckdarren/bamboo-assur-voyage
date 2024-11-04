@@ -62,7 +62,7 @@ class Simulateur extends Component
 
                 // Définir les tarifs basés sur la destination et le nombre de jours
                 switch ($this->destination) {
-                    case 'afrique-schengen':
+                    case 'afrique-shengen':
                         // Déterminer le tarif en fonction du nombre de jours
                         if ($this->nombreJours > 0 && $this->nombreJours <= 7) {
                             // Tarif pour les jours entre 1 et 7
