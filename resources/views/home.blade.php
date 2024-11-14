@@ -912,7 +912,9 @@
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl mx-auto">
                 <div class="flex items-center">
                     <header class="gap-2 pt-3 lg:grid-cols-3">
-                        <img src="/logo.png" alt="logo" class="h-[50px]">
+                        <a href="http:/">
+                            <img src="/logo.png" alt="logo" class="h-[50px]">
+                        </a>
                     </header>
                 </div>
 
