@@ -2,18 +2,58 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use Carbon\Carbon;
+use Livewire\Component;
+use App\Models\Cotation;
+use App\Models\Souscription;
+use Livewire\WithValidation;
 
 class Simulateur extends Component
 {
+
+    public $cotationId;
     public $destination = "";
-    public $voyageurs = 1;
+    public $voyageurs = 0;
     public $depart;
     public $retour;
     public $nombreJours = 0;
     public $montant = 0;
     public $nombreJoursStocke = 0;
+
+    public $currentStep = 1;
+
+    public $nom_prenom_souscripteur;
+    public $adresse_souscripteur;
+    public $phone_souscripteur;
+    public $email_souscripteur;
+    public $nom_prenom_assure;
+    public $date_naissance_assure;
+    public $adresse_assure;
+    public $phone_assure;
+    public $email_assure;
+    public $passeport_assure;
+
+    public $id;
+
+
+    public $liste_voyageurs = [];
+
+    // Validation des champs
+    protected $rules = [
+        'liste_voyageurs.*.nom_prenom_assure' => 'required|string|max:255',
+        'liste_voyageurs.*.date_naissance_assure' => 'required|date',
+        'liste_voyageurs.*.adresse_assure' => 'required|string|max:255',
+        'liste_voyageurs.*.phone_assure' => 'required|string|max:20',
+        'liste_voyageurs.*.email_assure' => 'required|email',
+        'liste_voyageurs.*.passport_assure' => 'required|string|max:255',
+
+        // Validation des informations du souscripteur
+        'nom_prenom_souscripteur' => 'required|string|max:255',
+        'adresse_souscripteur' => 'required|string|max:255',
+        'phone_souscripteur' => 'required|string|max:20',
+        'email_souscripteur' => 'required|email',
+    ];
+
 
     public function updatedVoyageurs($value)
     {
@@ -21,6 +61,16 @@ class Simulateur extends Component
         if ($this->retour) {
             $this->calculateDays();
         }
+
+        // Mettre à jour la liste des voyageurs en fonction du nombre de voyageurs
+        $this->liste_voyageurs = array_fill(0, $value, [
+            'nom_prenom_assure' => '',
+            'date_naissance_assure' => '',
+            'adresse_assure' => '',
+            'phone_assure' => '',
+            'email_assure' => '',
+            'passeport_assure' => '',
+        ]);
     }
 
     public function updatedDestination($value)
@@ -138,15 +188,7 @@ class Simulateur extends Component
                         $this->montant = 0; // Tarif par défaut si la destination n'est pas reconnue
                         break;
                 }
-
-
-
-
-
                 // $this->montant = $this->nombreJours * $this->voyageurs; // Inclusif
-
-
-
             } else {
                 $this->nombreJours = 0; // Dates invalides
             }
@@ -156,12 +198,88 @@ class Simulateur extends Component
     public function resetForm()
     {
         $this->reset(); // Réinitialise toutes les propriétés publiques à leurs valeurs par défaut
+        $this->currentStep = 1;
     }
 
+    public function nextStep()
+    {
+        $this->validateStep();
+        $this->currentStep++;
+    }
+
+    public function previousStep()
+    {
+        $this->currentStep--;
+    }
+
+    private function validateStep()
+    {
+        if ($this->currentStep == 1) {
+            $this->validate([
+                'destination' => 'required',
+                'voyageurs' => 'required|numeric|min:1',
+                'depart' => 'required|date',
+                'retour' => 'required|date',
+            ]);
+        } elseif ($this->currentStep == 2) {
+            $this->validate([
+                'nom_prenom_souscripteur' => 'required|string',
+                'adresse_souscripteur' => 'required|string',
+                'phone_souscripteur' => 'required|string',
+            ]);
+        }
+    }
+
+    // Fonction pour créer une souscription
     public function createSouscription()
     {
-        // Logique pour créer la souscription
+
+        // Créer une nouvelle cotation
+        $cotation = Cotation::create([
+            'destination' => $this->destination,  // Assurez-vous que vous passez ces données dans le formulaire
+            'voyageurs' => $this->voyageurs,
+            'depart' => $this->depart,
+            'retour' => $this->retour,
+            'nombre_jours' => $this->nombreJours,
+            'montant' => $this->montant,
+        ]);
+
+        // Créer les souscriptions pour chaque voyageur
+        foreach ($this->liste_voyageurs as $voyageur) {
+            Souscription::create([
+                'cotation_id' => $cotation->id,  // Lier la souscription à la cotation
+                'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                'adresse_assure' => $voyageur['adresse_assure'],
+                'phone_assure' => $voyageur['phone_assure'],
+                'email_assure' => $voyageur['email_assure'],
+                'passeport_assure' => $voyageur['passeport_assure'],
+
+                // Informations du souscripteur
+                'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                'adresse_souscripteur' => $this->adresse_souscripteur,
+                'phone_souscripteur' => $this->phone_souscripteur,
+                'email_souscripteur' => $this->email_souscripteur,
+            ]);
+        }
+
+        // Message de succès
+        session()->flash('message', 'Souscription(s) créées avec succès.');
+
+        // Réinitialiser les données des voyageurs (optionnel)
+        $this->liste_voyageurs = [];
+        // Réinitialiser les données des voyageurs et du souscripteur (optionnel)
+        $this->nom_prenom_souscripteur = '';
+        $this->adresse_souscripteur = '';
+        $this->phone_souscripteur = '';
+        $this->email_souscripteur = '';
+        $this->destination = '';  // Réinitialiser destination et autres champs de cotation
+        $this->voyageurs = 1;
+        $this->depart = null;
+        $this->retour = null;
+        $this->montant = null;
     }
+
 
     public function render()
     {

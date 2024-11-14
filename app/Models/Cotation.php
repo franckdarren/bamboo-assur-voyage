@@ -17,4 +17,9 @@ class Cotation extends Model
         'nombre_jours',
         'montant',
     ];
+
+    public function souscriptions()
+    {
+        return $this->hasMany(Souscription::class);
+    }
 }
