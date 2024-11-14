@@ -8,6 +8,8 @@ use Livewire\Component;
 use App\Models\Cotation;
 use App\Models\Souscription;
 use Livewire\WithValidation;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ConfirmationSouscription;
 
 class Simulateur extends Component
 {
@@ -275,12 +277,14 @@ class Simulateur extends Component
         ]);
 
         // Créer un rendez-vous lié à la souscription
-        Rdv::create([
+        $rdv = Rdv::create([
             'souscription_id' => $souscription->id,
             'date_rdv' => $this->date_rdv,
             'agence' => $this->agence,
             'heure_rdv' => $this->heure_rdv,
         ]);
+
+        Mail::to($souscription->email_assure)->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
 
         // Message de succès
         session()->flash('message', 'Souscription(s) créées avec succès. Verifier la boite mail du souscripteur.');
@@ -301,6 +305,7 @@ class Simulateur extends Component
         $this->heure_rdv = null;
         $this->agence = '';
     }
+
 
 
     public function render()
