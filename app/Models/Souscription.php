@@ -17,7 +17,8 @@ class Souscription extends Model
         'phone_assure',
         'email_assure',
         'passeport_assure',
-        'cotation_id'
+        'cotation_id',
+        'statut'
 
     ];
 

@@ -23,10 +23,9 @@ return new class extends Migration
             $table->string('phone_assure');
             $table->string('email_assure');
             $table->string('passeport_assure');
+            $table->string('statut')->default('En attente de paiement');
 
             $table->foreignId('cotation_id')->constrained()->onDelete('cascade');
-
-
 
             $table->timestamps();
         });
