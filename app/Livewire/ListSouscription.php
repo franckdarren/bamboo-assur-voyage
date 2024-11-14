@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Filament\Tables\Table;
+use App\Models\Souscription;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
@@ -13,7 +15,6 @@ use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ImportAction;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Exports\BonPeseeExporter;
-use App\Models\Souscription;
 use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Actions\Exports\Enums\ExportFormat;
@@ -37,6 +38,7 @@ class ListSouscription extends Component implements HasForms, HasTable
 
                 TextColumn::make('date_naissance_assure')
                     ->label('Date de naissance')
+                    ->date('d-m-Y')
                     ->searchable(),
 
                 TextColumn::make('adresse_assure')
@@ -55,16 +57,60 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->label('Passeport')
                     ->searchable(),
 
+                TextColumn::make('cotation.depart')
+                    ->label('Départ')
+                    ->searchable(),
+
+                TextColumn::make('cotation.retour')
+                    ->label('Retour')
+                    ->searchable(),
+
+                TextColumn::make('cotation.nombre_jours')
+                    ->label('Durée')
+                    ->formatStateUsing(fn($state) => $state . ' jours')
+                    ->searchable(),
+
+                TextColumn::make('montant_par_voyageur')
+                    ->label('Montant par Voyageur')
+                    ->formatStateUsing(fn($record) => $record->montant_par_voyageur)
+                    ->searchable(),
+
+                TextColumn::make('cotation.voyageurs')
+                    ->label('Voyageurs')
+                    ->searchable(),
+
                 TextColumn::make('statut')
+                    ->badge()
+                    ->sortable()
+                    ->color(fn(?string $state): string => match ($state) {
+                        'En attente de paiement' => 'warning',
+                        'Payée' => 'success',
+                    }),
+
+                TextColumn::make('nom_prenom_souscripteur')
+                    ->label('Souscripteur')
+                    ->searchable(),
+
+                TextColumn::make('phone_souscripteur')
+                    ->label('Telephone souscripteur')
                     ->searchable(),
 
                 TextColumn::make('created_at')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->dateTime('d-m-Y à H\hi')
+                    ->dateTimeTooltip()
+                    ->label("Date création"),
             ])
             ->filters([])
             ->actions([
-                // ...
+                Action::make('marquerPayee')
+                    ->label('Marquer comme payée')
+                    ->action(fn(Souscription $record) => $record->update(['statut' => 'Payée']))
+                    ->requiresConfirmation()
+                    ->color('success')
+                    ->icon('heroicon-o-check-circle')
+                    ->visible(fn(Souscription $record) => $record->statut !== 'Payée'),
             ])
             ->bulkActions([]);
     }

@@ -22,6 +22,16 @@ class Souscription extends Model
 
     ];
 
+    public function getMontantParVoyageurAttribute()
+    {
+        // Vérifier si la cotation est présente et que le nombre de voyageurs est supérieur à zéro
+        if ($this->cotation && $this->cotation->voyageurs > 0) {
+            return number_format($this->cotation->montant / $this->cotation->voyageurs, 0) . ' FCFA';
+        }
+
+        return 'N/A'; // Si la cotation n'est pas définie ou si le nombre de voyageurs est zéro
+    }
+
     public function cotation()
     {
         return $this->belongsTo(Cotation::class);

@@ -17,6 +17,7 @@
 
     <!-- Styles -->
     @livewireStyles
+    @filamentStyles
 </head>
 
 <body class="font-sans antialiased">
@@ -43,6 +44,8 @@
     @stack('modals')
 
     @livewireScripts
+    @filamentScripts
+    @vite('resources/js/app.js')
 
 </body>
 
