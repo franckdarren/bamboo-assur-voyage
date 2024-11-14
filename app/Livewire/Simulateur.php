@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Carbon\Carbon;
+use App\Models\Rdv;
 use Livewire\Component;
 use App\Models\Cotation;
 use App\Models\Souscription;
@@ -33,7 +34,11 @@ class Simulateur extends Component
     public $email_assure;
     public $passeport_assure;
 
-    public $id;
+    public $date_rdv;
+    public $heure_rdv;
+    public $agence;
+    public $souscription_id;
+
 
 
     public $liste_voyageurs = [];
@@ -246,7 +251,7 @@ class Simulateur extends Component
 
         // Créer les souscriptions pour chaque voyageur
         foreach ($this->liste_voyageurs as $voyageur) {
-            Souscription::create([
+            $souscription = Souscription::create([
                 'cotation_id' => $cotation->id,  // Lier la souscription à la cotation
                 'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
                 'date_naissance_assure' => $voyageur['date_naissance_assure'],
@@ -263,8 +268,22 @@ class Simulateur extends Component
             ]);
         }
 
+        // Validation des données
+        $this->validate([
+            'date_rdv' => 'required|date',
+            'heure_rdv' => 'required|date_format:H:i',
+        ]);
+
+        // Créer un rendez-vous lié à la souscription
+        Rdv::create([
+            'souscription_id' => $souscription->id,
+            'date_rdv' => $this->date_rdv,
+            'agence' => $this->agence,
+            'heure_rdv' => $this->heure_rdv,
+        ]);
+
         // Message de succès
-        session()->flash('message', 'Souscription(s) créées avec succès.');
+        session()->flash('message', 'Souscription(s) créées avec succès. Verifier la boite mail du souscripteur.');
 
         // Réinitialiser les données des voyageurs (optionnel)
         $this->liste_voyageurs = [];
@@ -278,6 +297,9 @@ class Simulateur extends Component
         $this->depart = null;
         $this->retour = null;
         $this->montant = null;
+        $this->date_rdv = null;
+        $this->heure_rdv = null;
+        $this->agence = '';
     }
 
 

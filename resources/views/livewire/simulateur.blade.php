@@ -4,6 +4,8 @@
             Simulation de Cotation - Étape 1
         @elseif ($currentStep == 2)
             Souscription
+        @elseif ($currentStep == 3)
+            Prendre un Rendez-vous
         @endif
     </h2>
     <!-- Afficher un message de succès -->
@@ -384,6 +386,77 @@
                         </div>
                     @endforeach
                 </div>
+
+
+                <!-- Bouton de soumission -->
+                <div class="flex justify-center mt-6 gap-2">
+                    <button type="button" wire:click="previousStep"
+                        class="px-5 py-3 bg-gray-300 text-gray-700 font-bold rounded-md">
+                        Précédent
+                    </button>
+                    <button type="button" wire:click="nextStep"
+                        class="px-5 py-3 bg-blue-600 text-white font-bold rounded-md">
+                        Suivant
+                    </button>
+                </div>
+            </div>
+        @endif
+
+        <!-- Étape 3: Prise de rendez-vous -->
+        @if ($currentStep == 3)
+            <div>
+                <!-- Informations de prise de rendez-vous -->
+                <div class="p-6 bg-white rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Informations du rendez-vous</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <!-- Agence -->
+                        <div class="mb-4">
+                            <label for="agence" class="block text-sm font-medium text-gray-700">Sélectionnez
+                                l'agence</label>
+                            <select wire:model.live="agence" id="agence"
+                                class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                required>
+                                <option value="">Choisir une agence</option>
+                                <option value="agence_1">Agence 1</option>
+                                <option value="agence_2">Agence 2</option>
+                                <option value="agence_3">Agence 3</option>
+                                <!-- Ajoutez ici les autres agences -->
+                            </select>
+                            @error('agence')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Date du rendez-vous -->
+                        <div class="mb-4">
+                            <label for="date_rdv" class="block text-sm font-medium text-gray-700">Sélectionnez
+                                la date</label>
+                            <input type="date" wire:model.live="date_rdv" id="date_rdv"
+                                class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                required />
+                            @error('date_rdv')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Heure du rendez-vous -->
+                        <div class="mb-4">
+                            <label for="heure_rdv" class="block text-sm font-medium text-gray-700">Sélectionnez
+                                l'heure</label>
+                            <input type="time" wire:model.live="heure_rdv" id="heure_rdv"
+                                class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                required min="08:00" max="16:00" />
+                            <p class="text-xs text-gray-500 mt-1">L'agence est ouverte de 8h à 16h.</p>
+                            @error('heure_rdv')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                    </div>
+                </div>
+
 
 
                 <!-- Bouton de soumission -->

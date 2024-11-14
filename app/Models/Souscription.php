@@ -25,4 +25,10 @@ class Souscription extends Model
     {
         return $this->belongsTo(Cotation::class);
     }
+
+    // Relation avec les rendez-vous
+    public function rendezvous()
+    {
+        return $this->hasMany(Rdv::class);
+    }
 }
