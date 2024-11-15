@@ -45,23 +45,6 @@ class Simulateur extends Component
 
     public $liste_voyageurs = [];
 
-    // Validation des champs
-    protected $rules = [
-        'liste_voyageurs.*.nom_prenom_assure' => 'required|string|max:255',
-        'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-        'liste_voyageurs.*.adresse_assure' => 'required|string|max:255',
-        'liste_voyageurs.*.phone_assure' => 'required|string|max:20',
-        'liste_voyageurs.*.email_assure' => 'required|email',
-        'liste_voyageurs.*.passport_assure' => 'required|string|max:255',
-
-        // Validation des informations du souscripteur
-        'nom_prenom_souscripteur' => 'required|string|max:255',
-        'adresse_souscripteur' => 'required|string|max:255',
-        'phone_souscripteur' => 'required|string|max:20',
-        'email_souscripteur' => 'required|email',
-    ];
-
-
     public function updatedVoyageurs($value)
     {
         // Vérifiez si la date de retour est définie avant de calculer

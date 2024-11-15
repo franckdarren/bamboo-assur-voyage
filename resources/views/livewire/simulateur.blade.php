@@ -1,5 +1,5 @@
 <div class="mt-2 max-w-2xl mx-auto p-8 bg-white shadow-lg rounded-lg border border-gray-200">
-    <h2 class="text-2xl font-semibold text-gray-800 text-center mb-6">
+    <h2 class="text-2xl font-semibold text-black text-center mb-6">
         @if ($currentStep == 1)
             Simulation de Cotation - Étape 1
         @elseif ($currentStep == 2)
@@ -18,7 +18,7 @@
         @if ($currentStep == 1)
             <!-- Destination -->
             <div>
-                <label for="destination" class="block text-sm font-medium text-gray-700">Destination</label>
+                <label for="destination" class="block text-sm font-medium text-black">Destination</label>
                 <select wire:model.live="destination" id="destination"
                     class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     <option>Sélectionnez une destination</option>
@@ -152,36 +152,18 @@
             <!-- Nombre de voyageurs et dates -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                    <label for="voyageurs" class="block text-sm font-medium text-gray-700">Nombre de
+                    <label for="voyageurs" class="block text-sm font-medium text-black">Nombre de
                         voyageur(s)</label>
                     <input type="number" min="1" wire:model.lazy="voyageurs" id="voyageurs"
                         class="mt-2 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required />
                     @error('voyageurs')
-                        <div>
-                            <label for="voyageurs" class="block text-sm font-medium text-gray-700">Nombre de
-                                voyageur(s)</label>
-                            <div>
-                                <label for="voyageurs" class="block text-sm font-medium text-gray-700">Nombre de
-                                    voyageur(s)</label>
-                                <input type="number" min="1" wire:model.lazy="voyageurs" id="voyageurs"
-                                    class="mt-2 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                                    required />
-                                @error('voyageurs')
-                                    <span class="text-red-600 text-xs">{{ $message }}</span>
-                                @enderror
-                            </div> <input type="number" min="1" wire:model.lazy="voyageurs" id="voyageurs"
-                                class="mt-2 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                                required />
-                            @error('voyageurs')
-                                <span class="text-red-600 text-xs">{{ $message }}</span>
-                            @enderror
-                        </div> <span class="text-red-600 text-xs">{{ $message }}</span>
+                        <span class="text-red-600 text-xs">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div>
-                    <label for="depart" class="block text-sm font-medium text-gray-700">Date départ</label>
+                    <label for="depart" class="block text-sm font-medium text-black">Date départ</label>
                     <input type="date" wire:model.live="depart" id="depart"
                         class="mt-2 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required />
@@ -191,7 +173,7 @@
                 </div>
 
                 <div>
-                    <label for="retour" class="block text-sm font-medium text-gray-700">Date retour</label>
+                    <label for="retour" class="block text-sm font-medium text-black">Date retour</label>
                     <input type="date" wire:model.live="retour" id="retour"
                         class="mt-2 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required />
@@ -204,22 +186,22 @@
             <!-- Durée et tarif -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Durée du voyage</label>
-                    <div class="mt-2 p-3 bg-gray-100 rounded-md text-gray-700">
+                    <label class="block text-sm font-medium text-black">Durée du voyage</label>
+                    <div class="mt-2 p-3 bg-gray-100 rounded-md text-black">
                         <span>{{ $nombreJours }} jours</span>
                     </div>
                 </div>
 
                 <div>
-                    <label for="montant" class="block text-sm font-medium text-gray-700">Tarif d'assurances</label>
-                    <div class="mt-2 p-3 bg-gray-100 rounded-md text-gray-700">
+                    <label for="montant" class="block text-sm font-medium text-black">Tarif d'assurances</label>
+                    <div class="mt-2 p-3 bg-gray-100 rounded-md text-black">
                         <span>{{ number_format($montant, 0, ',', ' ') }} FCFA</span>
                     </div>
                 </div>
             </div>
             <div class="flex justify-end gap-2">
                 <button type="button" wire:click="resetForm"
-                    class="ml-4 inline-flex items-center px-5 py-3 bg-gray-300 text-gray-700 font-bold text-sm uppercase tracking-widest rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition duration-150 ease-in-out">
+                    class="ml-4 inline-flex items-center px-5 py-3 bg-gray-300 text-black font-bold text-sm uppercase tracking-widest rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition duration-150 ease-in-out">
                     Réinitialiser
                 </button>
                 <button type="button" wire:click="nextStep"
@@ -235,13 +217,13 @@
             <div>
                 <!-- Informations du souscripteur -->
                 <div class="p-6 bg-white rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Informations du souscripteur</h3>
+                    <h3 class="text-lg font-semibold text-black mb-4">Informations du souscripteur</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Nom et prénom -->
                         <div class="mb-4">
-                            <label for="nom_prenom_souscripteur"
-                                class="block text-sm font-medium text-gray-700">Nom(s) et prénom(s)</label>
+                            <label for="nom_prenom_souscripteur" class="block text-sm font-medium text-black">Nom(s)
+                                et prénom(s)</label>
                             <input type="text" wire:model.live="nom_prenom_souscripteur"
                                 id="nom_prenom_souscripteur"
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
@@ -254,7 +236,7 @@
                         <!-- Adresse -->
                         <div class="mb-4">
                             <label for="adresse_souscripteur"
-                                class="block text-sm font-medium text-gray-700">Adresse</label>
+                                class="block text-sm font-medium text-black">Adresse</label>
                             <input type="text" wire:model.live="adresse_souscripteur" id="adresse_souscripteur"
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                 required />
@@ -266,7 +248,7 @@
                         <!-- Téléphone -->
                         <div class="mb-4">
                             <label for="phone_souscripteur"
-                                class="block text-sm font-medium text-gray-700">Téléphone</label>
+                                class="block text-sm font-medium text-black">Téléphone</label>
                             <input type="text" wire:model.live="phone_souscripteur" id="phone_souscripteur"
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                 required />
@@ -277,8 +259,7 @@
 
                         <!-- Email -->
                         <div class="mb-4">
-                            <label for="email_souscripteur"
-                                class="block text-sm font-medium text-gray-700">Email</label>
+                            <label for="email_souscripteur" class="block text-sm font-medium text-black">Email</label>
                             <input type="email" wire:model.live="email_souscripteur" id="email_souscripteur"
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                 required />
@@ -293,14 +274,14 @@
                     <!-- Étape 2 : Informations de l'assuré -->
                     @foreach ($liste_voyageurs as $index => $voyageur)
                         <div class="p-6 bg-white rounded-lg shadow-md mt-6">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Informations de l'assuré
+                            <h3 class="text-lg font-semibold text-black mb-4">Informations de l'assuré
                                 #{{ $index + 1 }}</h3>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <!-- Nom et prénom -->
                                 <div class="mb-4">
                                     <label for="nom_prenom_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-gray-700">Nom(s)
+                                        class="block text-sm font-medium text-black">Nom(s)
                                         et prénom(s)</label>
                                     <input type="text"
                                         wire:model="liste_voyageurs.{{ $index }}.nom_prenom_assure"
@@ -315,7 +296,7 @@
                                 <!-- Date de naissance -->
                                 <div class="mb-4">
                                     <label for="date_naissance_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-gray-700">Date de
+                                        class="block text-sm font-medium text-black">Date de
                                         naissance</label>
                                     <input type="date"
                                         wire:model="liste_voyageurs.{{ $index }}.date_naissance_assure"
@@ -330,7 +311,7 @@
                                 <!-- Adresse -->
                                 <div class="mb-4">
                                     <label for="adresse_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-gray-700">Adresse</label>
+                                        class="block text-sm font-medium text-black">Adresse</label>
                                     <input type="text"
                                         wire:model="liste_voyageurs.{{ $index }}.adresse_assure"
                                         id="adresse_assure_{{ $index }}"
@@ -344,7 +325,7 @@
                                 <!-- Téléphone -->
                                 <div class="mb-4">
                                     <label for="phone_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-gray-700">Téléphone</label>
+                                        class="block text-sm font-medium text-black">Téléphone</label>
                                     <input type="text"
                                         wire:model="liste_voyageurs.{{ $index }}.phone_assure"
                                         id="phone_assure_{{ $index }}"
@@ -358,7 +339,7 @@
                                 <!-- Passeport -->
                                 <div class="mb-4">
                                     <label for="passeport_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-gray-700">Numéro de Passeport</label>
+                                        class="block text-sm font-medium text-black">Numéro de Passeport</label>
                                     <input type="text"
                                         wire:model="liste_voyageurs.{{ $index }}.passeport_assure"
                                         id="passeport_assure_{{ $index }}"
@@ -372,7 +353,7 @@
                                 <!-- Email -->
                                 <div class="mb-4">
                                     <label for="email_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-gray-700">Email</label>
+                                        class="block text-sm font-medium text-black">Email</label>
                                     <input type="email"
                                         wire:model="liste_voyageurs.{{ $index }}.email_assure"
                                         id="email_assure_{{ $index }}"
@@ -391,7 +372,7 @@
                 <!-- Bouton de soumission -->
                 <div class="flex justify-center mt-6 gap-2">
                     <button type="button" wire:click="previousStep"
-                        class="px-5 py-3 bg-gray-300 text-gray-700 font-bold rounded-md">
+                        class="px-5 py-3 bg-gray-300 text-black font-bold rounded-md">
                         Précédent
                     </button>
                     <button type="button" wire:click="nextStep"
@@ -407,13 +388,13 @@
             <div>
                 <!-- Informations de prise de rendez-vous -->
                 <div class="p-6 bg-white rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Informations du rendez-vous</h3>
+                    <h3 class="text-lg font-semibold text-black mb-4">Informations du rendez-vous</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                         <!-- Agence -->
                         <div class="mb-4">
-                            <label for="agence" class="block text-sm font-medium text-gray-700">Sélectionnez
+                            <label for="agence" class="block text-sm font-medium text-black">Sélectionnez
                                 l'agence</label>
                             <select wire:model.live="agence" id="agence"
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
@@ -431,7 +412,7 @@
 
                         <!-- Date du rendez-vous -->
                         <div class="mb-4">
-                            <label for="date_rdv" class="block text-sm font-medium text-gray-700">Sélectionnez
+                            <label for="date_rdv" class="block text-sm font-medium text-black">Sélectionnez
                                 la date</label>
                             <input type="date" wire:model.live="date_rdv" id="date_rdv"
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
@@ -443,7 +424,7 @@
 
                         <!-- Heure du rendez-vous -->
                         <div class="mb-4">
-                            <label for="heure_rdv" class="block text-sm font-medium text-gray-700">Sélectionnez
+                            <label for="heure_rdv" class="block text-sm font-medium text-black">Sélectionnez
                                 l'heure</label>
                             <input type="time" wire:model.live="heure_rdv" id="heure_rdv"
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
@@ -462,7 +443,7 @@
                 <!-- Bouton de soumission -->
                 <div class="flex justify-center mt-6 gap-2">
                     <button type="button" wire:click="previousStep"
-                        class="px-5 py-3 bg-gray-300 text-gray-700 font-bold rounded-md">
+                        class="px-5 py-3 bg-gray-300 text-black font-bold rounded-md">
                         Précédent
                     </button>
                     <button type="submit"

@@ -28,7 +28,7 @@ class ListSouscription extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Souscription::query())
+            ->query(Souscription::query()->orderBy('created_at', 'desc'))
             // ->paginated(false)
             ->columns([
                 TextColumn::make('nom_prenom_assure')
@@ -72,8 +72,7 @@ class ListSouscription extends Component implements HasForms, HasTable
 
                 TextColumn::make('montant_par_voyageur')
                     ->label('Montant par Voyageur')
-                    ->formatStateUsing(fn($record) => $record->montant_par_voyageur)
-                    ->searchable(),
+                    ->formatStateUsing(fn($record) => $record->montant_par_voyageur),
 
                 TextColumn::make('cotation.voyageurs')
                     ->label('Voyageurs')
@@ -93,6 +92,18 @@ class ListSouscription extends Component implements HasForms, HasTable
 
                 TextColumn::make('phone_souscripteur')
                     ->label('Telephone souscripteur')
+                    ->searchable(),
+
+                TextColumn::make('rendezvous.date_rdv')
+                    ->label('Date RDV')
+                    ->searchable(),
+
+                TextColumn::make('rendezvous.heure_rdv')
+                    ->label('Heure RDV')
+                    ->searchable(),
+
+                TextColumn::make('rendezvous.agence')
+                    ->label('Agence')
                     ->searchable(),
 
                 TextColumn::make('created_at')
