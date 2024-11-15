@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('email_assure');
             $table->string('passeport_assure');
             $table->string('statut')->default('En attente de paiement');
+            $table->string('mode_paiement')->default('En agence');
+
 
             $table->foreignId('cotation_id')->constrained()->onDelete('cascade');
 

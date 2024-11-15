@@ -912,18 +912,18 @@
         <div class="relative min-h-screen flex selection:bg-[#FF2D20] selection:text-white">
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl mx-auto">
                 <div class="">
-                    <header class="gap-2 pt-3 flex justify-between items-center">
+                    <header class="gap-2 pt-3 md:pt-6 flex justify-between items-center">
                         <a href="http:/">
-                            <img src="/logo.png" alt="logo" class="h-[50px]">
+                            <img src="/logo.png" alt="logo" class="h-[40px]">
                         </a>
                         <a href="{{ route('login') }}"
                             class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                            Se connecter
+                            Connexion
                         </a>
                     </header>
                 </div>
 
-                <main class="flex justify-center">
+                <main class="flex justify-center mb-5">
                     <livewire:simulateur />
                 </main>
 
