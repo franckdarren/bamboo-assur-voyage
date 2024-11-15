@@ -389,8 +389,9 @@
                     </button>
 
                     <!-- Bouton Payer en Agence -->
-                    <button
-                        class="px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
+                    <button type="button"
+                        class="px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
+                        wire:click="createSouscriptionWithPaiement">
                         Payer en Ligne
                     </button>
                 </div>

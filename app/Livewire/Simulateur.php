@@ -35,6 +35,9 @@ class Simulateur extends Component
     public $phone_assure;
     public $email_assure;
     public $passeport_assure;
+    public $statut;
+    public $mode_paiement;
+
 
     public $date_rdv;
     public $heure_rdv;
@@ -266,6 +269,64 @@ class Simulateur extends Component
             'agence' => $this->agence,
             'heure_rdv' => $this->heure_rdv,
         ]);
+
+        Mail::to($souscription->email_assure)->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
+
+        // Message de succès
+        session()->flash('message', 'Souscription(s) créées avec succès. Verifier la boite mail du souscripteur.');
+
+        // Réinitialiser les données des voyageurs (optionnel)
+        $this->liste_voyageurs = [];
+        // Réinitialiser les données des voyageurs et du souscripteur (optionnel)
+        $this->nom_prenom_souscripteur = '';
+        $this->adresse_souscripteur = '';
+        $this->phone_souscripteur = '';
+        $this->email_souscripteur = '';
+        $this->destination = '';  // Réinitialiser destination et autres champs de cotation
+        $this->voyageurs = 1;
+        $this->depart = null;
+        $this->retour = null;
+        $this->montant = null;
+        $this->date_rdv = null;
+        $this->heure_rdv = null;
+        $this->agence = '';
+    }
+
+    public function createSouscriptionWithPaiement()
+    {
+
+        // Créer une nouvelle cotation
+        $cotation = Cotation::create([
+            'destination' => $this->destination,  // Assurez-vous que vous passez ces données dans le formulaire
+            'voyageurs' => $this->voyageurs,
+            'depart' => $this->depart,
+            'retour' => $this->retour,
+            'nombre_jours' => $this->nombreJours,
+            'montant' => $this->montant,
+        ]);
+
+        // Créer les souscriptions pour chaque voyageur
+        foreach ($this->liste_voyageurs as $voyageur) {
+            $souscription = Souscription::create([
+                'cotation_id' => $cotation->id,  // Lier la souscription à la cotation
+                'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                'adresse_assure' => $voyageur['adresse_assure'],
+                'phone_assure' => $voyageur['phone_assure'],
+                'email_assure' => $voyageur['email_assure'],
+                'passeport_assure' => $voyageur['passeport_assure'],
+
+                // Informations du souscripteur
+                'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                'adresse_souscripteur' => $this->adresse_souscripteur,
+                'phone_souscripteur' => $this->phone_souscripteur,
+                'email_souscripteur' => $this->email_souscripteur,
+
+                'statut' => 'En cours de traitement',
+                'mode_paiement' => 'En ligne',
+
+            ]);
+        }
 
         Mail::to($souscription->email_assure)->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
 

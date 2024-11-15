@@ -83,6 +83,7 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->sortable()
                     ->color(fn(?string $state): string => match ($state) {
                         'En attente de paiement' => 'warning',
+                        'En cours de traitement' => 'gray',
                         'Payée' => 'success',
                     }),
 
