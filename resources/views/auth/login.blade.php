@@ -34,7 +34,7 @@
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex items-center justify-end mt-4 gap-2">
                 @if (Route::has('password.request'))
                     <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         href="{{ route('password.request') }}">
@@ -42,9 +42,14 @@
                     </a>
                 @endif
 
-                <x-button class="ms-4 bg-[#4996d1]">
+                {{-- <x-button class="ms-4 bg-[#4996d1]">
                     {{ __('Log in') }}
-                </x-button>
+                </x-button> --}}
+                <button type="submit"
+                    class="px-6 py-2 bg-[#4996d1] text-white font-semibold text-sm rounded-lg shadow-md
+           hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all">
+                    Se connecter
+                </button>
             </div>
         </form>
     </x-authentication-card>

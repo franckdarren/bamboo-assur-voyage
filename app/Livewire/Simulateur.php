@@ -48,6 +48,78 @@ class Simulateur extends Component
 
     public $liste_voyageurs = [];
 
+    protected $tarifs = [
+        'afrique-shengen' => [
+            'pays' => ['Afrique du Sud',  'Algérie', 'Allemagne', 'Angola', 'Autriche', 'Belgique', 'Bénin', 'Burkina Faso', 'Burundi', 'Cameroun', 'Cap-Vert', 'République Centrafricaine', 'Tchad', 'Comores', 'Congo', 'République Démocratique du Congo', "Côte d'Ivoire", 'Djibouti', 'Danemark', 'Égypte', 'Érythrée', 'Espagne', 'Estonie', 'Eswatini', 'Éthiopie', 'Finlande', 'France', 'Gabon', 'Gambie', 'Ghana', 'Grèce', 'Guinée', 'Guinée-Bissau', 'Guinée Equatoriale', 'Hongrie', 'Islande', 'Italie', 'Kenya', 'Lesotho', 'Lettonie', 'Lituanie', 'Luxembourg', 'Madagascar',  'Malawi', 'Mali', 'Malte', 'Maroc', 'Maurice', 'Mauritanie', 'Mozambique', 'Namibie', 'Niger', 'Nigéria', 'Norvège', 'Ouganda', 'Pays-Bas', 'Portugal', 'Rwanda', 'Sénégal', 'Seychelles', 'Sierra Leone', 'Slovaquie', 'Slovénie', 'Somalie', 'Soudan', 'Suède', 'Suisse', 'Tanzanie', 'Togo', 'Tunisie', 'Zambie', 'Zimbabwe' ], // Ajoutez les pays concernés
+            'tarifs' => [
+                [1, 7, 13000],
+                [8, 10, 16000],
+                [11, 15, 20000],
+                [16, 21, 25000],
+                [22, 30, 28000],
+                [31, 45, 37000],
+                [46, 60, 40000],
+                [61, 91, 65000],
+                [92, 180, 75000],
+                [181, 365, 85000],
+            ],
+        ],
+        'monde' => [
+            'pays' => ['Afghanistan', 'Albanie', 'Arabie Saoudite', 'Argentine', 'Arménie', 'Australie', 'Albanie', 'Azerbaïdjan', 'Bangladesh', 'Biélorussie', 'Brésil', 'Canada', 'Chili', 'Chine', 'Colombie', 'Corée du Sud', 'Costa Rica', 'Émirats Arabes Unis', 'États-Unis', 'Géorgie', 'Inde', 'Indonésie', 'Iran', 'Irak', 'Israël', 'Japon','Jordanie', 'Kazakhstan', 'Kirghizistan', 'Liban', 'Malaisie', 'Mexique', 'Mongolie', 'Nouvelle-Zélande', 'Pakistan', 'Pérou', 'Philippines', 'Qatar', 'Russie', 'Serbie', 'Singapour', 'Sri Lanka', 'Thaïlande', 'Turquie', 'Ukraine', 'Uruguay', 'Venezuela', 'Vietnam' ], // Ajoutez les pays concernés
+            'tarifs' => [
+                [1, 7, 15000],
+                [8, 10, 18000],
+                [11, 15, 24000],
+                [16, 21, 30000],
+                [22, 30, 39000],
+                [31, 45, 45000],
+                [46, 60, 53000],
+                [61, 91, 85000],
+                [92, 180, 105000],
+                [181, 365, 120000],
+            ],
+        ],
+    ];
+
+    protected function getCategorieByDestination($destination)
+    {
+        foreach ($this->tarifs as $categorie => $details) {
+            if (in_array($destination, $details['pays'])) {
+                return $categorie;
+            }
+        }
+        return null; // Retournez null si la destination n'est pas trouvée
+    }
+
+    public function calculMontant()
+    {
+        $categorie = $this->getCategorieByDestination($this->destination);
+        if (!$categorie) {
+            $this->montant = 0; // Si la destination n'est pas reconnue
+            return;
+        }
+
+        $tarifs = $this->tarifs[$categorie]['tarifs'];
+
+        foreach ($tarifs as [$min, $max, $prix]) {
+            if ($this->nombreJours >= $min && $this->nombreJours <= $max) {
+                $this->montant = $this->voyageurs * $prix;
+                return;
+            }
+        }
+
+        $this->montant = 0; // Si aucun tarif ne correspond
+    }
+
+    public function updated($propertyName)
+    {
+        if (in_array($propertyName, ['destination', 'nombreJours', 'voyageurs'])) {
+            $this->calculMontant();
+        }
+    }
+
+
+
     public function updatedVoyageurs($value)
     {
         // Vérifiez si la date de retour est définie avant de calculer
@@ -103,90 +175,29 @@ class Simulateur extends Component
                 // Calculer la différence de jours et ajouter 1
                 $this->nombreJours = $departDate->diffInDays($retourDate) + 1; // Inclusif
 
-                // Définir les tarifs basés sur la destination et le nombre de jours
-                switch ($this->destination) {
-                    case 'afrique-shengen':
-                        // Déterminer le tarif en fonction du nombre de jours
-                        if ($this->nombreJours > 0 && $this->nombreJours <= 7) {
-                            // Tarif pour les jours entre 1 et 7
-                            $this->montant = $this->voyageurs * 13000;
-                        } elseif ($this->nombreJours > 7 && $this->nombreJours <= 10) {
-                            // Tarif pour les jours entre 7 et 10
-                            $this->montant = $this->voyageurs * 16000;
-                        } elseif ($this->nombreJours > 10 && $this->nombreJours <= 15) {
-                            // Tarif pour les jours entre 10 et 15
-                            $this->montant = $this->voyageurs * 20000;
-                        } elseif ($this->nombreJours > 15 && $this->nombreJours <= 21) {
-                            // Tarif pour les jours entre 15 et 21
-                            $this->montant = $this->voyageurs * 25000;
-                        } elseif ($this->nombreJours > 21 && $this->nombreJours <= 30) {
-                            // Tarif pour les jours entre 21 et 30
-                            $this->montant = $this->voyageurs * 28000;
-                        } elseif ($this->nombreJours > 30 && $this->nombreJours <= 45) {
-                            // Tarif pour les jours entre 30 et 45
-                            $this->montant = $this->voyageurs * 37000;
-                        } elseif ($this->nombreJours > 45 && $this->nombreJours <= 60) {
-                            // Tarif pour les jours entre 45 et 60
-                            $this->montant = $this->voyageurs * 40000;
-                        } elseif ($this->nombreJours > 60 && $this->nombreJours <= 91) {
-                            // Tarif pour les jours entre 60 et 91
-                            $this->montant = $this->voyageurs * 65000;
-                        } elseif ($this->nombreJours > 91 && $this->nombreJours <= 180) {
-                            // Tarif pour les jours entre 91 et 180
-                            $this->montant = $this->voyageurs * 75000;
-                        } elseif ($this->nombreJours > 180 && $this->nombreJours <= 365) {
-                            // Tarif pour les jours entre 180 et 365
-                            $this->montant = $this->voyageurs * 85000;
-                        } else {
-                        }
-                        break; // Sortir du switch une fois que le cas est traité
+                // Identifier la catégorie basée sur la destination
+                $categorie = $this->getCategorieByDestination($this->destination);
 
-                    case 'monde':
-                        // Déterminer le tarif en fonction du nombre de jours
-                        if ($this->nombreJours > 0 && $this->nombreJours <= 7) {
-                            // Tarif pour les jours entre 1 et 7
-                            $this->montant = $this->voyageurs * 15000;
-                        } elseif ($this->nombreJours > 7 && $this->nombreJours <= 10) {
-                            // Tarif pour les jours entre 7 et 10
-                            $this->montant = $this->voyageurs * 18000;
-                        } elseif ($this->nombreJours > 10 && $this->nombreJours <= 15) {
-                            // Tarif pour les jours entre 10 et 15
-                            $this->montant = $this->voyageurs * 24000;
-                        } elseif ($this->nombreJours > 15 && $this->nombreJours <= 21) {
-                            // Tarif pour les jours entre 15 et 21
-                            $this->montant = $this->voyageurs * 30000;
-                        } elseif ($this->nombreJours > 21 && $this->nombreJours <= 30) {
-                            // Tarif pour les jours entre 21 et 30
-                            $this->montant = $this->voyageurs * 39000;
-                        } elseif ($this->nombreJours > 30 && $this->nombreJours <= 45) {
-                            // Tarif pour les jours entre 30 et 45
-                            $this->montant = $this->voyageurs * 45000;
-                        } elseif ($this->nombreJours > 45 && $this->nombreJours <= 60) {
-                            // Tarif pour les jours entre 45 et 60
-                            $this->montant = $this->voyageurs * 53000;
-                        } elseif ($this->nombreJours > 60 && $this->nombreJours <= 91) {
-                            // Tarif pour les jours entre 60 et 91
-                            $this->montant = $this->voyageurs * 85000;
-                        } elseif ($this->nombreJours > 91 && $this->nombreJours <= 180) {
-                            // Tarif pour les jours entre 91 et 180
-                            $this->montant = $this->voyageurs * 105000;
-                        } elseif ($this->nombreJours > 180 && $this->nombreJours <= 365) {
-                            // Tarif pour les jours entre 180 et 365
-                            $this->montant = $this->voyageurs * 120000;
-                        } else {
+                if ($categorie) {
+                    // Appliquer les tarifs correspondants
+                    $tarifs = $this->tarifs[$categorie]['tarifs'];
+                    foreach ($tarifs as [$min, $max, $prix]) {
+                        if ($this->nombreJours >= $min && $this->nombreJours <= $max) {
+                            $this->montant = $this->voyageurs * $prix;
+                            return;
                         }
-                        break;
-
-                    default:
-                        $this->montant = 0; // Tarif par défaut si la destination n'est pas reconnue
-                        break;
+                    }
+                    // Si aucun tarif ne correspond, mettre à 0
+                    $this->montant = 0;
+                } else {
+                    $this->montant = 0; // Destination non reconnue
                 }
-                // $this->montant = $this->nombreJours * $this->voyageurs; // Inclusif
             } else {
                 $this->nombreJours = 0; // Dates invalides
             }
         }
     }
+
 
     public function resetForm()
     {

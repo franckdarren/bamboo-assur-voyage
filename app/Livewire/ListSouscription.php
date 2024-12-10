@@ -71,7 +71,7 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->searchable(),
 
                 TextColumn::make('montant_par_voyageur')
-                    ->label('Montant par Voyageur')
+                    ->label('Montant')
                     ->formatStateUsing(fn($record) => $record->montant_par_voyageur),
 
                 TextColumn::make('cotation.voyageurs')
@@ -114,7 +114,15 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->dateTimeTooltip()
                     ->label("Date création"),
             ])
-            ->filters([])
+            ->filters([
+                \Filament\Tables\Filters\SelectFilter::make('statut')
+                ->label('Statut')
+                ->options([
+                    'En attente de paiement' => 'En attente de paiement',
+                    'En cours de traitement' => 'En cours de traitement',
+                    'Payée' => 'Payée',
+                ]),
+            ])
             ->actions([
                 Action::make('marquerPayee')
                     ->label('Marquer comme payée')

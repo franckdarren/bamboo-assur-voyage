@@ -24,126 +24,126 @@
                 <select wire:model.live="destination" id="destination"
                     class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     <option>Sélectionnez une destination</option>
-                    <option value="monde">Afghanistan</option>
-                    <option value="afrique-shengen">Afrique du Sud</option>
-                    <option value="monde">Albanie</option>
-                    <option value="afrique-shengen">Algérie</option>
-                    <option value="afrique-shengen">Allemagne</option>
-                    <option value="afrique-shengen">Angola</option>
-                    <option value="monde">Arabie Saoudite</option>
-                    <option value="monde">Argentine</option>
-                    <option value="monde">Arménie</option>
-                    <option value="monde">Australie</option>
-                    <option value="afrique-shengen">Autriche</option>
-                    <option value="monde">Azerbaïdjan</option>
-                    <option value="monde">Bangladesh</option>
-                    <option value="afrique-shengen">Belgique</option>
-                    <option value="afrique-shengen">Bénin</option>
-                    <option value="monde">Biélorussie</option>
-                    <option value="afrique-shengen">Botswana</option>
-                    <option value="monde">Brésil</option>
-                    <option value="afrique-shengen">Burkina Faso</option>
-                    <option value="afrique-shengen">Burundi</option>
-                    <option value="afrique-shengen">Cameroun</option>
-                    <option value="monde">Canada</option>
-                    <option value="afrique-shengen">Cap-Vert</option>
-                    <option value="monde">Chili</option>
-                    <option value="monde">Chine</option>
-                    <option value="monde">Colombie</option>
-                    <option value="monde">Corée du Sud</option>
-                    <option value="monde">Costa Rica</option>
-                    <option value="afrique-shengen">République centrafricaine</option>
-                    <option value="afrique-shengen">Tchad</option>
-                    <option value="afrique-shengen">Comores</option>
-                    <option value="afrique-shengen">Congo</option>
-                    <option value="afrique-shengen">République Démocratique du Congo</option>
-                    <option value="afrique-shengen">Côte d'Ivoire</option>
-                    <option value="afrique-shengen">Djibouti</option>
-                    <option value="afrique-shengen">Danemark</option>
-                    <option value="afrique-shengen">Égypte</option>
-                    <option value="monde">Émirats Arabes Unis</option>
-                    <option value="afrique-shengen">Érythrée</option>
-                    <option value="afrique-shengen">Espagne</option>
-                    <option value="afrique-shengen">Estonie</option>
-                    <option value="afrique-shengen">Eswatini</option>
-                    <option value="monde">États-Unis</option>
-                    <option value="afrique-shengen">Éthiopie</option>
-                    <option value="afrique-shengen">Finlande</option>
-                    <option value="afrique-shengen">France</option>
-                    <option value="afrique-shengen">Gabon</option>
-                    <option value="afrique-shengen">Gambie</option>
-                    <option value="monde">Géorgie</option>
-                    <option value="afrique-shengen">Ghana</option>
-                    <option value="afrique-shengen">Grèce</option>
-                    <option value="afrique-shengen">Guinée</option>
-                    <option value="afrique-shengen">Guinée-Bissau</option>
-                    <option value="afrique-shengen">Guinée équatoriale</option>
-                    <option value="afrique-shengen">Hongrie</option>
-                    <option value="monde">Inde</option>
-                    <option value="monde">Indonésie</option>
-                    <option value="monde">Iran</option>
-                    <option value="monde">Irak</option>
-                    <option value="afrique-shengen">Islande</option>
-                    <option value="monde">Israël</option>
-                    <option value="afrique-shengen">Italie</option>
-                    <option value="monde">Japon</option>
-                    <option value="monde">Jordanie</option>
-                    <option value="monde">Kazakhstan</option>
-                    <option value="monde">Kirghizistan</option>
-                    <option value="afrique-shengen">Kenya</option>
-                    <option value="monde">Liban</option>
-                    <option value="afrique-shengen">Lesotho</option>
-                    <option value="afrique-shengen">Lettonie</option>
-                    <option value="afrique-shengen">Lituanie</option>
-                    <option value="afrique-shengen">Luxembourg</option>
-                    <option value="afrique-shengen">Madagascar</option>
-                    <option value="afrique-shengen">Malawi</option>
-                    <option value="monde">Malaisie</option>
-                    <option value="afrique-shengen">Mali</option>
-                    <option value="afrique-shengen">Malte</option>
-                    <option value="afrique-shengen">Maroc</option>
-                    <option value="afrique-shengen">Maurice</option>
-                    <option value="afrique-shengen">Mauritanie</option>
-                    <option value="monde">Mexique</option>
-                    <option value="monde">Mongolie</option>
-                    <option value="afrique-shengen">Mozambique</option>
-                    <option value="afrique-shengen">Namibie</option>
-                    <option value="afrique-shengen">Niger</option>
-                    <option value="afrique-shengen">Nigéria</option>
-                    <option value="afrique-shengen">Norvège</option>
-                    <option value="monde">Nouvelle-Zélande</option>
-                    <option value="afrique-shengen">Ouganda</option>
-                    <option value="monde">Pakistan</option>
-                    <option value="afrique-shengen">Pays-Bas</option>
-                    <option value="monde">Pérou</option>
-                    <option value="monde">Philippines</option>
-                    <option value="afrique-shengen">Portugal</option>
-                    <option value="monde">Qatar</option>
-                    <option value="monde">Russie</option>
-                    <option value="afrique-shengen">Rwanda</option>
-                    <option value="afrique-shengen">Sénégal</option>
-                    <option value="monde">Serbie</option>
-                    <option value="afrique-shengen">Seychelles</option>
-                    <option value="afrique-shengen">Sierra Leone</option>
-                    <option value="monde">Singapour</option>
-                    <option value="afrique-shengen">Slovaquie</option>
-                    <option value="afrique-shengen">Slovénie</option>
-                    <option value="afrique-shengen">Somalie</option>
-                    <option value="afrique-shengen">Soudan</option>
-                    <option value="monde">Sri Lanka</option>
-                    <option value="afrique-shengen">Suède</option>
-                    <option value="afrique-shengen">Suisse</option>
-                    <option value="afrique-shengen">Tanzanie</option>
-                    <option value="monde">Thaïlande</option>
-                    <option value="afrique-shengen">Togo</option>
-                    <option value="afrique-shengen">Tunisie</option>
-                    <option value="monde">Turquie</option>
-                    <option value="monde">Ukraine</option>
-                    <option value="monde">Uruguay</option>
-                    <option value="monde">Venezuela</option>
-                    <option value="monde">Vietnam</option>
-                    <option value="afrique-shengen">Zambie</option>
-                    <option value="afrique-shengen">Zimbabwe</option>
+                    <option value="Afghanistan">Afghanistan</option>
+                    <option value="Afrique du Sud">Afrique du Sud</option>
+                    <option value="Albanie">Albanie</option>
+                    <option value="Algérie">Algérie</option>
+                    <option value="Allemagne">Allemagne</option>
+                    <option value="Angola">Angola</option>
+                    <option value="Arabie Saoudite">Arabie Saoudite</option>
+                    <option value="Argentine">Argentine</option>
+                    <option value="Arménie">Arménie</option>
+                    <option value="Australie">Australie</option>
+                    <option value="Autriche">Autriche</option>
+                    <option value="Azerbaïdjan">Azerbaïdjan</option>
+                    <option value="Bangladesh">Bangladesh</option>
+                    <option value="Belgique">Belgique</option>
+                    <option value="Bénin">Bénin</option>
+                    <option value="Biélorussie">Biélorussie</option>
+                    <option value="Botswana">Botswana</option>
+                    <option value="Brésil">Brésil</option>
+                    <option value="Burkina Faso">Burkina Faso</option>
+                    <option value="Burundi">Burundi</option>
+                    <option value="Cameroun">Cameroun</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Cap-Vert">Cap-Vert</option>
+                    <option value="Chili">Chili</option>
+                    <option value="Chine">Chine</option>
+                    <option value="Colombie">Colombie</option>
+                    <option value="Corée du Sud">Corée du Sud</option>
+                    <option value="Costa Rica">Costa Rica</option>
+                    <option value="République Centrafricaine">République Centrafricaine</option>
+                    <option value="Tchad">Tchad</option>
+                    <option value="Comores">Comores</option>
+                    <option value="Congo">Congo</option>
+                    <option value="République Démocratique du Congo">République Démocratique du Congo</option>
+                    <option value="Côte d'Ivoire">Côte d'Ivoire</option>
+                    <option value="Djibouti">Djibouti</option>
+                    <option value="Danemark">Danemark</option>
+                    <option value="Égypte">Égypte</option>
+                    <option value="Émirats Arabes Unis">Émirats Arabes Unis</option>
+                    <option value="Érythrée">Érythrée</option>
+                    <option value="Espagne">Espagne</option>
+                    <option value="Estonie">Estonie</option>
+                    <option value="Eswatini">Eswatini</option>
+                    <option value="États-Unis">États-Unis</option>
+                    <option value="Éthiopie">Éthiopie</option>
+                    <option value="Finlande">Finlande</option>
+                    <option value="France">France</option>
+                    <option value="Gabon">Gabon</option>
+                    <option value="Gambie">Gambie</option>
+                    <option value="Géorgie">Géorgie</option>
+                    <option value="Ghana">Ghana</option>
+                    <option value="Grèce">Grèce</option>
+                    <option value="Guinée">Guinée</option>
+                    <option value="Guinée-Bissau">Guinée-Bissau</option>
+                    <option value="Guinée Equatoriale">Guinée Equatoriale</option>
+                    <option value="Hongrie">Hongrie</option>
+                    <option value="Inde">Inde</option>
+                    <option value="Indonésie">Indonésie</option>
+                    <option value="Iran">Iran</option>
+                    <option value="Irak">Irak</option>
+                    <option value="Islande">Islande</option>
+                    <option value="Israël">Israël</option>
+                    <option value="Italie">Italie</option>
+                    <option value="Japon">Japon</option>
+                    <option value="Jordanie">Jordanie</option>
+                    <option value="Kazakhstan">Kazakhstan</option>
+                    <option value="Kirghizistan">Kirghizistan</option>
+                    <option value="Kenya">Kenya</option>
+                    <option value="Liban">Liban</option>
+                    <option value="Lesotho">Lesotho</option>
+                    <option value="Lettonie">Lettonie</option>
+                    <option value="Lituanie">Lituanie</option>
+                    <option value="Luxembourg">Luxembourg</option>
+                    <option value="Madagascar">Madagascar</option>
+                    <option value="Malawi">Malawi</option>
+                    <option value="Malaisie">Malaisie</option>
+                    <option value="Mali">Mali</option>
+                    <option value="Malte">Malte</option>
+                    <option value="Maroc">Maroc</option>
+                    <option value="Maurice">Maurice</option>
+                    <option value="Mauritanie">Mauritanie</option>
+                    <option value="Mexique">Mexique</option>
+                    <option value="Mongolie">Mongolie</option>
+                    <option value="Mozambique">Mozambique</option>
+                    <option value="Namibie">Namibie</option>
+                    <option value="Niger">Niger</option>
+                    <option value="Nigéria">Nigéria</option>
+                    <option value="Norvège">Norvège</option>
+                    <option value="Nouvelle-Zélande">Nouvelle-Zélande</option>
+                    <option value="Ouganda">Ouganda</option>
+                    <option value="Pakistan">Pakistan</option>
+                    <option value="Pays-Bas">Pays-Bas</option>
+                    <option value="Pérou">Pérou</option>
+                    <option value="Philippines">Philippines</option>
+                    <option value="Portugal">Portugal</option>
+                    <option value="Qatar">Qatar</option>
+                    <option value="Russie">Russie</option>
+                    <option value="Rwanda">Rwanda</option>
+                    <option value="Sénégal">Sénégal</option>
+                    <option value="Serbie">Serbie</option>
+                    <option value="Seychelles">Seychelles</option>
+                    <option value="Sierra Leone">Sierra Leone</option>
+                    <option value="Singapour">Singapour</option>
+                    <option value="Slovaquie">Slovaquie</option>
+                    <option value="Slovénie">Slovénie</option>
+                    <option value="Somalie">Somalie</option>
+                    <option value="Soudan">Soudan</option>
+                    <option value="Sri Lanka">Sri Lanka</option>
+                    <option value="Suède">Suède</option>
+                    <option value="Suisse">Suisse</option>
+                    <option value="Tanzanie">Tanzanie</option>
+                    <option value="Thaïlande">Thaïlande</option>
+                    <option value="Togo">Togo</option>
+                    <option value="Tunisie">Tunisie</option>
+                    <option value="Turquie">Turquie</option>
+                    <option value="Ukraine">Ukraine</option>
+                    <option value="Uruguay">Uruguay</option>
+                    <option value="Venezuela">Venezuela</option>
+                    <option value="Vietnam">Vietnam</option>
+                    <option value="Zambie">Zambie</option>
+                    <option value="Zimbabwe">Zimbabwe</option>
 
                 </select>
                 @error('destination')
@@ -207,7 +207,7 @@
                     Réinitialiser
                 </button>
                 <button type="button" wire:click="nextStep"
-                    class="px-5 py-3 bg-blue-600 text-white font-bold rounded-md hover:scale-105 active:scale-95">
+                    class="px-5 py-3 bg-[#4996d1] text-white font-bold rounded-md hover:scale-105 active:scale-95">
                     Suivant
                 </button>
 
@@ -217,61 +217,57 @@
         <!-- Étape 2: Nombre de voyageurs et dates -->
         @if ($currentStep == 2)
             <!-- Informations du souscripteur -->
-            <div class="p-6 bg-white rounded-lg shadow-md">
-                <h3 class="text-lg font-semibold text-black mb-4">Informations du souscripteur</h3>
+            <h3 class="text-lg font-semibold text-black mb-4">Informations du souscripteur</h3>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Nom et prénom -->
-                    <div class="col-span-1 md:col-span-2 mb-4">
-                        <label for="nom_prenom_souscripteur" class="block text-sm font-medium text-black">Nom(s)
-                            et prénom(s)</label>
-                        <input type="text" wire:model.live="nom_prenom_souscripteur" id="nom_prenom_souscripteur"
-                            class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                            required />
-                        @error('nom_prenom_souscripteur')
-                            <span class="text-red-500 text-xs">{{ $message }}</span>
-                        @enderror
-                    </div>
+            <!-- Nom et prénom -->
+            <div class="col-span-1 md:col-span-2 mb-4">
+                <label for="nom_prenom_souscripteur" class="block text-sm font-medium text-black">Nom(s)
+                    et prénom(s)</label>
+                <input type="text" wire:model.live="nom_prenom_souscripteur" id="nom_prenom_souscripteur"
+                    class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    required />
+                @error('nom_prenom_souscripteur')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
+            </div>
 
-                    <!-- Adresse -->
-                    <div class="mb-4">
-                        <label for="adresse_souscripteur" class="block text-sm font-medium text-black">Adresse</label>
-                        <input type="text" wire:model.live="adresse_souscripteur" id="adresse_souscripteur"
-                            class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                            required />
-                        @error('adresse_souscripteur')
-                            <span class="text-red-500 text-xs">{{ $message }}</span>
-                        @enderror
-                    </div>
+            <!-- Adresse -->
+            <div class="mb-4">
+                <label for="adresse_souscripteur" class="block text-sm font-medium text-black">Adresse</label>
+                <input type="text" wire:model.live="adresse_souscripteur" id="adresse_souscripteur"
+                    class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    required />
+                @error('adresse_souscripteur')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
+            </div>
 
-                    <!-- Téléphone -->
-                    <div class="mb-4">
-                        <label for="phone_souscripteur" class="block text-sm font-medium text-black">Téléphone</label>
-                        <input type="text" wire:model.live="phone_souscripteur" id="phone_souscripteur"
-                            class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                            required />
-                        @error('phone_souscripteur')
-                            <span class="text-red-500 text-xs">{{ $message }}</span>
-                        @enderror
-                    </div>
+            <!-- Téléphone -->
+            <div class="mb-4">
+                <label for="phone_souscripteur" class="block text-sm font-medium text-black">Téléphone</label>
+                <input type="text" wire:model.live="phone_souscripteur" id="phone_souscripteur"
+                    class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    required />
+                @error('phone_souscripteur')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
+            </div>
 
-                    <!-- Email -->
-                    <div class="col-span-1 md:col-span-2 mb-4">
-                        <label for="email_souscripteur" class="block text-sm font-medium text-black">Email</label>
-                        <input type="email" wire:model.live="email_souscripteur" id="email_souscripteur"
-                            class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                            required />
-                        @error('email_souscripteur')
-                            <span class="text-red-500 text-xs">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
+            <!-- Email -->
+            <div class="col-span-1 md:col-span-2 mb-4">
+                <label for="email_souscripteur" class="block text-sm font-medium text-black">Email</label>
+                <input type="email" wire:model.live="email_souscripteur" id="email_souscripteur"
+                    class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                    required />
+                @error('email_souscripteur')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
             </div>
 
             <div>
                 <!-- Étape 2 : Informations de l'assuré -->
                 @foreach ($liste_voyageurs as $index => $voyageur)
-                    <div class="p-6 bg-white rounded-lg shadow-md mt-6">
+                    <div class="mt-6">
                         <h3 class="text-lg font-semibold text-black mb-4">Informations de l'assuré
                             #{{ $index + 1 }}</h3>
 
@@ -369,7 +365,7 @@
                     Précédent
                 </button>
                 <button type="button" wire:click="nextStep"
-                    class="px-5 py-3 bg-blue-600 text-white font-bold rounded-md hover:scale-105 active:scale-95">
+                    class="px-5 py-3 bg-[#4996d1] text-white font-bold rounded-md hover:scale-105 active:scale-95">
                     Suivant
                 </button>
             </div>
@@ -378,12 +374,12 @@
         <!-- Étape 3: Prise de rendez-vous -->
         @if ($currentStep == 3)
             <!-- Informations de prise de rendez-vous -->
-            <div class="p-6 bg-white rounded-lg shadow-md">
+            <div class="">
                 {{-- <h3 class="text-lg font-semibold text-black mb-4">Informations du rendez-vous</h3> --}}
                 <div class="flex justify-center gap-4 mt-6">
                     <!-- Bouton Payer en ligne -->
                     <button type="button"
-                        class="px-6 py-3 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
+                        class="px-6 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
                         wire:click="nextStep">
                         Payer en Agence
                     </button>
@@ -405,7 +401,7 @@
                     Précédent
                 </button>
                 {{-- <button type="button" wire:click="nextStep"
-                    class="px-5 py-3 bg-blue-600 text-white font-bold rounded-md">
+                    class="px-5 py-3 bg-[#4996d1] text-white font-bold rounded-md">
                     Suivant
                 </button> --}}
             </div>
@@ -414,7 +410,7 @@
         <!-- Étape 4: Prise de rendez-vous -->
         @if ($currentStep == 4)
             <!-- Informations de prise de rendez-vous -->
-            <div class="p-6 bg-white rounded-lg shadow-md">
+            <div class="p-6 bg-white rounded-lg">
                 <h3 class="text-lg font-semibold text-black mb-4">Informations du rendez-vous</h3>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -472,7 +468,7 @@
                     Précédent
                 </button>
                 <button type="submit"
-                    class="inline-flex items-center px-5 py-3 bg-blue-600 text-white font-bold text-sm uppercase tracking-widest rounded-md shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out hover:scale-105 active:scale-95">
+                    class="inline-flex items-center px-5 py-3 bg-[#4996d1] text-white font-bold text-sm uppercase tracking-widest rounded-md shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out hover:scale-105 active:scale-95">
                     Souscrire
                 </button>
             </div>

@@ -47,7 +47,7 @@
                     <strong>{{ \Carbon\Carbon::parse($cotation->retour)->format('d F Y') }}</strong>
                 </p>
                 <p style="font-size: 14px; line-height: 1.6; margin: 0;">Montant :
-                    <strong>{{ $cotation->montant }} FCFA</strong>
+                    <strong>{{ number_format($cotation->montant, 0, ',', ' ') }} FCFA</strong>
                 </p>
             </td>
         </tr>
