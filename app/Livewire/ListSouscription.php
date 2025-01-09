@@ -7,6 +7,7 @@ use Filament\Tables\Table;
 use App\Models\Souscription;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
@@ -55,6 +56,10 @@ class ListSouscription extends Component implements HasForms, HasTable
 
                 TextColumn::make('passeport_assure')
                     ->label('Passeport')
+                    ->searchable(),
+
+                TextColumn::make('cotation.destination')
+                    ->label('Destination')
                     ->searchable(),
 
                 TextColumn::make('cotation.depart')
@@ -114,14 +119,19 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->dateTimeTooltip()
                     ->label("Date création"),
             ])
+            ->groups([
+                Group::make('nom_prenom_souscripteur')
+                    ->label('Souscripteur')
+                    ->collapsible(),
+            ])
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('statut')
-                ->label('Statut')
-                ->options([
-                    'En attente de paiement' => 'En attente de paiement',
-                    'En cours de traitement' => 'En cours de traitement',
-                    'Payée' => 'Payée',
-                ]),
+                    ->label('Statut')
+                    ->options([
+                        'En attente de paiement' => 'En attente de paiement',
+                        'En cours de traitement' => 'En cours de traitement',
+                        'Payée' => 'Payée',
+                    ]),
             ])
             ->actions([
                 Action::make('marquerPayee')

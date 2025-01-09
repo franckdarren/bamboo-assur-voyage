@@ -931,8 +931,25 @@
             </div>
         </div>
     </div>
+    <!-- Script JavaScript -->
+    <script>
+        let idleTime = 0;
+        const maxIdleTime = 120 * 60 * 1000; // 120 minutes
+
+        function resetIdleTime() {
+            idleTime = 0;
+        }
+
+        document.onmousemove = resetIdleTime;
+        document.onkeypress = resetIdleTime;
+
+        setInterval(() => {
+            idleTime += 1000;
+            if (idleTime >= maxIdleTime) {
+                alert('Votre session a expiré. Vous allez être redirigé.');
+                window.location.href = '/login';
+            }
+        }, 1000);
+    </script>
 </body>
-
-
-
 </html>

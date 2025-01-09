@@ -123,8 +123,6 @@ class Simulateur extends Component
         }
     }
 
-
-
     public function updatedVoyageurs($value)
     {
         // Vérifiez si la date de retour est définie avant de calculer
@@ -166,7 +164,6 @@ class Simulateur extends Component
         }
     }
 
-
     public function updatedRetour($value)
     {
         // Validation de la date de retour par rapport à la date de départ
@@ -179,6 +176,16 @@ class Simulateur extends Component
         // Vérifie si la date de départ est définie avant de calculer les jours
         if ($this->depart) {
             $this->calculateDays();
+        }
+    }
+
+    public function updatedDateRdv($value)
+    {
+        // Vérifie si la date de rendez-vous est définie avant la date de départ
+        if ($this->depart && strtotime($this->date_rdv) > strtotime($this->depart)) {
+            $this->addError('date_rdv', 'La date du rendez-vous doit être avant la date de départ.');
+        } else {
+            $this->resetErrorBag('date_rdv'); // Réinitialise l'erreur si la validation passe
         }
     }
 
@@ -286,21 +293,21 @@ class Simulateur extends Component
                 'phone_souscripteur' => $this->phone_souscripteur,
                 'email_souscripteur' => $this->email_souscripteur,
             ]);
+
+            // Validation des données
+            $this->validate([
+                'date_rdv' => 'required|date',
+                'heure_rdv' => 'required|date_format:H:i',
+            ]);
+
+            // Créer un rendez-vous lié à la souscription
+            $rdv = Rdv::create([
+                'souscription_id' => $souscription->id,
+                'date_rdv' => $this->date_rdv,
+                'agence' => $this->agence,
+                'heure_rdv' => $this->heure_rdv,
+            ]);
         }
-
-        // Validation des données
-        $this->validate([
-            'date_rdv' => 'required|date',
-            'heure_rdv' => 'required|date_format:H:i',
-        ]);
-
-        // Créer un rendez-vous lié à la souscription
-        $rdv = Rdv::create([
-            'souscription_id' => $souscription->id,
-            'date_rdv' => $this->date_rdv,
-            'agence' => $this->agence,
-            'heure_rdv' => $this->heure_rdv,
-        ]);
 
         Mail::to($souscription->email_assure)->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
 
