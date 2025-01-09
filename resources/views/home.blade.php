@@ -905,6 +905,7 @@
             }
         </style>
     @endif
+
 </head>
 
 <body class="font-sans antialiased dark:bg-black dark:text-white/50">
@@ -917,7 +918,7 @@
                             <img src="/logo.png" alt="logo" class="h-[40px]">
                         </a>
                         <a href="{{ route('login') }}"
-                            class="rounded-md px-3 py-2 text-white bg-[#4996d1] ring-1 ring-transparent transition hover:bg-blue-800">
+                            class="rounded-md px-3 py-2 text-white bg-[#4996d1] ring-1 ring-transparent transition hover:bg-blue-700">
                             Connexion
                         </a>
                     </header>

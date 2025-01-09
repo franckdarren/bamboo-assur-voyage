@@ -16,7 +16,7 @@ class Simulateur extends Component
 
     public $cotationId;
     public $destination = "";
-    public $voyageurs = 0;
+    public $voyageurs;
     public $depart;
     public $retour;
     public $nombreJours = 0;
@@ -50,7 +50,7 @@ class Simulateur extends Component
 
     protected $tarifs = [
         'afrique-shengen' => [
-            'pays' => ['Afrique du Sud',  'Algérie', 'Allemagne', 'Angola', 'Autriche', 'Belgique', 'Bénin', 'Burkina Faso', 'Burundi', 'Cameroun', 'Cap-Vert', 'République Centrafricaine', 'Tchad', 'Comores', 'Congo', 'République Démocratique du Congo', "Côte d'Ivoire", 'Djibouti', 'Danemark', 'Égypte', 'Érythrée', 'Espagne', 'Estonie', 'Eswatini', 'Éthiopie', 'Finlande', 'France', 'Gabon', 'Gambie', 'Ghana', 'Grèce', 'Guinée', 'Guinée-Bissau', 'Guinée Equatoriale', 'Hongrie', 'Islande', 'Italie', 'Kenya', 'Lesotho', 'Lettonie', 'Lituanie', 'Luxembourg', 'Madagascar',  'Malawi', 'Mali', 'Malte', 'Maroc', 'Maurice', 'Mauritanie', 'Mozambique', 'Namibie', 'Niger', 'Nigéria', 'Norvège', 'Ouganda', 'Pays-Bas', 'Portugal', 'Rwanda', 'Sénégal', 'Seychelles', 'Sierra Leone', 'Slovaquie', 'Slovénie', 'Somalie', 'Soudan', 'Suède', 'Suisse', 'Tanzanie', 'Togo', 'Tunisie', 'Zambie', 'Zimbabwe' ], // Ajoutez les pays concernés
+            'pays' => ['Afrique du Sud',  'Algérie', 'Allemagne', 'Angola', 'Autriche', 'Belgique', 'Bénin', 'Burkina Faso', 'Burundi', 'Cameroun', 'Cap-Vert', 'République Centrafricaine', 'Tchad', 'Comores', 'Congo', 'République Démocratique du Congo', "Côte d'Ivoire", 'Djibouti', 'Danemark', 'Égypte', 'Érythrée', 'Espagne', 'Estonie', 'Eswatini', 'Éthiopie', 'Finlande', 'France', 'Gabon', 'Gambie', 'Ghana', 'Grèce', 'Guinée', 'Guinée-Bissau', 'Guinée Equatoriale', 'Hongrie', 'Islande', 'Italie', 'Kenya', 'Lesotho', 'Lettonie', 'Lituanie', 'Luxembourg', 'Madagascar',  'Malawi', 'Mali', 'Malte', 'Maroc', 'Maurice', 'Mauritanie', 'Mozambique', 'Namibie', 'Niger', 'Nigéria', 'Norvège', 'Ouganda', 'Pays-Bas', 'Portugal', 'Rwanda', 'Sénégal', 'Seychelles', 'Sierra Leone', 'Slovaquie', 'Slovénie', 'Somalie', 'Soudan', 'Suède', 'Suisse', 'Tanzanie', 'Togo', 'Tunisie', 'Zambie', 'Zimbabwe'], // Ajoutez les pays concernés
             'tarifs' => [
                 [1, 7, 13000],
                 [8, 10, 16000],
@@ -65,7 +65,7 @@ class Simulateur extends Component
             ],
         ],
         'monde' => [
-            'pays' => ['Afghanistan', 'Albanie', 'Arabie Saoudite', 'Argentine', 'Arménie', 'Australie', 'Albanie', 'Azerbaïdjan', 'Bangladesh', 'Biélorussie', 'Brésil', 'Canada', 'Chili', 'Chine', 'Colombie', 'Corée du Sud', 'Costa Rica', 'Émirats Arabes Unis', 'États-Unis', 'Géorgie', 'Inde', 'Indonésie', 'Iran', 'Irak', 'Israël', 'Japon','Jordanie', 'Kazakhstan', 'Kirghizistan', 'Liban', 'Malaisie', 'Mexique', 'Mongolie', 'Nouvelle-Zélande', 'Pakistan', 'Pérou', 'Philippines', 'Qatar', 'Russie', 'Serbie', 'Singapour', 'Sri Lanka', 'Thaïlande', 'Turquie', 'Ukraine', 'Uruguay', 'Venezuela', 'Vietnam' ], // Ajoutez les pays concernés
+            'pays' => ['Afghanistan', 'Albanie', 'Arabie Saoudite', 'Argentine', 'Arménie', 'Australie', 'Albanie', 'Azerbaïdjan', 'Bangladesh', 'Biélorussie', 'Brésil', 'Canada', 'Chili', 'Chine', 'Colombie', 'Corée du Sud', 'Costa Rica', 'Émirats Arabes Unis', 'États-Unis', 'Géorgie', 'Inde', 'Indonésie', 'Iran', 'Irak', 'Israël', 'Japon', 'Jordanie', 'Kazakhstan', 'Kirghizistan', 'Liban', 'Malaisie', 'Mexique', 'Mongolie', 'Nouvelle-Zélande', 'Pakistan', 'Pérou', 'Philippines', 'Qatar', 'Russie', 'Serbie', 'Singapour', 'Sri Lanka', 'Thaïlande', 'Turquie', 'Ukraine', 'Uruguay', 'Venezuela', 'Vietnam'], // Ajoutez les pays concernés
             'tarifs' => [
                 [1, 7, 15000],
                 [8, 10, 18000],
@@ -79,6 +79,11 @@ class Simulateur extends Component
                 [181, 365, 120000],
             ],
         ],
+    ];
+
+    protected $rules = [
+        'depart' => 'required|date|after_or_equal:today',
+        'retour' => 'required|date|after:depart',
     ];
 
     protected function getCategorieByDestination($destination)
@@ -148,19 +153,35 @@ class Simulateur extends Component
 
     public function updatedDepart($value)
     {
+        // Validation de la date de départ pour qu'elle soit aujourd'hui ou après
+        if (strtotime($this->depart) < strtotime(today())) {
+            $this->addError('depart', 'La date de départ doit être aujourd\'hui ou une date ultérieure.');
+        } else {
+            $this->resetErrorBag('depart'); // Réinitialise l'erreur si la validation passe
+        }
+
         // Vérifiez si la date de retour est définie avant de calculer
         if ($this->retour) {
             $this->calculateDays();
         }
     }
 
+
     public function updatedRetour($value)
     {
-        // Vérifiez si la date de départ est définie avant de calculer
+        // Validation de la date de retour par rapport à la date de départ
+        if ($this->depart && strtotime($this->retour) <= strtotime($this->depart)) {
+            $this->addError('retour', 'La date de retour doit être supérieure à la date de départ.');
+        } else {
+            $this->resetErrorBag('retour'); // Réinitialise l'erreur si la validation passe
+        }
+
+        // Vérifie si la date de départ est définie avant de calculer les jours
         if ($this->depart) {
             $this->calculateDays();
         }
     }
+
 
     public function calculateDays()
     {
@@ -222,8 +243,8 @@ class Simulateur extends Component
             $this->validate([
                 'destination' => 'required',
                 'voyageurs' => 'required|numeric|min:1',
-                'depart' => 'required|date',
-                'retour' => 'required|date',
+                'depart' => 'required|date|after_or_equal:today',
+                'retour' => 'required|date|after:depart',
             ]);
         } elseif ($this->currentStep == 2) {
             $this->validate([
@@ -284,7 +305,7 @@ class Simulateur extends Component
         Mail::to($souscription->email_assure)->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
 
         // Message de succès
-        session()->flash('message', 'Souscription(s) créées avec succès. Verifier la boite mail du souscripteur.');
+        session()->flash('success', 'Souscription(s) créées avec succès. Verifier la boite mail du souscripteur.');
 
         // Réinitialiser les données des voyageurs (optionnel)
         $this->liste_voyageurs = [];
