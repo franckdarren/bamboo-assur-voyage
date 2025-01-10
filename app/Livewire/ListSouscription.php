@@ -100,6 +100,15 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->label('Telephone souscripteur')
                     ->searchable(),
 
+                TextColumn::make('mode_paiement')
+                    ->label('Mode paiement')
+                    ->badge()
+                    ->color(fn(?string $state): string => match ($state) {
+                        'En agence' => 'warning',
+                        'En ligne' => 'gray',
+                    })
+                    ->searchable(),
+
                 TextColumn::make('rendezvous.date_rdv')
                     ->label('Date RDV')
                     ->searchable(),
@@ -121,9 +130,10 @@ class ListSouscription extends Component implements HasForms, HasTable
             ])
             ->groups([
                 Group::make('nom_prenom_souscripteur')
-                    ->label('Souscripteur')
-                    ->collapsible(),
+                    ->label('Souscripteur'),
             ])
+
+            ->groupingDirectionSettingHidden()
             ->filters([
                 \Filament\Tables\Filters\SelectFilter::make('statut')
                     ->label('Statut')
