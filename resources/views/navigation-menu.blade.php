@@ -135,7 +135,23 @@
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
                             </form>
+
+                            <div class="border-t border-gray-200"></div>
+
+                            {{-- Dark mode et Light mode --}}
+                            <button
+                                @click="theme = 'light'; localStorage.setItem('theme', 'light'); window.dispatchEvent(new CustomEvent('theme-changed'))"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ">
+                                🌞 Thème Clair
+                            </button>
+
+                            <button
+                                @click="theme = 'dark'; localStorage.setItem('theme', 'dark'); window.dispatchEvent(new CustomEvent('theme-changed'))"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ">
+                                🌙 Thème Sombre
+                            </button>
                         </x-slot>
+
                     </x-dropdown>
                 </div>
             </div>
@@ -237,4 +253,28 @@
             </div>
         </div>
     </div>
+    <script>
+        // Check theme on page load
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        // Watch for theme changes
+        window.addEventListener('theme-changed', () => {
+            if (localStorage.theme === 'dark') {
+                document.documentElement.classList.add('dark')
+            } else if (localStorage.theme === 'light') {
+                document.documentElement.classList.remove('dark')
+            } else {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark')
+                } else {
+                    document.documentElement.classList.remove('dark')
+                }
+            }
+        })
+    </script>
 </nav>

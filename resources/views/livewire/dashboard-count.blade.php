@@ -2,32 +2,32 @@
     <div
         class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
         <h5 class="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $souscription_jour }}</h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">Souscriptions du jour</p>
+        <p class="font-normal text-gray-700 dark:text-white">Souscriptions du jour</p>
     </div>
     <div
         class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
         <h5 class="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $souscription_attentes }}
         </h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">Souscriptions en attente</p>
+        <p class="font-normal text-gray-700 dark:text-white">Souscriptions en attente</p>
     </div>
     <div
         class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
         <h5 class="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
             {{ $souscription_encours_traitement }}
         </h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">Souscriptions en cours de traitement</p>
+        <p class="font-normal text-gray-700 dark:text-white">Souscriptions en cours de traitement</p>
     </div>
     <div
         class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
         <h5 class="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">
             {{ $souscription_payees }}
         </h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">Souscriptions payées</p>
+        <p class="font-normal text-gray-700 dark:text-white">Souscriptions payées</p>
     </div>
     <div
         class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
         <h5 class="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $souscription_totales }}
         </h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">Total des souscriptions</p>
+        <p class="font-normal text-gray-700 dark:text-white ">Total des souscriptions</p>
     </div>
 </div>

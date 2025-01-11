@@ -1,1 +1,1 @@
-<img src="/logo.png" alt="logo" class="h-[35px]">
+<img src="/cachet.png" alt="logo" class="h-[50px]">
