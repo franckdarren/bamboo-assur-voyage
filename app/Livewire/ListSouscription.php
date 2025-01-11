@@ -203,7 +203,6 @@ class ListSouscription extends Component implements HasForms, HasTable
                                             ->default(fn() => $record->adresse_assure),
 
                                         TextInput::make('phone_assure')
-                                            ->numeric()
                                             ->label('Phone')
                                             ->required()
                                             ->default(fn() => $record->phone_assure),
@@ -273,7 +272,7 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->icon('heroicon-m-ellipsis-vertical')
                     ->size(ActionSize::Small)
                     ->color('primary')
-                
+
 
             ])
             ->bulkActions([]);

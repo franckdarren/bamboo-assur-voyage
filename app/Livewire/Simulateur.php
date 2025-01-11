@@ -12,6 +12,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmationSouscription;
 use Illuminate\Support\Facades\Storage;
+use App\Jobs\EnvoyerConfirmationSouscription;
 
 class Simulateur extends Component
 {
@@ -329,9 +330,11 @@ class Simulateur extends Component
                 'agence' => $this->agence,
                 'heure_rdv' => $this->heure_rdv,
             ]);
+
+            // Envoyer les confirmation par mail
+            EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
         }
 
-        Mail::to($souscription->email_souscripteur)->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
         session()->flash('success', 'Souscription(s) créées avec succès. Vérifiez la boîte mail du souscripteur.');
 
         $this->resetInputFields();

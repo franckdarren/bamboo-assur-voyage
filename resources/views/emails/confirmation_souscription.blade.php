@@ -36,6 +36,27 @@
 
         <tr>
             <td style="padding: 20px;">
+                <h3 style="color: #007bff; font-size: 18px; margin-bottom: 10px;">Informations du l'assuré</h3>
+                <p style="font-size: 14px; line-height: 1.6; margin: 0;">Nom et Prénom :
+                    <strong>{{ $souscription->nom_prenom_assure }}</strong>
+                </p>
+                <p style="font-size: 14px; line-height: 1.6; margin: 0;">Adresse :
+                    <strong>{{ $souscription->adresse_assure }}</strong>
+                </p>
+                <p style="font-size: 14px; line-height: 1.6; margin: 0;">Téléphone :
+                    <strong>{{ $souscription->phone_assure }}</strong>
+                </p>
+                <p style="font-size: 14px; line-height: 1.6; margin: 0;">Email :
+                    <strong>{{ $souscription->email_assure }}</strong>
+                </p>
+                <p style="font-size: 14px; line-height: 1.6; margin: 0;">Passeport :
+                    <strong>{{ $souscription->passeport_assure }}</strong>
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 20px;">
                 <h3 style="color: #007bff; font-size: 18px; margin-bottom: 10px;">Informations de la Cotation</h3>
                 <p style="font-size: 14px; line-height: 1.6; margin: 0;">Destination :
                     <strong>{{ $cotation->destination }}</strong>
@@ -47,7 +68,7 @@
                     <strong>{{ \Carbon\Carbon::parse($cotation->retour)->format('d F Y') }}</strong>
                 </p>
                 <p style="font-size: 14px; line-height: 1.6; margin: 0;">Montant :
-                    <strong>{{ number_format($cotation->montant, 0, ',', ' ') }} FCFA</strong>
+                    <strong>{{ number_format($montantParAssure, 0, ',', ' ') }} FCFA</strong>
                 </p>
             </td>
         </tr>
