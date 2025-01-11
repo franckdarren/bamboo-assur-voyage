@@ -20,6 +20,7 @@ class Souscription extends Model
         'cotation_id',
         'statut',
         'mode_paiement',
+        'url_passeport_assure'
 
     ];
 

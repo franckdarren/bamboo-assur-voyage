@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('phone_assure');
             $table->string('email_assure');
             $table->string('passeport_assure');
+            $table->string('url_passeport_assure')->nullable();
             $table->string('statut')->default('En attente de paiement');
             $table->string('mode_paiement')->default('En agence');
 

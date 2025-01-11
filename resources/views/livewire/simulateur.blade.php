@@ -372,6 +372,20 @@
                                     @enderror
                                 </div>
 
+                                <!-- Url Passeport -->
+                                <div class="mb-4">
+                                    <label for="url_passeport_assure_{{ $index }}"
+                                        class="block text-sm font-medium text-black">Image du Passeport</label>
+                                    <input type="file"
+                                        wire:model="liste_voyageurs.{{ $index }}.url_passeport_assure_"
+                                        id="url_passeport_assure_{{ $index }}"
+                                        class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
+                                        required />
+                                    @error('liste_voyageurs.' . $index . '.url_passeport_assure_')
+                                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
                                 <!-- Email -->
                                 <div class="col-span-1 md:col-span-2 mb-4">
                                     <label for="email_assure_{{ $index }}"

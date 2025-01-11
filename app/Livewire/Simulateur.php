@@ -8,11 +8,15 @@ use Livewire\Component;
 use App\Models\Cotation;
 use App\Models\Souscription;
 use Livewire\WithValidation;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmationSouscription;
+use Illuminate\Support\Facades\Storage;
 
 class Simulateur extends Component
 {
+
+    use WithFileUploads;
 
     public $cotationId;
     public $destination = "";
@@ -35,6 +39,7 @@ class Simulateur extends Component
     public $phone_assure;
     public $email_assure;
     public $passeport_assure;
+    public $url_passeport_assure;
     public $statut;
     public $mode_paiement;
 
@@ -84,6 +89,7 @@ class Simulateur extends Component
     protected $rules = [
         'depart' => 'required|date|after_or_equal:today',
         'retour' => 'required|date|after:depart',
+        "liste_voyageurs.*.url_passeport_assure_" => 'nullable|image|max:10024',
     ];
 
     protected function getCategorieByDestination($destination)
@@ -265,10 +271,30 @@ class Simulateur extends Component
     // Fonction pour créer une souscription
     public function createSouscription()
     {
+        $this->validate([
+            'destination' => 'required|string',
+            'voyageurs' => 'required|integer|min:1',
+            'depart' => 'required|date',
+            'retour' => 'required|date|after_or_equal:depart',
+            'nombreJours' => 'required|integer|min:1',
+            'montant' => 'required|numeric',
+            'nom_prenom_souscripteur' => 'required|string',
+            'adresse_souscripteur' => 'required|string',
+            'phone_souscripteur' => 'required|string',
+            'email_souscripteur' => 'required|email',
+            'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
+            'liste_voyageurs.*.date_naissance_assure' => 'required|date',
+            'liste_voyageurs.*.adresse_assure' => 'required|string',
+            'liste_voyageurs.*.phone_assure' => 'required|string',
+            'liste_voyageurs.*.email_assure' => 'required|email',
+            'liste_voyageurs.*.url_passeport_assure_' => 'nullable|image|max:2048',
+            'date_rdv' => 'required|date',
+            'heure_rdv' => 'required|date_format:H:i',
+            'agence' => 'required|string',
+        ]);
 
-        // Créer une nouvelle cotation
         $cotation = Cotation::create([
-            'destination' => $this->destination,  // Assurez-vous que vous passez ces données dans le formulaire
+            'destination' => $this->destination,
             'voyageurs' => $this->voyageurs,
             'depart' => $this->depart,
             'retour' => $this->retour,
@@ -276,31 +302,27 @@ class Simulateur extends Component
             'montant' => $this->montant,
         ]);
 
-        // Créer les souscriptions pour chaque voyageur
-        foreach ($this->liste_voyageurs as $voyageur) {
+        foreach ($this->liste_voyageurs as &$voyageur) {
+            if (isset($voyageur['url_passeport_assure_']) && $voyageur['url_passeport_assure_']) {
+                $path = $voyageur['url_passeport_assure_']->store('passeports', 'public');
+                $voyageur['url_passeport_assure'] = $path;
+            }
+
             $souscription = Souscription::create([
-                'cotation_id' => $cotation->id,  // Lier la souscription à la cotation
+                'cotation_id' => $cotation->id,
                 'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
                 'date_naissance_assure' => $voyageur['date_naissance_assure'],
                 'adresse_assure' => $voyageur['adresse_assure'],
                 'phone_assure' => $voyageur['phone_assure'],
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
-
-                // Informations du souscripteur
+                'url_passeport_assure' => $voyageur['url_passeport_assure'],
                 'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
                 'adresse_souscripteur' => $this->adresse_souscripteur,
                 'phone_souscripteur' => $this->phone_souscripteur,
                 'email_souscripteur' => $this->email_souscripteur,
             ]);
 
-            // Validation des données
-            $this->validate([
-                'date_rdv' => 'required|date',
-                'heure_rdv' => 'required|date_format:H:i',
-            ]);
-
-            // Créer un rendez-vous lié à la souscription
             $rdv = Rdv::create([
                 'souscription_id' => $souscription->id,
                 'date_rdv' => $this->date_rdv,
@@ -309,19 +331,20 @@ class Simulateur extends Component
             ]);
         }
 
-        Mail::to($souscription->email_assure)->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
+        Mail::to($souscription->email_souscripteur)->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
+        session()->flash('success', 'Souscription(s) créées avec succès. Vérifiez la boîte mail du souscripteur.');
 
-        // Message de succès
-        session()->flash('success', 'Souscription(s) créées avec succès. Verifier la boite mail du souscripteur.');
+        $this->resetInputFields();
+    }
 
-        // Réinitialiser les données des voyageurs (optionnel)
+    private function resetInputFields()
+    {
         $this->liste_voyageurs = [];
-        // Réinitialiser les données des voyageurs et du souscripteur (optionnel)
         $this->nom_prenom_souscripteur = '';
         $this->adresse_souscripteur = '';
         $this->phone_souscripteur = '';
         $this->email_souscripteur = '';
-        $this->destination = '';  // Réinitialiser destination et autres champs de cotation
+        $this->destination = '';
         $this->voyageurs = 1;
         $this->depart = null;
         $this->retour = null;

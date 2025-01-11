@@ -5,13 +5,22 @@ namespace App\Livewire;
 use Livewire\Component;
 use Filament\Tables\Table;
 use App\Models\Souscription;
+use Filament\Actions\StaticAction;
+use Illuminate\Support\HtmlString;
+use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Support\Facades\Storage;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ImportAction;
 use Illuminate\Database\Eloquent\Builder;
@@ -57,6 +66,10 @@ class ListSouscription extends Component implements HasForms, HasTable
                 TextColumn::make('passeport_assure')
                     ->label('Passeport')
                     ->searchable(),
+
+                ImageColumn::make('url_passeport_assure')
+                    ->label('Image'),
+
 
                 TextColumn::make('cotation.destination')
                     ->label('Destination')
@@ -144,13 +157,124 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ]),
             ])
             ->actions([
-                Action::make('marquerPayee')
-                    ->label('Marquer comme payée')
-                    ->action(fn(Souscription $record) => $record->update(['statut' => 'Payée']))
-                    ->requiresConfirmation()
-                    ->color('success')
-                    ->icon('heroicon-o-check-circle')
-                    ->visible(fn(Souscription $record) => $record->statut !== 'Payée'),
+                ActionGroup::make([
+                    Action::make('marquerPayee')
+                        ->label('Marquer comme payée')
+                        ->action(fn(Souscription $record) => $record->update(['statut' => 'Payée']))
+                        ->requiresConfirmation()
+                        ->color('success')
+                        ->icon('heroicon-o-check-circle')
+                        ->visible(fn(Souscription $record) => $record->statut !== 'Payée'),
+
+                    //Affichage du passport
+                    Action::make('url_passeport_assure')
+                        ->label('Voir le passport')
+                        ->modalContent(fn(Souscription $record) => new HtmlString(
+                            '<iframe src="' . Storage::disk('public')->url($record->url_passeport_assure) . '" width="100%" height="600px"></iframe>'
+                        ))
+                        ->modalWidth('7xl')
+                        ->requiresConfirmation(false)
+                        ->modalSubmitAction(false)
+                        ->modalFooterActionsAlignment('right')
+                        ->modalCancelAction(fn(StaticAction $action) => $action),
+
+                    // Bouton personnalisé "Modifier"
+                    Action::make('modifier')
+                        ->label('Modifier')
+                        // ->icon('heroicon-o-pencil')
+                        ->action(function (Souscription $record, array $data): void {
+                            $record->update($data); // Met à jour l'enregistrement
+                        })
+                        ->form(function (Souscription $record) {
+                            return [
+                                Grid::make(2) // Deux colonnes
+                                    ->schema([
+                                        TextInput::make('nom_prenom_assure')
+                                            ->required()
+                                            ->default(fn() => $record->nom_prenom_assure),
+
+                                        TextInput::make('date_naissance_assure')
+                                            ->required()
+                                            ->default(fn() => $record->date_naissance_assure),
+
+                                        TextInput::make('adresse_assure')
+                                            ->label('Adresse')
+                                            ->required()
+                                            ->default(fn() => $record->adresse_assure),
+
+                                        TextInput::make('phone_assure')
+                                            ->numeric()
+                                            ->label('Phone')
+                                            ->required()
+                                            ->default(fn() => $record->phone_assure),
+
+                                        TextInput::make('email_assure')
+                                            ->email()
+                                            ->required()
+                                            ->default(fn() => $record->email_assure),
+
+                                        TextInput::make('passeport_assure')
+                                            ->required()
+                                            ->default(fn() => $record->passeport_assure),
+
+                                        FileUpload::make('url_passeport_assure')
+                                            ->label('Image passport')
+                                            ->visibility('public')
+                                            ->default(fn() => $record->url_passeport_assure),
+
+                                        // TextInput::make('cotation.destination')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->cotation?->destination),
+
+                                        // TextInput::make('cotation.depart')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->cotation?->depart),
+
+                                        // TextInput::make('cotation.retour')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->cotation?->retour),
+
+                                        // TextInput::make('cotation.nombre_jours')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->cotation?->nombre_jours),
+
+                                        // TextInput::make('montant_par_voyageur')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->montant_par_voyageur),
+
+                                        // TextInput::make('cotation.voyageurs')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->cotation?->voyageurs),
+
+                                        // TextInput::make('nom_prenom_souscripteur')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->nom_prenom_souscripteur),
+
+                                        // TextInput::make('phone_souscripteur')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->phone_souscripteur),
+
+                                        // TextInput::make('rendezvous.date_rdv')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->rendezvous?->date_rdv),
+
+                                        // TextInput::make('rendezvous.heure_rdv')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->rendezvous?->heure_rdv),
+
+                                        // TextInput::make('rendezvous.agence')
+                                        //     ->required()
+                                        //     ->default(fn() => $record->rendezvous?->agence),
+                                    ]),
+
+                            ];
+                        }),
+                ])->label('Action')
+                    ->icon('heroicon-m-ellipsis-vertical')
+                    ->size(ActionSize::Small)
+                    ->color('primary')
+                
+
             ])
             ->bulkActions([]);
     }
