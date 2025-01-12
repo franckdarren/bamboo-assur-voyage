@@ -6,3 +6,9 @@
 [x-cloak] {
     display: none;
 }
+
+.img_back {
+    background-image: url(/public/signature.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
