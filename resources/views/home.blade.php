@@ -927,10 +927,7 @@
                 <main class="flex justify-center mb-5">
                     <livewire:simulateur />
                 </main>
-                <div class="img_back h-[300px] w-full">
-
-                </div>
-
+                
             </div>
         </div>
     </div>
