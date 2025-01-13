@@ -403,6 +403,7 @@
                         </div>
                     @endforeach
                 </div>
+                
                 <!-- Bouton de soumission -->
                 <div class="flex justify-center mt-6 gap-2">
                     <button type="button" wire:click="previousStep"

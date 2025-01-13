@@ -90,8 +90,36 @@ class Simulateur extends Component
     protected $rules = [
         'depart' => 'required|date|after_or_equal:today',
         'retour' => 'required|date|after:depart',
-        "liste_voyageurs.*.url_passeport_assure_" => 'nullable|image|max:10024',
     ];
+
+    public function messages()
+    {
+        return [
+            'destination.required' => 'Veuillez indiquer la destination.',
+            'voyageurs.required' => 'Le nombre de voyageurs est requis.',
+            'depart.required' => 'La date de départ est obligatoire.',
+            'retour.required' => 'La date de retour est obligatoire.',
+            'retour.after_or_equal' => 'La date de retour doit être après ou égale à la date de départ.',
+            'nombreJours.required' => 'Le nombre de jours est obligatoire.',
+            'montant.required' => 'Le montant est requis.',
+            'nom_prenom_souscripteur.required' => 'Le nom et prénom du souscripteur sont requis.',
+            'adresse_souscripteur.required' => 'L\'adresse du souscripteur est obligatoire.',
+            'phone_souscripteur.required' => 'Le téléphone du souscripteur est requis.',
+            'email_souscripteur.required' => 'L\'email du souscripteur est obligatoire.',
+            'liste_voyageurs.*.nom_prenom_assure.required' => 'Le nom et prénom du voyageur est requis.',
+            'liste_voyageurs.*.date_naissance_assure.required' => 'La date de naissance du voyageur est obligatoire.',
+            'liste_voyageurs.*.adresse_assure.required' => 'L\'adresse du voyageur est requise.',
+            'liste_voyageurs.*.phone_assure.required' => 'Le téléphone du voyageur est requis.',
+            'liste_voyageurs.*.email_assure.required' => 'L\'email du voyageur est obligatoire.',
+            'liste_voyageurs.*.passeport_assure.required' => 'Le numéro de passeport est requis.',
+            'liste_voyageurs.*.url_passeport_assure_.required' => 'L\'image du passeport est obligatoire.',
+            'date_rdv.required' => 'La date de rendez-vous est obligatoire.',
+            'heure_rdv.required' => 'L\'heure de rendez-vous est obligatoire.',
+            'heure_rdv.date_format' => 'L\'heure doit être au format HH:MM.',
+            'agence.required' => 'L\'agence est obligatoire.',
+        ];
+    }
+
 
     protected function getCategorieByDestination($destination)
     {
@@ -265,9 +293,18 @@ class Simulateur extends Component
                 'nom_prenom_souscripteur' => 'required|string',
                 'adresse_souscripteur' => 'required|string',
                 'phone_souscripteur' => 'required|string',
+                'email_souscripteur' => 'required|email',
+                'liste_voyageurs.*.passeport_assure' => 'required|string',
+                'liste_voyageurs.*.url_passeport_assure_' => 'required|image|max:10024',
+                'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
+                'liste_voyageurs.*.date_naissance_assure' => 'required|date',
+                'liste_voyageurs.*.adresse_assure' => 'required|string',
+                'liste_voyageurs.*.phone_assure' => 'required|string',
+                'liste_voyageurs.*.email_assure' => 'required|email',
             ]);
         }
     }
+
 
     // Fonction pour créer une souscription
     public function createSouscription()
@@ -288,7 +325,8 @@ class Simulateur extends Component
             'liste_voyageurs.*.adresse_assure' => 'required|string',
             'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
-            'liste_voyageurs.*.url_passeport_assure_' => 'nullable|image|max:10024',
+            'liste_voyageurs.*.passeport_assure' => 'required|string',
+            'liste_voyageurs.*.url_passeport_assure_' => 'required|image|max:10024',
             'date_rdv' => 'required|date',
             'heure_rdv' => 'required|date_format:H:i',
             'agence' => 'required|string',
