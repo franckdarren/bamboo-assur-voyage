@@ -377,11 +377,11 @@
                                     <label for="url_passeport_assure_{{ $index }}"
                                         class="block text-sm font-medium text-black">Image du Passeport</label>
                                     <input type="file"
-                                        wire:model="liste_voyageurs.{{ $index }}.url_passeport_assure_"
+                                        wire:model="liste_voyageurs.{{ $index }}.url_passeport_assure"
                                         id="url_passeport_assure_{{ $index }}"
                                         class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                         required />
-                                    @error('liste_voyageurs.' . $index . '.url_passeport_assure_')
+                                    @error('liste_voyageurs.' . $index . '.url_passeport_assure')
                                         <span class="text-red-500 text-xs">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -403,7 +403,7 @@
                         </div>
                     @endforeach
                 </div>
-                
+
                 <!-- Bouton de soumission -->
                 <div class="flex justify-center mt-6 gap-2">
                     <button type="button" wire:click="previousStep"

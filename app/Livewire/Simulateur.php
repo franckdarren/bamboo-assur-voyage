@@ -112,7 +112,7 @@ class Simulateur extends Component
             'liste_voyageurs.*.phone_assure.required' => 'Le téléphone du voyageur est requis.',
             'liste_voyageurs.*.email_assure.required' => 'L\'email du voyageur est obligatoire.',
             'liste_voyageurs.*.passeport_assure.required' => 'Le numéro de passeport est requis.',
-            'liste_voyageurs.*.url_passeport_assure_.required' => 'L\'image du passeport est obligatoire.',
+            'liste_voyageurs.*.url_passeport_assure.required' => 'L\'image du passeport est obligatoire.',
             'date_rdv.required' => 'La date de rendez-vous est obligatoire.',
             'heure_rdv.required' => 'L\'heure de rendez-vous est obligatoire.',
             'heure_rdv.date_format' => 'L\'heure doit être au format HH:MM.',
@@ -173,6 +173,7 @@ class Simulateur extends Component
             'phone_assure' => '',
             'email_assure' => '',
             'passeport_assure' => '',
+            'url_passeport_assure' => '',
         ]);
     }
 
@@ -289,13 +290,14 @@ class Simulateur extends Component
                 'retour' => 'required|date|after:depart',
             ]);
         } elseif ($this->currentStep == 2) {
+            // dd($this->liste_voyageurs);
             $this->validate([
                 'nom_prenom_souscripteur' => 'required|string',
                 'adresse_souscripteur' => 'required|string',
                 'phone_souscripteur' => 'required|string',
                 'email_souscripteur' => 'required|email',
                 'liste_voyageurs.*.passeport_assure' => 'required|string',
-                'liste_voyageurs.*.url_passeport_assure_' => 'required|image|max:10024',
+                'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
                 'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
                 'liste_voyageurs.*.date_naissance_assure' => 'required|date',
                 'liste_voyageurs.*.adresse_assure' => 'required|string',
@@ -326,7 +328,7 @@ class Simulateur extends Component
             'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
             'liste_voyageurs.*.passeport_assure' => 'required|string',
-            'liste_voyageurs.*.url_passeport_assure_' => 'required|image|max:10024',
+            'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
             'date_rdv' => 'required|date',
             'heure_rdv' => 'required|date_format:H:i',
             'agence' => 'required|string',
@@ -342,8 +344,8 @@ class Simulateur extends Component
         ]);
 
         foreach ($this->liste_voyageurs as &$voyageur) {
-            if (isset($voyageur['url_passeport_assure_']) && $voyageur['url_passeport_assure_']) {
-                $path = $voyageur['url_passeport_assure_']->store('passeports', 'public');
+            if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
+                $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
                 $voyageur['url_passeport_assure'] = $path;
             }
 
