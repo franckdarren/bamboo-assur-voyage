@@ -90,7 +90,6 @@ class Simulateur extends Component
     protected $rules = [
         'depart' => 'required|date|after_or_equal:today',
         'retour' => 'required|date|after:depart',
-        "liste_voyageurs.*.url_passeport_assure_" => 'nullable|image|max:10024',
     ];
 
     protected function getCategorieByDestination($destination)
@@ -288,7 +287,7 @@ class Simulateur extends Component
             'liste_voyageurs.*.adresse_assure' => 'required|string',
             'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
-            'liste_voyageurs.*.url_passeport_assure_' => 'nullable|image|max:10024',
+            'liste_voyageurs.*.url_passeport_assure_' => 'required|image|max:10024',
             'date_rdv' => 'required|date',
             'heure_rdv' => 'required|date_format:H:i',
             'agence' => 'required|string',
