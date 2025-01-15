@@ -915,7 +915,7 @@
                 <div class="">
                     <header class="gap-2 pt-3 md:pt-6 flex justify-between items-center">
                         <a href="http:/">
-                            <img src="/logo.png" alt="logo" class="h-[40px]">
+                            <x-application-mark class="block w-auto h-9" />
                         </a>
                         <a href="{{ route('login') }}"
                             class="rounded-md px-3 py-2 text-white bg-[#4996d1] ring-1 ring-transparent transition hover:bg-blue-700">
@@ -927,7 +927,7 @@
                 <main class="flex justify-center mb-5">
                     <livewire:simulateur />
                 </main>
-                
+
             </div>
         </div>
     </div>
