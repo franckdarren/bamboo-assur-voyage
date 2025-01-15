@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmationSouscription;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\EnvoyerConfirmationSouscription;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Simulateur extends Component
 {
@@ -453,6 +454,62 @@ class Simulateur extends Component
         $this->date_rdv = null;
         $this->heure_rdv = null;
         $this->agence = '';
+    }
+
+    public function imprimerDevis()
+    {
+
+        $this->validate([
+            'destination' => 'required|string',
+            'voyageurs' => 'required|integer|min:1',
+            'depart' => 'required|date',
+            'retour' => 'required|date|after_or_equal:depart',
+            'nombreJours' => 'required|integer|min:1',
+            'montant' => 'required|numeric',
+            'nom_prenom_souscripteur' => 'required|string',
+            'adresse_souscripteur' => 'required|string',
+            'phone_souscripteur' => 'required|string',
+            'email_souscripteur' => 'required|email',
+            'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
+            'liste_voyageurs.*.date_naissance_assure' => 'required|date',
+            'liste_voyageurs.*.adresse_assure' => 'required|string',
+            'liste_voyageurs.*.phone_assure' => 'required|string',
+            'liste_voyageurs.*.email_assure' => 'required|email',
+            'liste_voyageurs.*.passeport_assure' => 'required|string',
+            // 'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+        ]);
+
+        foreach ($this->liste_voyageurs as &$voyageur) {
+
+            $data = [
+                'destination' => $this->destination,
+                'voyageurs' => $this->voyageurs,
+                'depart' => $this->depart,
+                'retour' => $this->retour,
+                'nombre_jours' => $this->nombreJours,
+                'montant' => $this->montant,
+
+                'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                'adresse_assure' => $voyageur['adresse_assure'],
+                'phone_assure' => $voyageur['phone_assure'],
+                'email_assure' => $voyageur['email_assure'],
+                'passeport_assure' => $voyageur['passeport_assure'],
+                'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                'adresse_souscripteur' => $this->adresse_souscripteur,
+                'phone_souscripteur' => $this->phone_souscripteur,
+                'email_souscripteur' => $this->email_souscripteur,
+
+                'liste_voyageurs' => $this->liste_voyageurs, 
+            ];
+
+            $pdf = Pdf::loadView('devis', $data);
+
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->stream();
+                }, 'devis.pdf');
+        }
     }
 
 

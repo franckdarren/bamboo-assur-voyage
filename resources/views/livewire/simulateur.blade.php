@@ -236,7 +236,7 @@
                     </button>
                     <button type="button" wire:click="nextStep"
                         class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
-                        Suivant
+                        Remplir la souscription
                     </button>
 
                 </div>
@@ -410,9 +410,13 @@
                         class="px-5 py-3 bg-gray-300 text-black font-bold rounded-md hover:scale-105 active:scale-95">
                         Précédent
                     </button>
+                    <button type="button" wire:click="imprimerDevis"
+                        class="px-5 py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
+                        Imprimer
+                    </button>
                     <button type="button" wire:click="nextStep"
                         class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
-                        Suivant
+                        Payer
                     </button>
                 </div>
             @endif
@@ -468,9 +472,11 @@
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                 required>
                                 <option value="">Choisir une agence</option>
-                                <option value="agence_1">Agence 1</option>
-                                <option value="agence_2">Agence 2</option>
-                                <option value="agence_3">Agence 3</option>
+                                <option value="agence_1">Libreville</option>
+                                <option value="agence_2">Port Gentil</option>
+                                <option value="agence_3">Makokou</option>
+                                <option value="agence_3">Mouila</option>
+
                                 <!-- Ajoutez ici les autres agences -->
                             </select>
                             @error('agence')
