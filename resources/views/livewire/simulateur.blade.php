@@ -412,7 +412,7 @@
                     </button>
                     <button type="button" wire:click="imprimerDevis"
                         class="px-5 py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
-                        Imprimer
+                        Imprimer devis
                     </button>
                     <button type="button" wire:click="nextStep"
                         class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
@@ -472,10 +472,10 @@
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                 required>
                                 <option value="">Choisir une agence</option>
-                                <option value="agence_1">Libreville</option>
-                                <option value="agence_2">Port Gentil</option>
-                                <option value="agence_3">Makokou</option>
-                                <option value="agence_3">Mouila</option>
+                                <option value="Libreville">Libreville</option>
+                                <option value="Port Gentil">Port Gentil</option>
+                                <option value="Makokou">Makokou</option>
+                                <option value="Mouila">Mouila</option>
 
                                 <!-- Ajoutez ici les autres agences -->
                             </select>
