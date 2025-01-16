@@ -130,7 +130,7 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->label('Heure RDV')
                     ->searchable(),
 
-                TextColumn::make('rendezvous.agence')
+                TextColumn::make('rendezvous.agence.nom')
                     ->label('Agence')
                     ->searchable(),
 

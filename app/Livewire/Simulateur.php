@@ -4,16 +4,17 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use App\Models\Rdv;
+use App\Models\Agence;
 use Livewire\Component;
 use App\Models\Cotation;
 use App\Models\Souscription;
 use Livewire\WithValidation;
 use Livewire\WithFileUploads;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmationSouscription;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\EnvoyerConfirmationSouscription;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class Simulateur extends Component
 {
@@ -48,7 +49,7 @@ class Simulateur extends Component
 
     public $date_rdv;
     public $heure_rdv;
-    public $agence;
+    public $agence_id;
     public $souscription_id;
 
 
@@ -117,7 +118,7 @@ class Simulateur extends Component
             'date_rdv.required' => 'La date de rendez-vous est obligatoire.',
             'heure_rdv.required' => 'L\'heure de rendez-vous est obligatoire.',
             'heure_rdv.date_format' => 'L\'heure doit être au format HH:MM.',
-            'agence.required' => 'L\'agence est obligatoire.',
+            'agence_id.required' => 'L\'agence est obligatoire.',
         ];
     }
 
@@ -332,7 +333,7 @@ class Simulateur extends Component
             'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
             'date_rdv' => 'required|date',
             'heure_rdv' => 'required|date_format:H:i',
-            'agence' => 'required|string',
+            'agence_id' => 'required',
         ]);
 
         $cotation = Cotation::create([
@@ -368,7 +369,7 @@ class Simulateur extends Component
             $rdv = Rdv::create([
                 'souscription_id' => $souscription->id,
                 'date_rdv' => $this->date_rdv,
-                'agence' => $this->agence,
+                'agence_id' => $this->agence_id,
                 'heure_rdv' => $this->heure_rdv,
             ]);
 
@@ -395,7 +396,7 @@ class Simulateur extends Component
         $this->montant = null;
         $this->date_rdv = null;
         $this->heure_rdv = null;
-        $this->agence = '';
+        $this->agence_id = '';
     }
 
     public function createSouscriptionWithPaiement()
@@ -453,7 +454,7 @@ class Simulateur extends Component
         $this->montant = null;
         $this->date_rdv = null;
         $this->heure_rdv = null;
-        $this->agence = '';
+        $this->agence_id = '';
     }
 
     public function imprimerDevis()
@@ -516,6 +517,10 @@ class Simulateur extends Component
 
     public function render()
     {
-        return view('livewire.simulateur');
+        $agences = Agence::get();
+
+        return view('livewire.simulateur', [
+            'agences' => $agences,
+        ]);
     }
 }

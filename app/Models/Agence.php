@@ -15,4 +15,9 @@ class Agence extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function rdvs()
+    {
+        return $this->hasMany(Rdv::class);
+    }
 }

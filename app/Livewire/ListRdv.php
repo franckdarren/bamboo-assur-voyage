@@ -34,7 +34,7 @@ class ListRdv extends Component implements HasForms, HasTable
                     ->label('Heure RDV')
                     ->searchable(),
 
-                TextColumn::make('agence')
+                TextColumn::make('agence.nom')
                     ->label('Agence')
                     ->searchable(),
 

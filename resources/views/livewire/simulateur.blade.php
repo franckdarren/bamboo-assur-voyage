@@ -466,24 +466,21 @@
 
                         <!-- Agence -->
                         <div class="col-span-1 md:col-span-2 mb-4">
-                            <label for="agence" class="block text-sm font-medium text-black">Sélectionnez
+                            <label for="agence_id" class="block text-sm font-medium text-black">Sélectionnez
                                 l'agence</label>
-                            <select wire:model.live="agence" id="agence"
+                            <select wire:model.live="agence_id" id="agence_id"
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                 required>
                                 <option value="">Choisir une agence</option>
-                                <option value="Libreville">Libreville</option>
-                                <option value="Port Gentil">Port Gentil</option>
-                                <option value="Makokou">Makokou</option>
-                                <option value="Mouila">Mouila</option>
-
-                                <!-- Ajoutez ici les autres agences -->
+                                @foreach ($agences as $agence)
+                                    <option value="{{ $agence->id }}">{{ $agence->nom }}</option>
+                                @endforeach
                             </select>
-                            @error('agence')
+                            @error('agence_id')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
-                        </div>
-
+                        </div> 
+                        
                         <!-- Date du rendez-vous -->
                         <div class="mb-4">
                             <label for="date_rdv" class="block text-sm font-medium text-black">Sélectionnez
