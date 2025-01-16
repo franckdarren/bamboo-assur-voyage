@@ -29,7 +29,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'id_siege',
+        'id_agence',
     ];
 
     /**
@@ -66,8 +66,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function siege()
+    public function agence()
     {
-        return $this->belongsTo(Siege::class);
+        return $this->belongsTo(Agence::class);
     }
 }

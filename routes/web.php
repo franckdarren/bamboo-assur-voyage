@@ -20,4 +20,7 @@ Route::middleware([
     Route::get('/rdv', function () {
         return view('rdv');
     })->name('rdv');
+    Route::get('/agences', function () {
+        return view('agences');
+    })->name('agences');
 });

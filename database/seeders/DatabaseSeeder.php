@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Siege;
+use App\Models\Agence;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,15 +16,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        // Appel du SiegeSeeder
-        $this->call(SiegeSeeder::class);
+        $this->call(AgenceSeeder::class);
 
-        $librevilleSiegeId = Siege::where('nom', 'Libreville')->value('id');
+        $librevilleAgenceId = Agence::where('nom', 'Libreville')->value('id');
 
         User::factory()->create([
             'name' => 'Administrateur',
             'email' => 'admin@admin.com',
-            'siege_id' => $librevilleSiegeId, // Utilise l'ID du siège
+            'agence_id' => $librevilleAgenceId, // Utilise l'ID du siège
             'password' => bcrypt('password'),
         ]);
     }

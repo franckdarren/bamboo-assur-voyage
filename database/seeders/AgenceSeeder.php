@@ -2,33 +2,33 @@
 
 namespace Database\Seeders;
 
-use App\Models\Siege;
+use App\Models\Agence;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class SiegeSeeder extends Seeder
+class AgenceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Siege::create([
+        Agence::create([
             'nom' => 'Libreville',
             'localisation' => '',
         ]);
 
-        Siege::create([
+        Agence::create([
             'nom' => 'Port Gentil',
             'localisation' => '',
         ]);
 
-        Siege::create([
+        Agence::create([
             'nom' => 'Makokou',
             'localisation' => '',
         ]);
 
-        Siege::create([
+        Agence::create([
             'nom' => 'Mouila',
             'localisation' => '',
         ]);

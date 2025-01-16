@@ -59,11 +59,11 @@
             <x-input-error for="name" class="mt-2" />
         </div>
 
-        <!-- Siege -->
+        <!-- agences -->
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="siege" value="{{ __('Siège') }}" />
-            <x-input id="siege" type="text" class="mt-1 block w-full" value="{{ auth()->user()->siege->nom }}" disabled />
-            <x-input-error for="siege" class="mt-2" />
+            <x-label for="agence" value="{{ __('Agence') }}" />
+            <x-input id="agence" type="text" class="mt-1 block w-full" value="{{ auth()->user()->agence->nom }}" disabled />
+            <x-input-error for="agence" class="mt-2" />
         </div>
 
 
