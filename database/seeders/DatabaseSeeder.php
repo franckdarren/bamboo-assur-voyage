@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Siege;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,10 +16,15 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        // Appel du SiegeSeeder
+        $this->call(SiegeSeeder::class);
+
+        $librevilleSiegeId = Siege::where('nom', 'Libreville')->value('id');
+
         User::factory()->create([
-            'name' => 'Admin',
+            'name' => 'Administrateur',
             'email' => 'admin@admin.com',
-            'siege' => 'Libreville',
+            'siege_id' => $librevilleSiegeId, // Utilise l'ID du siège
             'password' => bcrypt('password'),
         ]);
     }

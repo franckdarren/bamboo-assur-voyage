@@ -62,8 +62,7 @@
         <!-- Siege -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="siege" value="{{ __('Siège') }}" />
-            <x-input id="siege" type="text" class="mt-1 block w-full" wire:model="state.siege" required disabled
-                autocomplete="siege" />
+            <x-input id="siege" type="text" class="mt-1 block w-full" value="{{ auth()->user()->siege->nom }}" disabled />
             <x-input-error for="siege" class="mt-2" />
         </div>
 
