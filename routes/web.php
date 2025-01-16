@@ -17,4 +17,7 @@ Route::middleware([
     Route::get('/souscriptions', function () {
         return view('souscription');
     })->name('souscription');
+    Route::get('/rdv', function () {
+        return view('rdv');
+    })->name('rdv');
 });
