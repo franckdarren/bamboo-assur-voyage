@@ -11,6 +11,19 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+
+    //Routes Administrateurs
+    Route::group(['middleware' => ['role:Administrateur']], function () {
+        Route::get('/validations-offres', function () {
+            return view('validations-offres');
+        })->name('validations-offres');
+
+        Route::get('/transactions', function () {
+            return view('transaction');
+        })->name('transaction');
+    });
+
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');

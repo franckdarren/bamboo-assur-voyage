@@ -6,6 +6,8 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Agence;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,14 +19,24 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call(AgenceSeeder::class);
+        $this->call(RoleSeeder::class);
 
         $librevilleAgenceId = Agence::where('nom', 'Libreville')->value('id');
 
-        User::factory()->create([
+        $admin = User::factory()->create([
             'name' => 'Administrateur',
             'email' => 'admin@admin.com',
             'agence_id' => $librevilleAgenceId, // Utilise l'ID du siège
             'password' => bcrypt('password'),
         ]);
+        $admin->assignRole('admin');
+
+        $superviseur = User::factory()->create([
+            'name' => 'Superviseur',
+            'email' => 'superviseur@superviseur.com',
+            'agence_id' => $librevilleAgenceId, // Utilise l'ID du siège
+            'password' => bcrypt('password'),
+        ]);
+        $superviseur->assignRole('superviseur');
     }
 }
