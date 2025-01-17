@@ -14,6 +14,8 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 
@@ -52,13 +54,13 @@ class ListUser extends Component implements HasForms, HasTable
                             ->required(),
                         TextInput::make('email')
                             ->label('Email'),
-                            TextInput::make('password')
+                        TextInput::make('password')
                             ->label('Mot de passe')
                             ->password()
                             ->required()
                             ->minLength(8)
                             ->maxLength(255),
-                        
+
                         Select::make('agence_id')
                             ->label('Agence')
                             ->options(Agence::all()->pluck('nom', 'id'))
@@ -75,16 +77,21 @@ class ListUser extends Component implements HasForms, HasTable
                             ->send();
                     })
             ])
-            ->filters([])
+            ->filters([
+                \Filament\Tables\Filters\TrashedFilter::make(),
+            ])
             ->actions([
-                DeleteAction::make()
-                    ->label('Supprimer')
-                    ->requiresConfirmation()
-                    ->modalHeading('Confirmation de suppression')
-                    ->modalSubheading('Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.')
-                    ->successNotificationTitle('Utilisateur supprimé avec succès.')
-                    ->successNotificationTitle('Succès')
-                    ->color('danger'),
+                // DeleteAction::make()
+                //     ->label('Supprimer')
+                //     ->requiresConfirmation()
+                //     ->modalHeading('Confirmation de suppression')
+                //     ->modalSubheading('Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.')
+                //     ->successNotificationTitle('Utilisateur supprimé avec succès.')
+                //     ->successNotificationTitle('Succès')
+                //     ->color('danger'),
+                DeleteAction::make(),
+                RestoreAction::make(),
+                ForceDeleteAction::make(),
             ])
             ->bulkActions([]);
     }
