@@ -29,7 +29,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'id_agence',
+        'agence_id',
     ];
 
     /**

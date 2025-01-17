@@ -23,4 +23,7 @@ Route::middleware([
     Route::get('/agences', function () {
         return view('agences');
     })->name('agences');
+    Route::get('/users', action: function () {
+        return view('users');
+    })->name('users');
 });
