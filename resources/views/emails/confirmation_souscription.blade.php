@@ -62,10 +62,10 @@
                     <strong>{{ $cotation->destination }}</strong>
                 </p>
                 <p style="font-size: 14px; line-height: 1.6; margin: 0;">Départ :
-                    <strong>{{ \Carbon\Carbon::parse($cotation->depart)->format('d F Y') }}</strong>
+                    <strong>{{ \Carbon\Carbon::parse($cotation->depart)->locale('fr')->format('d F Y') }}</strong>
                 </p>
                 <p style="font-size: 14px; line-height: 1.6; margin: 0;">Retour :
-                    <strong>{{ \Carbon\Carbon::parse($cotation->retour)->format('d F Y') }}</strong>
+                    <strong>{{ \Carbon\Carbon::parse($cotation->retour)->locale('fr')->format('d F Y') }}</strong>
                 </p>
                 <p style="font-size: 14px; line-height: 1.6; margin: 0;">Montant :
                     <strong>{{ number_format($montantParAssure, 0, ',', ' ') }} FCFA</strong>
@@ -76,10 +76,11 @@
         <tr>
             <td style="padding: 20px;">
                 <h3 style="color: #007bff; font-size: 18px; margin-bottom: 10px;">Détails du Rendez-vous</h3>
-                <p style="font-size: 14px; line-height: 1.6; margin: 0;">Agence : <strong>{{ $rdv->agence }}</strong>
+                <p style="font-size: 14px; line-height: 1.6; margin: 0;">Agence :
+                    <strong>{{ $agence->nom }}</strong>
                 </p>
                 <p style="font-size: 14px; line-height: 1.6; margin: 0;">Date :
-                    <strong>{{ \Carbon\Carbon::parse($rdv->date_rdv)->format('d F Y') }}</strong>
+                    <strong>{{ \Carbon\Carbon::parse($rdv->date_rdv)->locale('fr')->format('d F Y') }}</strong>
 
                 </p>
                 <p style="font-size: 14px; line-height: 1.6; margin: 0;">Heure : <strong>{{ $rdv->heure_rdv }}</strong>
