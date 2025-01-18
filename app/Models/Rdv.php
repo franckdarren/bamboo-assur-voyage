@@ -14,6 +14,11 @@ class Rdv extends Model
         'souscription_id',
     ];
 
+    public function getHeureRdvAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('H:i');
+    }
+
     public function souscription()
     {
         return $this->belongsTo(Souscription::class);

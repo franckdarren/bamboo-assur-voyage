@@ -24,7 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
-        Carbon::setLocale(config('app.locale'));
+        // Forcer la locale PHP sur la locale française pour les dates
+        setlocale(LC_TIME, 'fr_FR.utf8', 'fr_FR', 'fr', 'fra'); // Essaye plusieurs variantes de la locale
+        Carbon::setLocale('fr');
     }
 }

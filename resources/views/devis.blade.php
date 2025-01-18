@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devis Voyage</title>
+    <title>Devis Assurance Voyage</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,10 +48,10 @@
         <div class="section">
             <h2>Détails du Voyage</h2>
             <p><strong>Destination :</strong> {{ $destination }}</p>
-            <p><strong>Date de départ :</strong> {{ $depart }}</p>
-            <p><strong>Date de retour :</strong> {{ $retour }}</p>
+            <p><strong>Date de départ :</strong> {{ \Carbon\Carbon::parse($depart)->locale('fr')->format('d/m/Y') }}</p>
+            <p><strong>Date de retour :</strong> {{ \Carbon\Carbon::parse($retour)->locale('fr')->format('d/m/Y') }}</p>
             <p><strong>Nombre de jours :</strong> {{ $nombre_jours }}</p>
-            <p><strong>Montant :</strong> {{ $montant }} FCFA</p>
+            <p><strong>Montant :</strong> {{ number_format($montant, 0, ',', ' ') }} FCFA</p>
         </div>
 
         <div class="section">
@@ -79,7 +79,7 @@
                     @foreach ($liste_voyageurs as $voyageur)
                         <tr>
                             <td>{{ $voyageur['nom_prenom_assure'] }}</td>
-                            <td>{{ $voyageur['date_naissance_assure'] }}</td>
+                            <td>{{ \Carbon\Carbon::parse($voyageur['date_naissance_assure'])->locale('fr')->format('d/m/Y') }}</td>
                             <td>{{ $voyageur['adresse_assure'] }}</td>
                             <td>{{ $voyageur['phone_assure'] }}</td>
                             <td>{{ $voyageur['email_assure'] }}</td>
