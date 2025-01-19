@@ -236,7 +236,7 @@
                     </button>
                     <button type="button" wire:click="nextStep"
                         class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
-                        Suivant
+                        Remplir la souscription
                     </button>
 
                 </div>
@@ -377,11 +377,11 @@
                                     <label for="url_passeport_assure_{{ $index }}"
                                         class="block text-sm font-medium text-black">Image du Passeport</label>
                                     <input type="file"
-                                        wire:model="liste_voyageurs.{{ $index }}.url_passeport_assure_"
+                                        wire:model="liste_voyageurs.{{ $index }}.url_passeport_assure"
                                         id="url_passeport_assure_{{ $index }}"
                                         class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                         required />
-                                    @error('liste_voyageurs.' . $index . '.url_passeport_assure_')
+                                    @error('liste_voyageurs.' . $index . '.url_passeport_assure')
                                         <span class="text-red-500 text-xs">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -403,15 +403,20 @@
                         </div>
                     @endforeach
                 </div>
+
                 <!-- Bouton de soumission -->
                 <div class="flex justify-center mt-6 gap-2">
                     <button type="button" wire:click="previousStep"
                         class="px-5 py-3 bg-gray-300 text-black font-bold rounded-md hover:scale-105 active:scale-95">
                         Précédent
                     </button>
+                    <button type="button" wire:click="imprimerDevis"
+                        class="px-5 py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
+                        Imprimer devis
+                    </button>
                     <button type="button" wire:click="nextStep"
                         class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
-                        Suivant
+                        Payer
                     </button>
                 </div>
             @endif
@@ -461,22 +466,21 @@
 
                         <!-- Agence -->
                         <div class="col-span-1 md:col-span-2 mb-4">
-                            <label for="agence" class="block text-sm font-medium text-black">Sélectionnez
+                            <label for="agence_id" class="block text-sm font-medium text-black">Sélectionnez
                                 l'agence</label>
-                            <select wire:model.live="agence" id="agence"
+                            <select wire:model.live="agence_id" id="agence_id"
                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                 required>
                                 <option value="">Choisir une agence</option>
-                                <option value="agence_1">Agence 1</option>
-                                <option value="agence_2">Agence 2</option>
-                                <option value="agence_3">Agence 3</option>
-                                <!-- Ajoutez ici les autres agences -->
+                                @foreach ($agences as $agence)
+                                    <option value="{{ $agence->id }}">{{ $agence->nom }}</option>
+                                @endforeach
                             </select>
-                            @error('agence')
+                            @error('agence_id')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
-                        </div>
-
+                        </div> 
+                        
                         <!-- Date du rendez-vous -->
                         <div class="mb-4">
                             <label for="date_rdv" class="block text-sm font-medium text-black">Sélectionnez

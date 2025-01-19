@@ -57,6 +57,7 @@ class ConfirmationSouscription extends Mailable
                 'souscription' => $this->souscription,
                 'cotation' => $this->cotation,
                 'rdv' => $this->rdv,
+                'agence' => $this->rdv->agence,
                 'montantParAssure' => $this->cotation->montant / $this->cotation->voyageurs
             ]);
     }

@@ -52,21 +52,43 @@
                     </div>
 
                     <nav class="mt-10">
-                        <!-- Lien Investisseurs -->
+                        <!-- Lien Tableau de bord -->
                         <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" :icone="'<span class=\'iconify text-4xl\'
-                                                                                data-icon=\'duo-icons:dashboard\' data-inline=\'false\'></span>'">
+                                                                                                                                data-icon=\'duo-icons:dashboard\' data-inline=\'false\'></span>'">
                             {{ __('Tableau de bord') }}
                         </x-nav-link>
 
-                        <!-- Lien Investisseurs -->
+                        <!-- Lien RDV -->
+                        <x-nav-link href="{{ route('rdv') }}" :active="request()->routeIs('rdv')" :icone="'<span class=\'iconify text-4xl\'
+                                                                                                      data-icon=\'solar:calendar-bold-duotone\' data-inline=\'false\'></span>'">
+                            {{ __('Rendez-vous') }}
+                        </x-nav-link>
+
+                        <!-- Lien Souscriptions -->
                         <x-nav-link href="{{ route('souscription') }}" :active="request()->routeIs('souscription')" :icone="'<span class=\'iconify text-4xl\'
-                                                                                data-icon=\'uim:briefcase\' data-inline=\'false\'></span>'">
+                                                                                                                                data-icon=\'uim:briefcase\' data-inline=\'false\'></span>'">
                             {{ __('Souscriptions') }}
                         </x-nav-link>
 
+                        @role('admin')
+                            <!-- Gestion des agences -->
+                            <x-nav-link href="{{ route('agences') }}" :active="request()->routeIs('agences')" :icone="'<span class=\'iconify text-4xl\'
+                                                                                                        data-icon=\'solar:home-bold-duotone\' data-inline=\'false\'></span>'">
+                                {{ __('Gestion agences') }}
+                            </x-nav-link>
+                        @endrole
+
+                        @role('admin')
+                            <!-- Gestion des utilisateurs -->
+                            <x-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')" :icone="'<span class=\'iconify text-4xl\'
+                                                                                data-icon=\'ph:users-three-bold\' data-inline=\'false\'></span>'">
+                                {{ __('Gestion utilisateurs') }}
+                            </x-nav-link>
+                        @endrole
+
                         {{-- Profil --}}
                         <x-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')" :icone="'<span class=\'iconify text-4xl\'
-                                                    data-icon=\'solar:user-bold-duotone\' data-inline=\'false\'></span>'">
+                                                                                                                                data-icon=\'solar:user-bold-duotone\' data-inline=\'false\'></span>'">
                             {{ __('Profil') }}
                         </x-nav-link>
 
@@ -204,6 +226,7 @@
 
     @stack('modals')
 
+    @livewire('notifications')
     @livewireScripts
     @filamentScripts
     @vite('resources/js/app.js')

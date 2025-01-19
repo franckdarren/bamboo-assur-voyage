@@ -1,3 +1,3 @@
 <a href="/">
-    <img src="/logo.png" alt="logo" class="h-[50px]">
+    <img src="/cachet.png" alt="logo" class="h-[80px]">
 </a>

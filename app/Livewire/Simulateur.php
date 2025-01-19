@@ -4,11 +4,13 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use App\Models\Rdv;
+use App\Models\Agence;
 use Livewire\Component;
 use App\Models\Cotation;
 use App\Models\Souscription;
 use Livewire\WithValidation;
 use Livewire\WithFileUploads;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmationSouscription;
 use Illuminate\Support\Facades\Storage;
@@ -47,7 +49,7 @@ class Simulateur extends Component
 
     public $date_rdv;
     public $heure_rdv;
-    public $agence;
+    public $agence_id;
     public $souscription_id;
 
 
@@ -91,6 +93,35 @@ class Simulateur extends Component
         'depart' => 'required|date|after_or_equal:today',
         'retour' => 'required|date|after:depart',
     ];
+
+    public function messages()
+    {
+        return [
+            'destination.required' => 'Veuillez indiquer la destination.',
+            'voyageurs.required' => 'Le nombre de voyageurs est requis.',
+            'depart.required' => 'La date de départ est obligatoire.',
+            'retour.required' => 'La date de retour est obligatoire.',
+            'retour.after_or_equal' => 'La date de retour doit être après ou égale à la date de départ.',
+            'nombreJours.required' => 'Le nombre de jours est obligatoire.',
+            'montant.required' => 'Le montant est requis.',
+            'nom_prenom_souscripteur.required' => 'Le nom et prénom du souscripteur sont requis.',
+            'adresse_souscripteur.required' => 'L\'adresse du souscripteur est obligatoire.',
+            'phone_souscripteur.required' => 'Le téléphone du souscripteur est requis.',
+            'email_souscripteur.required' => 'L\'email du souscripteur est obligatoire.',
+            'liste_voyageurs.*.nom_prenom_assure.required' => 'Le nom et prénom du voyageur est requis.',
+            'liste_voyageurs.*.date_naissance_assure.required' => 'La date de naissance du voyageur est obligatoire.',
+            'liste_voyageurs.*.adresse_assure.required' => 'L\'adresse du voyageur est requise.',
+            'liste_voyageurs.*.phone_assure.required' => 'Le téléphone du voyageur est requis.',
+            'liste_voyageurs.*.email_assure.required' => 'L\'email du voyageur est obligatoire.',
+            'liste_voyageurs.*.passeport_assure.required' => 'Le numéro de passeport est requis.',
+            'liste_voyageurs.*.url_passeport_assure.required' => 'L\'image du passeport est obligatoire.',
+            'date_rdv.required' => 'La date de rendez-vous est obligatoire.',
+            'heure_rdv.required' => 'L\'heure de rendez-vous est obligatoire.',
+            'heure_rdv.date_format' => 'L\'heure doit être au format HH:MM.',
+            'agence_id.required' => 'L\'agence est obligatoire.',
+        ];
+    }
+
 
     protected function getCategorieByDestination($destination)
     {
@@ -144,6 +175,7 @@ class Simulateur extends Component
             'phone_assure' => '',
             'email_assure' => '',
             'passeport_assure' => '',
+            'url_passeport_assure' => '',
         ]);
     }
 
@@ -260,13 +292,23 @@ class Simulateur extends Component
                 'retour' => 'required|date|after:depart',
             ]);
         } elseif ($this->currentStep == 2) {
+            // dd($this->liste_voyageurs);
             $this->validate([
                 'nom_prenom_souscripteur' => 'required|string',
                 'adresse_souscripteur' => 'required|string',
                 'phone_souscripteur' => 'required|string',
+                'email_souscripteur' => 'required|email',
+                'liste_voyageurs.*.passeport_assure' => 'required|string',
+                'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+                'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
+                'liste_voyageurs.*.date_naissance_assure' => 'required|date',
+                'liste_voyageurs.*.adresse_assure' => 'required|string',
+                'liste_voyageurs.*.phone_assure' => 'required|string',
+                'liste_voyageurs.*.email_assure' => 'required|email',
             ]);
         }
     }
+
 
     // Fonction pour créer une souscription
     public function createSouscription()
@@ -287,10 +329,11 @@ class Simulateur extends Component
             'liste_voyageurs.*.adresse_assure' => 'required|string',
             'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
-            'liste_voyageurs.*.url_passeport_assure_' => 'required|image|max:10024',
+            'liste_voyageurs.*.passeport_assure' => 'required|string',
+            'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
             'date_rdv' => 'required|date',
             'heure_rdv' => 'required|date_format:H:i',
-            'agence' => 'required|string',
+            'agence_id' => 'required',
         ]);
 
         $cotation = Cotation::create([
@@ -303,8 +346,8 @@ class Simulateur extends Component
         ]);
 
         foreach ($this->liste_voyageurs as &$voyageur) {
-            if (isset($voyageur['url_passeport_assure_']) && $voyageur['url_passeport_assure_']) {
-                $path = $voyageur['url_passeport_assure_']->store('passeports', 'public');
+            if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
+                $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
                 $voyageur['url_passeport_assure'] = $path;
             }
 
@@ -326,7 +369,7 @@ class Simulateur extends Component
             $rdv = Rdv::create([
                 'souscription_id' => $souscription->id,
                 'date_rdv' => $this->date_rdv,
-                'agence' => $this->agence,
+                'agence_id' => $this->agence_id,
                 'heure_rdv' => $this->heure_rdv,
             ]);
 
@@ -353,7 +396,7 @@ class Simulateur extends Component
         $this->montant = null;
         $this->date_rdv = null;
         $this->heure_rdv = null;
-        $this->agence = '';
+        $this->agence_id = '';
     }
 
     public function createSouscriptionWithPaiement()
@@ -411,13 +454,73 @@ class Simulateur extends Component
         $this->montant = null;
         $this->date_rdv = null;
         $this->heure_rdv = null;
-        $this->agence = '';
+        $this->agence_id = '';
+    }
+
+    public function imprimerDevis()
+    {
+
+        $this->validate([
+            'destination' => 'required|string',
+            'voyageurs' => 'required|integer|min:1',
+            'depart' => 'required|date',
+            'retour' => 'required|date|after_or_equal:depart',
+            'nombreJours' => 'required|integer|min:1',
+            'montant' => 'required|numeric',
+            'nom_prenom_souscripteur' => 'required|string',
+            'adresse_souscripteur' => 'required|string',
+            'phone_souscripteur' => 'required|string',
+            'email_souscripteur' => 'required|email',
+            'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
+            'liste_voyageurs.*.date_naissance_assure' => 'required|date',
+            'liste_voyageurs.*.adresse_assure' => 'required|string',
+            'liste_voyageurs.*.phone_assure' => 'required|string',
+            'liste_voyageurs.*.email_assure' => 'required|email',
+            'liste_voyageurs.*.passeport_assure' => 'required|string',
+            // 'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+        ]);
+
+        foreach ($this->liste_voyageurs as &$voyageur) {
+
+            $data = [
+                'destination' => $this->destination,
+                'voyageurs' => $this->voyageurs,
+                'depart' => $this->depart,
+                'retour' => $this->retour,
+                'nombre_jours' => $this->nombreJours,
+                'montant' => $this->montant,
+
+                'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                'adresse_assure' => $voyageur['adresse_assure'],
+                'phone_assure' => $voyageur['phone_assure'],
+                'email_assure' => $voyageur['email_assure'],
+                'passeport_assure' => $voyageur['passeport_assure'],
+                'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                'adresse_souscripteur' => $this->adresse_souscripteur,
+                'phone_souscripteur' => $this->phone_souscripteur,
+                'email_souscripteur' => $this->email_souscripteur,
+
+                'liste_voyageurs' => $this->liste_voyageurs, 
+            ];
+
+            $pdf = Pdf::loadView('devis', $data);
+
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->stream();
+                }, 'devis.pdf');
+        }
     }
 
 
 
     public function render()
     {
-        return view('livewire.simulateur');
+        $agences = Agence::get();
+
+        return view('livewire.simulateur', [
+            'agences' => $agences,
+        ]);
     }
 }

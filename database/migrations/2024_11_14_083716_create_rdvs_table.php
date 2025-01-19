@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('souscription_id')->constrained()->onDelete('cascade'); // Relation vers la table souscriptions
             $table->date('date_rdv'); // Date du rendez-vous
             $table->time('heure_rdv');
-            $table->string('agence');
 
             $table->timestamps();
         });

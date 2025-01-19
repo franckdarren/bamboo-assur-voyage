@@ -130,7 +130,7 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->label('Heure RDV')
                     ->searchable(),
 
-                TextColumn::make('rendezvous.agence')
+                TextColumn::make('rendezvous.agence.nom')
                     ->label('Agence')
                     ->searchable(),
 
@@ -172,7 +172,7 @@ class ListSouscription extends Component implements HasForms, HasTable
                         ->modalContent(fn(Souscription $record) => new HtmlString(
                             '<iframe src="' . Storage::disk('public')->url($record->url_passeport_assure) . '" width="100%" height="600px"></iframe>'
                         ))
-                        ->modalWidth('7xl')
+                        ->modalWidth('6xl')
                         ->requiresConfirmation(false)
                         ->modalSubmitAction(false)
                         ->modalFooterActionsAlignment('right')
