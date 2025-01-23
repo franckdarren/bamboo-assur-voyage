@@ -45,6 +45,8 @@ class Simulateur extends Component
     public $url_passeport_assure;
     public $url_billet_voyage;
 
+    public $urlBilletCollectif = null; // Pour l'URL collective
+
     public $statut;
     public $mode_paiement;
 
@@ -54,7 +56,7 @@ class Simulateur extends Component
     public $agence_id;
     public $souscription_id;
 
-
+    public $isCollectif = false; // Par défaut, individuel
 
     public $liste_voyageurs = [];
 
@@ -305,6 +307,30 @@ class Simulateur extends Component
         }
     }
 
+    // Met à jour l'URL collective pour tous les voyageurs
+    public function updatedUrlBilletCollectif($value)
+    {
+        if ($this->isCollectif) {
+            foreach ($this->liste_voyageurs as $index => $voyageur) {
+                $this->liste_voyageurs[$index]['url_billet_voyage'] = $value;
+            }
+        }
+    }
+
+    // Réinitialise les URL si le mode collectif est désactivé
+    public function updatedIsCollectif($value)
+    {
+        if ($value) {
+            // Passe en mode collectif : vider les URL individuelles et synchroniser avec l'URL collective
+            foreach ($this->liste_voyageurs as $index => $voyageur) {
+                $this->liste_voyageurs[$index]['url_billet_voyage'] = $this->urlBilletCollectif;
+            }
+        } else {
+            // Passe en mode individuel : vider l'URL collective
+            $this->urlBilletCollectif = null;
+        }
+    }
+
 
     // Fonction pour créer une souscription
     public function createSouscription()
@@ -344,6 +370,10 @@ class Simulateur extends Component
                 $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
                 $voyageur['url_passeport_assure'] = $path;
             }
+            if (isset($voyageur['url_billet_voyage']) && $voyageur['url_billet_voyage']) {
+                $path = $voyageur['url_billet_voyage']->store('billets', 'public');
+                $voyageur['url_billet_voyage'] = $path;
+            }
 
             $souscription = Souscription::create([
                 'cotation_id' => $cotation->id,
@@ -352,6 +382,7 @@ class Simulateur extends Component
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
                 'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                'url_billet_voyage' => $voyageur['url_billet_voyage'],
                 'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
                 'adresse_souscripteur' => $this->adresse_souscripteur,
                 'phone_souscripteur' => $this->phone_souscripteur,

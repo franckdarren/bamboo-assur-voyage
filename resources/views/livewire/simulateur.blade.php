@@ -292,6 +292,17 @@
                     @enderror
                 </div>
 
+                <!-- Vérificaton du titre de voyage -->
+                @if ($voyageurs >= 2)
+                    <!-- Case à cocher pour billet collectif -->
+                    <div class="mt-4 text-black">
+                        <label for="isCollectif">
+                            <input type="checkbox" id="isCollectif" wire:model="isCollectif" />
+                            Billet collectif ?
+                        </label>
+                    </div>
+                @endif
+
                 <div>
                     <!-- Étape 2 : Informations de l'assuré -->
                     @foreach ($liste_voyageurs as $index => $voyageur)
@@ -354,6 +365,20 @@
                                         class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                         required />
                                     @error('liste_voyageurs.' . $index . '.url_passeport_assure')
+                                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <!-- Url Billet -->
+                                <div class="mb-4">
+                                    <label for="url_billet_voyage_{{ $index }}"
+                                        class="block text-sm font-medium text-black">Image du billet d'avion</label>
+                                    <input type="file"
+                                        wire:model="liste_voyageurs.{{ $index }}.url_billet_voyage"
+                                        id="url_billet_voyage_{{ $index }}"
+                                        class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
+                                        required />
+                                    @error('liste_voyageurs.' . $index . '.url_billet_voyage')
                                         <span class="text-red-500 text-xs">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -451,8 +476,8 @@
                             @error('agence_id')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
-                        </div> 
-                        
+                        </div>
+
                         <!-- Date du rendez-vous -->
                         <div class="mb-4">
                             <label for="date_rdv" class="block text-sm font-medium text-black">Sélectionnez

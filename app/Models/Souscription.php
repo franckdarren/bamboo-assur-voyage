@@ -13,14 +13,13 @@ class Souscription extends Model
         'email_souscripteur',
         'nom_prenom_assure',
         'date_naissance_assure',
-        'adresse_assure',
-        'phone_assure',
         'email_assure',
         'passeport_assure',
         'cotation_id',
         'statut',
         'mode_paiement',
-        'url_passeport_assure'
+        'url_passeport_assure',
+        'url_billet_voyage'
 
     ];
 
