@@ -330,34 +330,6 @@
                                     @enderror
                                 </div>
 
-                                <!-- Adresse -->
-                                <div class="mb-4">
-                                    <label for="adresse_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-black">Adresse</label>
-                                    <input type="text"
-                                        wire:model="liste_voyageurs.{{ $index }}.adresse_assure"
-                                        id="adresse_assure_{{ $index }}"
-                                        class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
-                                        required />
-                                    @error('liste_voyageurs.' . $index . '.adresse_assure')
-                                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <!-- Téléphone -->
-                                <div class="mb-4">
-                                    <label for="phone_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-black">Téléphone</label>
-                                    <input type="text"
-                                        wire:model="liste_voyageurs.{{ $index }}.phone_assure"
-                                        id="phone_assure_{{ $index }}"
-                                        class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
-                                        required />
-                                    @error('liste_voyageurs.' . $index . '.phone_assure')
-                                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
                                 <!-- Passeport -->
                                 <div class="mb-4">
                                     <label for="passeport_assure_{{ $index }}"

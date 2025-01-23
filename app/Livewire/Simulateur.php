@@ -43,6 +43,8 @@ class Simulateur extends Component
     public $email_assure;
     public $passeport_assure;
     public $url_passeport_assure;
+    public $url_billet_voyage;
+
     public $statut;
     public $mode_paiement;
 
@@ -58,7 +60,7 @@ class Simulateur extends Component
 
     protected $tarifs = [
         'afrique-shengen' => [
-            'pays' => ['Afrique du Sud',  'Algérie', 'Allemagne', 'Angola', 'Autriche', 'Belgique', 'Bénin', 'Burkina Faso', 'Burundi', 'Cameroun', 'Cap-Vert', 'République Centrafricaine', 'Tchad', 'Comores', 'Congo', 'République Démocratique du Congo', "Côte d'Ivoire", 'Djibouti', 'Danemark', 'Égypte', 'Érythrée', 'Espagne', 'Estonie', 'Eswatini', 'Éthiopie', 'Finlande', 'France', 'Gabon', 'Gambie', 'Ghana', 'Grèce', 'Guinée', 'Guinée-Bissau', 'Guinée Equatoriale', 'Hongrie', 'Islande', 'Italie', 'Kenya', 'Lesotho', 'Lettonie', 'Lituanie', 'Luxembourg', 'Madagascar',  'Malawi', 'Mali', 'Malte', 'Maroc', 'Maurice', 'Mauritanie', 'Mozambique', 'Namibie', 'Niger', 'Nigéria', 'Norvège', 'Ouganda', 'Pays-Bas', 'Portugal', 'Rwanda', 'Sénégal', 'Seychelles', 'Sierra Leone', 'Slovaquie', 'Slovénie', 'Somalie', 'Soudan', 'Suède', 'Suisse', 'Tanzanie', 'Togo', 'Tunisie', 'Zambie', 'Zimbabwe'], // Ajoutez les pays concernés
+            'pays' => ['Afrique du Sud', 'Algérie', 'Allemagne', 'Angola', 'Autriche', 'Belgique', 'Bénin', 'Burkina Faso', 'Burundi', 'Cameroun', 'Cap-Vert', 'République Centrafricaine', 'Tchad', 'Comores', 'Congo', 'République Démocratique du Congo', "Côte d'Ivoire", 'Djibouti', 'Danemark', 'Égypte', 'Érythrée', 'Espagne', 'Estonie', 'Eswatini', 'Éthiopie', 'Finlande', 'France', 'Gabon', 'Gambie', 'Ghana', 'Grèce', 'Guinée', 'Guinée-Bissau', 'Guinée Equatoriale', 'Hongrie', 'Islande', 'Italie', 'Kenya', 'Lesotho', 'Lettonie', 'Lituanie', 'Luxembourg', 'Madagascar', 'Malawi', 'Mali', 'Malte', 'Maroc', 'Maurice', 'Mauritanie', 'Mozambique', 'Namibie', 'Niger', 'Nigéria', 'Norvège', 'Ouganda', 'Pays-Bas', 'Portugal', 'Rwanda', 'Sénégal', 'Seychelles', 'Sierra Leone', 'Slovaquie', 'Slovénie', 'Somalie', 'Soudan', 'Suède', 'Suisse', 'Tanzanie', 'Togo', 'Tunisie', 'Zambie', 'Zimbabwe'], // Ajoutez les pays concernés
             'tarifs' => [
                 [1, 7, 13000],
                 [8, 10, 16000],
@@ -110,8 +112,6 @@ class Simulateur extends Component
             'email_souscripteur.required' => 'L\'email du souscripteur est obligatoire.',
             'liste_voyageurs.*.nom_prenom_assure.required' => 'Le nom et prénom du voyageur est requis.',
             'liste_voyageurs.*.date_naissance_assure.required' => 'La date de naissance du voyageur est obligatoire.',
-            'liste_voyageurs.*.adresse_assure.required' => 'L\'adresse du voyageur est requise.',
-            'liste_voyageurs.*.phone_assure.required' => 'Le téléphone du voyageur est requis.',
             'liste_voyageurs.*.email_assure.required' => 'L\'email du voyageur est obligatoire.',
             'liste_voyageurs.*.passeport_assure.required' => 'Le numéro de passeport est requis.',
             'liste_voyageurs.*.url_passeport_assure.required' => 'L\'image du passeport est obligatoire.',
@@ -171,8 +171,6 @@ class Simulateur extends Component
         $this->liste_voyageurs = array_fill(0, $value, [
             'nom_prenom_assure' => '',
             'date_naissance_assure' => '',
-            'adresse_assure' => '',
-            'phone_assure' => '',
             'email_assure' => '',
             'passeport_assure' => '',
             'url_passeport_assure' => '',
@@ -302,8 +300,6 @@ class Simulateur extends Component
                 'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
                 'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
                 'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-                'liste_voyageurs.*.adresse_assure' => 'required|string',
-                'liste_voyageurs.*.phone_assure' => 'required|string',
                 'liste_voyageurs.*.email_assure' => 'required|email',
             ]);
         }
@@ -326,8 +322,6 @@ class Simulateur extends Component
             'email_souscripteur' => 'required|email',
             'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
             'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-            'liste_voyageurs.*.adresse_assure' => 'required|string',
-            'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
             'liste_voyageurs.*.passeport_assure' => 'required|string',
             'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
@@ -355,8 +349,6 @@ class Simulateur extends Component
                 'cotation_id' => $cotation->id,
                 'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
                 'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'adresse_assure' => $voyageur['adresse_assure'],
-                'phone_assure' => $voyageur['phone_assure'],
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
                 'url_passeport_assure' => $voyageur['url_passeport_assure'],
@@ -418,8 +410,6 @@ class Simulateur extends Component
                 'cotation_id' => $cotation->id,  // Lier la souscription à la cotation
                 'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
                 'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'adresse_assure' => $voyageur['adresse_assure'],
-                'phone_assure' => $voyageur['phone_assure'],
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
 
@@ -473,8 +463,6 @@ class Simulateur extends Component
             'email_souscripteur' => 'required|email',
             'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
             'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-            'liste_voyageurs.*.adresse_assure' => 'required|string',
-            'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
             'liste_voyageurs.*.passeport_assure' => 'required|string',
             // 'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
@@ -492,8 +480,6 @@ class Simulateur extends Component
 
                 'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
                 'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'adresse_assure' => $voyageur['adresse_assure'],
-                'phone_assure' => $voyageur['phone_assure'],
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
                 'url_passeport_assure' => $voyageur['url_passeport_assure'],
@@ -502,14 +488,14 @@ class Simulateur extends Component
                 'phone_souscripteur' => $this->phone_souscripteur,
                 'email_souscripteur' => $this->email_souscripteur,
 
-                'liste_voyageurs' => $this->liste_voyageurs, 
+                'liste_voyageurs' => $this->liste_voyageurs,
             ];
 
             $pdf = Pdf::loadView('devis', $data);
 
             return response()->streamDownload(function () use ($pdf) {
                 echo $pdf->stream();
-                }, 'devis.pdf');
+            }, 'devis.pdf');
         }
     }
 
