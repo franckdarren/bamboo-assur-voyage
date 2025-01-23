@@ -598,6 +598,7 @@ class Simulateur extends Component
 
         return view('livewire.simulateur', [
             'agences' => $agences,
+            'isButtonDisabled' => $this->nombreJours > 366 || $this->montant == 0,
         ]);
     }
 }

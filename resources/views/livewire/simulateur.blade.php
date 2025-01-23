@@ -235,9 +235,12 @@
                         Réinitialiser
                     </button>
                     <button type="button" wire:click="nextStep"
-                        class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
+                        class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform active:scale-95 
+    {{ $isButtonDisabled ? 'opacity-50 cursor-not-allowed' : '' }}"
+                        @disabled($isButtonDisabled)>
                         Remplir la souscription
                     </button>
+
 
                 </div>
             @endif
