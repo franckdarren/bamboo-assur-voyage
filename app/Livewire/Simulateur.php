@@ -124,7 +124,6 @@ class Simulateur extends Component
         ];
     }
 
-
     protected function getCategorieByDestination($destination)
     {
         foreach ($this->tarifs as $categorie => $details) {
@@ -176,6 +175,8 @@ class Simulateur extends Component
             'email_assure' => '',
             'passeport_assure' => '',
             'url_passeport_assure' => '',
+            'url_billet_voyage' => '',
+
         ]);
     }
 
@@ -317,17 +318,27 @@ class Simulateur extends Component
         }
     }
 
-    // Réinitialise les URL si le mode collectif est désactivé
-    public function updatedIsCollectif($value)
+    public function updatedIsCollectif()
     {
-        if ($value) {
-            // Passe en mode collectif : vider les URL individuelles et synchroniser avec l'URL collective
-            foreach ($this->liste_voyageurs as $index => $voyageur) {
-                $this->liste_voyageurs[$index]['url_billet_voyage'] = $this->urlBilletCollectif;
+        if ($this->isCollectif) {
+            // Si le billet est collectif, applique l'URL du billet du premier voyageur à tous les autres
+            $urlCollectif = $this->liste_voyageurs[0]['url_billet_voyage'] ?? '';
+            foreach ($this->liste_voyageurs as $index => &$voyageur) {
+                if ($index > 0) {
+                    $voyageur['url_billet_voyage'] = $urlCollectif;
+                }
             }
-        } else {
-            // Passe en mode individuel : vider l'URL collective
-            $this->urlBilletCollectif = null;
+        }
+    }
+
+    public function updatedListeVoyageurs($value, $key)
+    {
+        // Si le billet est collectif, synchronise l'URL entre tous les voyageurs
+        if ($this->isCollectif && str_contains($key, '.url_billet_voyage')) {
+            $urlCollectif = $this->liste_voyageurs[0]['url_billet_voyage'] ?? '';
+            foreach ($this->liste_voyageurs as $index => &$voyageur) {
+                $voyageur['url_billet_voyage'] = $urlCollectif;
+            }
         }
     }
 
@@ -350,7 +361,9 @@ class Simulateur extends Component
             'liste_voyageurs.*.date_naissance_assure' => 'required|date',
             'liste_voyageurs.*.email_assure' => 'required|email',
             'liste_voyageurs.*.passeport_assure' => 'required|string',
-            'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+            'liste_voyageurs.*.url_passeport_assure' => 'required|image|max:10240',
+            'liste_voyageurs.*.url_billet_voyage' => 'nullable|image|max:10240',
+
             'date_rdv' => 'required|date',
             'heure_rdv' => 'required|date_format:H:i',
             'agence_id' => 'required',
@@ -365,6 +378,8 @@ class Simulateur extends Component
             'montant' => $this->montant,
         ]);
 
+        $isCollectifOn= $this->isCollectif;
+
         foreach ($this->liste_voyageurs as &$voyageur) {
             if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
                 $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
@@ -375,35 +390,80 @@ class Simulateur extends Component
                 $voyageur['url_billet_voyage'] = $path;
             }
 
-            $souscription = Souscription::create([
-                'cotation_id' => $cotation->id,
-                'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
-                'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'email_assure' => $voyageur['email_assure'],
-                'passeport_assure' => $voyageur['passeport_assure'],
-                'url_passeport_assure' => $voyageur['url_passeport_assure'],
-                'url_billet_voyage' => $voyageur['url_billet_voyage'],
-                'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
-                'adresse_souscripteur' => $this->adresse_souscripteur,
-                'phone_souscripteur' => $this->phone_souscripteur,
-                'email_souscripteur' => $this->email_souscripteur,
-            ]);
+            if ($isCollectifOn) {
+                foreach ($this->liste_voyageurs as $index => $voyageur) {
+                    // Déterminer l'URL du billet de voyage (individuel ou collectif)
+                    $urlBilletVoyage = $this->isCollectif && isset($this->liste_voyageurs[0]['url_billet_voyage'])
+                        ? $this->liste_voyageurs[0]['url_billet_voyage'] // Utiliser le billet du premier voyageur si collectif
+                        : ($voyageur['url_billet_voyage'] ?? null); // Sinon, billet individuel ou null
+                
+                    // Vérifier que les données obligatoires sont présentes
+                    if (empty($voyageur['nom_prenom_assure']) || empty($voyageur['date_naissance_assure']) || empty($voyageur['email_assure'])) {
+                        throw new \Exception("Données manquantes pour le voyageur à l'index $index");
+                    }
+                
+                    // Créer une souscription pour chaque voyageur
+                    $souscription = Souscription::create([
+                        'cotation_id' => $cotation->id,
+                        'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                        'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                        'email_assure' => $voyageur['email_assure'],
+                        'passeport_assure' => $voyageur['passeport_assure'],
+                        'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                        'url_billet_voyage' => $urlBilletVoyage, // Utiliser l'URL déterminée
+                        'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                        'adresse_souscripteur' => $this->adresse_souscripteur,
+                        'phone_souscripteur' => $this->phone_souscripteur,
+                        'email_souscripteur' => $this->email_souscripteur,
+                    ]);
+                
+                    // Créer un rendez-vous pour chaque souscription
+                    $rdv = Rdv::create([
+                        'souscription_id' => $souscription->id,
+                        'date_rdv' => $this->date_rdv,
+                        'agence_id' => $this->agence_id,
+                        'heure_rdv' => $this->heure_rdv,
+                    ]);
+                
+                    // Envoyer la confirmation par email
+                    EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+                }
+                
 
-            $rdv = Rdv::create([
-                'souscription_id' => $souscription->id,
-                'date_rdv' => $this->date_rdv,
-                'agence_id' => $this->agence_id,
-                'heure_rdv' => $this->heure_rdv,
-            ]);
+            } else {
+                $souscription = Souscription::create([
+                    'cotation_id' => $cotation->id,
+                    'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                    'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                    'email_assure' => $voyageur['email_assure'],
+                    'passeport_assure' => $voyageur['passeport_assure'],
+                    'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                    'url_billet_voyage' => $voyageur['url_billet_voyage'],
+                    'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                    'adresse_souscripteur' => $this->adresse_souscripteur,
+                    'phone_souscripteur' => $this->phone_souscripteur,
+                    'email_souscripteur' => $this->email_souscripteur,
+                ]);
 
-            // Envoyer les confirmation par mail
-            EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+                $rdv = Rdv::create([
+                    'souscription_id' => $souscription->id,
+                    'date_rdv' => $this->date_rdv,
+                    'agence_id' => $this->agence_id,
+                    'heure_rdv' => $this->heure_rdv,
+                ]);
+
+                // Envoyer les confirmation par mail
+                EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+            }
+
+
         }
 
         session()->flash('success', 'Souscription(s) créées avec succès. Vérifiez la boîte mail du souscripteur.');
 
         $this->resetInputFields();
     }
+
 
     private function resetInputFields()
     {

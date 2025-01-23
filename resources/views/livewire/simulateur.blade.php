@@ -293,113 +293,124 @@
                 </div>
 
                 <!-- Vérificaton du titre de voyage -->
-                @if ($voyageurs >= 2)
-                    <!-- Case à cocher pour billet collectif -->
-                    <div class="mt-4 text-black">
-                        <label for="isCollectif">
-                            <input type="checkbox" id="isCollectif" wire:model="isCollectif" />
-                            Billet collectif ?
-                        </label>
-                    </div>
-                @endif
-
                 <div>
-                    <!-- Étape 2 : Informations de l'assuré -->
-                    @foreach ($liste_voyageurs as $index => $voyageur)
-                        <div class="mt-6">
-                            <h3 class="text-lg font-semibold text-black mb-4">Informations de l'assuré
-                                #{{ $index + 1 }}</h3>
+                    <div>
+                        <!-- Case à cocher pour billet collectif -->
+                        @if ($voyageurs >= 2)
+                            <div class="mt-4 text-black">
+                                <label for="isCollectif">
+                                    <input type="checkbox" id="isCollectif" wire:model="isCollectif" wire:poll />
+                                    Billet collectif ?
+                                </label>
+                            </div>
+                        @endif
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- Nom et prénom -->
-                                <div class="col-span-1 md:col-span-2 mb-4">
-                                    <label for="nom_prenom_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-black">Nom(s)
-                                        et prénom(s)</label>
-                                    <input type="text"
-                                        wire:model="liste_voyageurs.{{ $index }}.nom_prenom_assure"
-                                        id="nom_prenom_assure_{{ $index }}"
-                                        class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
-                                        required />
-                                    @error('liste_voyageurs.' . $index . '.nom_prenom_assure')
-                                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                                    @enderror
-                                </div>
 
-                                <!-- Date de naissance -->
-                                <div class="mb-4">
-                                    <label for="date_naissance_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-black">Date de
-                                        naissance</label>
-                                    <input type="date"
-                                        wire:model="liste_voyageurs.{{ $index }}.date_naissance_assure"
-                                        id="date_naissance_assure_{{ $index }}"
-                                        class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
-                                        required />
-                                    @error('liste_voyageurs.' . $index . '.date_naissance_assure')
-                                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                                    @enderror
-                                </div>
 
-                                <!-- Passeport -->
-                                <div class="mb-4">
-                                    <label for="passeport_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-black">Numéro de Passeport</label>
-                                    <input type="text"
-                                        wire:model="liste_voyageurs.{{ $index }}.passeport_assure"
-                                        id="passeport_assure_{{ $index }}"
-                                        class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
-                                        required />
-                                    @error('liste_voyageurs.' . $index . '.passeport_assure')
-                                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                        <!-- Liste des voyageurs -->
+                        @foreach ($liste_voyageurs as $index => $voyageur)
+                            <div class="mt-6">
+                                <h3 class="text-lg font-semibold text-black mb-4">Informations de l'assuré
+                                    #{{ $index + 1 }}</h3>
 
-                                <!-- Url Passeport -->
-                                <div class="mb-4">
-                                    <label for="url_passeport_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-black">Image du Passeport</label>
-                                    <input type="file"
-                                        wire:model="liste_voyageurs.{{ $index }}.url_passeport_assure"
-                                        id="url_passeport_assure_{{ $index }}"
-                                        class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
-                                        required />
-                                    @error('liste_voyageurs.' . $index . '.url_passeport_assure')
-                                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <!-- Nom et prénom -->
+                                    <div class="col-span-1 md:col-span-2 mb-4">
+                                        <label for="nom_prenom_assure_{{ $index }}"
+                                            class="block text-sm font-medium text-black">
+                                            Nom(s) et prénom(s)
+                                        </label>
+                                        <input type="text"
+                                            wire:model="liste_voyageurs.{{ $index }}.nom_prenom_assure"
+                                            id="nom_prenom_assure_{{ $index }}"
+                                            class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
+                                            required />
+                                    </div>
 
-                                <!-- Url Billet -->
-                                <div class="mb-4">
-                                    <label for="url_billet_voyage_{{ $index }}"
-                                        class="block text-sm font-medium text-black">Image du billet d'avion</label>
-                                    <input type="file"
-                                        wire:model="liste_voyageurs.{{ $index }}.url_billet_voyage"
-                                        id="url_billet_voyage_{{ $index }}"
-                                        class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
-                                        required />
-                                    @error('liste_voyageurs.' . $index . '.url_billet_voyage')
-                                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                    <!-- Date de naissance -->
+                                    <div class="mb-4">
+                                        <label for="date_naissance_assure_{{ $index }}"
+                                            class="block text-sm font-medium text-black">
+                                            Date de naissance
+                                        </label>
+                                        <input type="date"
+                                            wire:model="liste_voyageurs.{{ $index }}.date_naissance_assure"
+                                            id="date_naissance_assure_{{ $index }}"
+                                            class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
+                                            required />
+                                    </div>
 
-                                <!-- Email -->
-                                <div class="col-span-1 md:col-span-2 mb-4">
-                                    <label for="email_assure_{{ $index }}"
-                                        class="block text-sm font-medium text-black">Email</label>
-                                    <input type="email"
-                                        wire:model="liste_voyageurs.{{ $index }}.email_assure"
-                                        id="email_assure_{{ $index }}"
-                                        class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
-                                        required />
-                                    @error('liste_voyageurs.' . $index . '.email_assure')
-                                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                                    @enderror
+                                    <!-- Passeport -->
+                                    <div class="mb-4">
+                                        <label for="passeport_assure_{{ $index }}"
+                                            class="block text-sm font-medium text-black">
+                                            Numéro de Passeport
+                                        </label>
+                                        <input type="text"
+                                            wire:model="liste_voyageurs.{{ $index }}.passeport_assure"
+                                            id="passeport_assure_{{ $index }}"
+                                            class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
+                                            required />
+                                    </div>
+
+                                    <!-- URL Passeport -->
+                                    <div class="mb-4">
+                                        <label for="url_passeport_assure_{{ $index }}"
+                                            class="block text-sm font-medium text-black">
+                                            Image du Passeport
+                                        </label>
+                                        <input type="file"
+                                            wire:model="liste_voyageurs.{{ $index }}.url_passeport_assure"
+                                            id="url_passeport_assure_{{ $index }}"
+                                            class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
+                                            required />
+                                    </div>
+
+                                    <!-- URL Billet (affiché uniquement pour le premier voyageur si collectif) -->
+                                    @if ($isCollectif && $index === 0)
+                                        <div class="mb-4">
+                                            <label for="url_billet_voyage_{{ $index }}"
+                                                class="block text-sm font-medium text-black">
+                                                Image du billet collectif
+                                            </label>
+                                            <input type="file" wire:model="url_billet_voyage"
+                                                id="url_billet_voyage_{{ $index }}"
+                                                class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
+                                                required />
+                                        </div>
+                                    @elseif (!$isCollectif)
+                                        <div class="mb-4">
+                                            <label for="url_billet_voyage_{{ $index }}"
+                                                class="block text-sm font-medium text-black">
+                                                Image du billet individuel
+                                            </label>
+                                            <input type="file"
+                                                wire:model="liste_voyageurs.{{ $index }}.url_billet_voyage"
+                                                id="url_billet_voyage_{{ $index }}"
+                                                class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
+                                                required />
+                                        </div>
+                                    @endif
+
+                                    <!-- Email -->
+                                    <div class="col-span-1 md:col-span-2 mb-4">
+                                        <label for="email_assure_{{ $index }}"
+                                            class="block text-sm font-medium text-black">
+                                            Email
+                                        </label>
+                                        <input type="email"
+                                            wire:model="liste_voyageurs.{{ $index }}.email_assure"
+                                            id="email_assure_{{ $index }}"
+                                            class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
+                                            required />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+
                 </div>
+
 
                 <!-- Bouton de soumission -->
                 <div class="flex justify-center mt-6 gap-2">
