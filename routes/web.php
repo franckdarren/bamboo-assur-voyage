@@ -1,10 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('home');
 });
+
+Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
+Route::post('/payment-callback', [PaymentController::class, 'callback'])->name('payment.callback');
+Route::get('/payment-success', [PaymentController::class, 'success'])->name('payment.success');
+
+
 
 Route::middleware([
     'auth:sanctum',

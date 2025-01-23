@@ -8,9 +8,11 @@ use App\Models\Agence;
 use Livewire\Component;
 use App\Models\Cotation;
 use App\Models\Souscription;
+use Illuminate\Http\Request;
 use Livewire\WithValidation;
 use Livewire\WithFileUploads;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmationSouscription;
 use Illuminate\Support\Facades\Storage;
@@ -58,7 +60,7 @@ class Simulateur extends Component
 
     protected $tarifs = [
         'afrique-shengen' => [
-            'pays' => ['Afrique du Sud',  'Algérie', 'Allemagne', 'Angola', 'Autriche', 'Belgique', 'Bénin', 'Burkina Faso', 'Burundi', 'Cameroun', 'Cap-Vert', 'République Centrafricaine', 'Tchad', 'Comores', 'Congo', 'République Démocratique du Congo', "Côte d'Ivoire", 'Djibouti', 'Danemark', 'Égypte', 'Érythrée', 'Espagne', 'Estonie', 'Eswatini', 'Éthiopie', 'Finlande', 'France', 'Gabon', 'Gambie', 'Ghana', 'Grèce', 'Guinée', 'Guinée-Bissau', 'Guinée Equatoriale', 'Hongrie', 'Islande', 'Italie', 'Kenya', 'Lesotho', 'Lettonie', 'Lituanie', 'Luxembourg', 'Madagascar',  'Malawi', 'Mali', 'Malte', 'Maroc', 'Maurice', 'Mauritanie', 'Mozambique', 'Namibie', 'Niger', 'Nigéria', 'Norvège', 'Ouganda', 'Pays-Bas', 'Portugal', 'Rwanda', 'Sénégal', 'Seychelles', 'Sierra Leone', 'Slovaquie', 'Slovénie', 'Somalie', 'Soudan', 'Suède', 'Suisse', 'Tanzanie', 'Togo', 'Tunisie', 'Zambie', 'Zimbabwe'], // Ajoutez les pays concernés
+            'pays' => ['Afrique du Sud', 'Algérie', 'Allemagne', 'Angola', 'Autriche', 'Belgique', 'Bénin', 'Burkina Faso', 'Burundi', 'Cameroun', 'Cap-Vert', 'République Centrafricaine', 'Tchad', 'Comores', 'Congo', 'République Démocratique du Congo', "Côte d'Ivoire", 'Djibouti', 'Danemark', 'Égypte', 'Érythrée', 'Espagne', 'Estonie', 'Eswatini', 'Éthiopie', 'Finlande', 'France', 'Gabon', 'Gambie', 'Ghana', 'Grèce', 'Guinée', 'Guinée-Bissau', 'Guinée Equatoriale', 'Hongrie', 'Islande', 'Italie', 'Kenya', 'Lesotho', 'Lettonie', 'Lituanie', 'Luxembourg', 'Madagascar', 'Malawi', 'Mali', 'Malte', 'Maroc', 'Maurice', 'Mauritanie', 'Mozambique', 'Namibie', 'Niger', 'Nigéria', 'Norvège', 'Ouganda', 'Pays-Bas', 'Portugal', 'Rwanda', 'Sénégal', 'Seychelles', 'Sierra Leone', 'Slovaquie', 'Slovénie', 'Somalie', 'Soudan', 'Suède', 'Suisse', 'Tanzanie', 'Togo', 'Tunisie', 'Zambie', 'Zimbabwe'], // Ajoutez les pays concernés
             'tarifs' => [
                 [1, 7, 13000],
                 [8, 10, 16000],
@@ -402,9 +404,28 @@ class Simulateur extends Component
     public function createSouscriptionWithPaiement()
     {
 
-        // Créer une nouvelle cotation
+        $this->validate([
+            'destination' => 'required|string',
+            'voyageurs' => 'required|integer|min:1',
+            'depart' => 'required|date',
+            'retour' => 'required|date|after_or_equal:depart',
+            'nombreJours' => 'required|integer|min:1',
+            'montant' => 'required|numeric',
+            'nom_prenom_souscripteur' => 'required|string',
+            'adresse_souscripteur' => 'required|string',
+            'phone_souscripteur' => 'required|string',
+            'email_souscripteur' => 'required|email',
+            'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
+            'liste_voyageurs.*.date_naissance_assure' => 'required|date',
+            'liste_voyageurs.*.adresse_assure' => 'required|string',
+            'liste_voyageurs.*.phone_assure' => 'required|string',
+            'liste_voyageurs.*.email_assure' => 'required|email',
+            'liste_voyageurs.*.passeport_assure' => 'required|string',
+            'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+        ]);
+
         $cotation = Cotation::create([
-            'destination' => $this->destination,  // Assurez-vous que vous passez ces données dans le formulaire
+            'destination' => $this->destination,
             'voyageurs' => $this->voyageurs,
             'depart' => $this->depart,
             'retour' => $this->retour,
@@ -412,49 +433,38 @@ class Simulateur extends Component
             'montant' => $this->montant,
         ]);
 
-        // Créer les souscriptions pour chaque voyageur
-        foreach ($this->liste_voyageurs as $voyageur) {
+        foreach ($this->liste_voyageurs as &$voyageur) {
+            if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
+                $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
+                $voyageur['url_passeport_assure'] = $path;
+            }
+
             $souscription = Souscription::create([
-                'cotation_id' => $cotation->id,  // Lier la souscription à la cotation
+                'cotation_id' => $cotation->id,
                 'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
                 'date_naissance_assure' => $voyageur['date_naissance_assure'],
                 'adresse_assure' => $voyageur['adresse_assure'],
                 'phone_assure' => $voyageur['phone_assure'],
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
-
-                // Informations du souscripteur
+                'url_passeport_assure' => $voyageur['url_passeport_assure'],
                 'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
                 'adresse_souscripteur' => $this->adresse_souscripteur,
                 'phone_souscripteur' => $this->phone_souscripteur,
                 'email_souscripteur' => $this->email_souscripteur,
-
-                'statut' => 'En cours de traitement',
-                'mode_paiement' => 'En ligne',
-
             ]);
         }
 
-        Mail::to($souscription->email_assure)->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
-
-        // Message de succès
-        session()->flash('message', 'Souscription(s) créées avec succès. Verifier la boite mail du souscripteur.');
-
-        // Réinitialiser les données des voyageurs (optionnel)
-        $this->liste_voyageurs = [];
-        // Réinitialiser les données des voyageurs et du souscripteur (optionnel)
-        $this->nom_prenom_souscripteur = '';
-        $this->adresse_souscripteur = '';
-        $this->phone_souscripteur = '';
-        $this->email_souscripteur = '';
-        $this->destination = '';  // Réinitialiser destination et autres champs de cotation
-        $this->voyageurs = 1;
-        $this->depart = null;
-        $this->retour = null;
-        $this->montant = null;
-        $this->date_rdv = null;
-        $this->heure_rdv = null;
-        $this->agence_id = '';
+        // Appel à l'API pour le paiement
+        
+        $response = app(\App\Http\Controllers\PaymentController::class)->checkout(new Request([
+            'cotation_id' => $cotation->id,
+            'name' => $this->nom_prenom_souscripteur,
+            'email' => $this->email_souscripteur,
+            'amount' => $this->montant,
+            'phone' => $this->phone_souscripteur,
+            'email_souscripteur' => $this->email_souscripteur,
+        ]));
     }
 
     public function imprimerDevis()
@@ -502,14 +512,14 @@ class Simulateur extends Component
                 'phone_souscripteur' => $this->phone_souscripteur,
                 'email_souscripteur' => $this->email_souscripteur,
 
-                'liste_voyageurs' => $this->liste_voyageurs, 
+                'liste_voyageurs' => $this->liste_voyageurs,
             ];
 
             $pdf = Pdf::loadView('devis', $data);
 
             return response()->streamDownload(function () use ($pdf) {
                 echo $pdf->stream();
-                }, 'devis.pdf');
+            }, 'devis.pdf');
         }
     }
 

@@ -22,4 +22,9 @@ class Cotation extends Model
     {
         return $this->hasMany(Souscription::class);
     }
+
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class);
+    }
 }

@@ -435,11 +435,11 @@
                         </button>
 
                         <!-- Bouton Payer en ligne -->
-                        {{-- <button type="button"
-                            class="px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
+                        <button type="button"
+                            class="px-6 py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
                             wire:click="createSouscriptionWithPaiement">
                             Payer en Ligne
-                        </button> --}}
+                        </button>
                     </div>
                 </div>
 
@@ -479,8 +479,8 @@
                             @error('agence_id')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
-                        </div> 
-                        
+                        </div>
+
                         <!-- Date du rendez-vous -->
                         <div class="mb-4">
                             <label for="date_rdv" class="block text-sm font-medium text-black">Sélectionnez
