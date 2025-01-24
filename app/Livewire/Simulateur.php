@@ -97,6 +97,7 @@ class Simulateur extends Component
     protected $rules = [
         'depart' => 'required|date|after_or_equal:today',
         'retour' => 'required|date|after:depart',
+        'phone_souscripteur' => ['required', 'regex:/^\d{9}$/'], // Validation avec regex pour 9 chiffres
     ];
 
     public function messages()
@@ -123,6 +124,8 @@ class Simulateur extends Component
             'heure_rdv.required' => 'L\'heure de rendez-vous est obligatoire.',
             'heure_rdv.date_format' => 'L\'heure doit être au format HH:MM.',
             'agence_id.required' => 'L\'agence est obligatoire.',
+
+            'phone_souscripteur.regex' => 'Le champ téléphone doit contenir exactement 9 chiffres.',
         ];
     }
 
@@ -316,7 +319,7 @@ class Simulateur extends Component
             $this->validate([
                 'nom_prenom_souscripteur' => 'required|string',
                 'adresse_souscripteur' => 'required|string',
-                'phone_souscripteur' => 'required|string',
+                'phone_souscripteur' => 'required|string|regex:/^\d{9}$/',
                 'email_souscripteur' => 'required|email',
                 'liste_voyageurs.*.passeport_assure' => 'required|string',
                 'liste_voyageurs.*.url_passeport_assure' => 'required|image|max:10240',
