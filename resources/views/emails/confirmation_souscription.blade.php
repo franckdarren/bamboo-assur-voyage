@@ -40,12 +40,7 @@
                 <p style="font-size: 14px; line-height: 1.6; margin: 0;">Nom et Prénom :
                     <strong>{{ $souscription->nom_prenom_assure }}</strong>
                 </p>
-                <p style="font-size: 14px; line-height: 1.6; margin: 0;">Adresse :
-                    <strong>{{ $souscription->adresse_assure }}</strong>
-                </p>
-                <p style="font-size: 14px; line-height: 1.6; margin: 0;">Téléphone :
-                    <strong>{{ $souscription->phone_assure }}</strong>
-                </p>
+                
                 <p style="font-size: 14px; line-height: 1.6; margin: 0;">Email :
                     <strong>{{ $souscription->email_assure }}</strong>
                 </p>

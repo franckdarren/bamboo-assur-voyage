@@ -117,6 +117,7 @@ class Simulateur extends Component
             'liste_voyageurs.*.email_assure.required' => 'L\'email du voyageur est obligatoire.',
             'liste_voyageurs.*.passeport_assure.required' => 'Le numéro de passeport est requis.',
             'liste_voyageurs.*.url_passeport_assure.required' => 'L\'image du passeport est obligatoire.',
+            'liste_voyageurs.*.url_billet_voyage.required' => 'L\'image du billet de voyage est obligatoire.',
             'date_rdv.required' => 'La date de rendez-vous est obligatoire.',
             'heure_rdv.required' => 'L\'heure de rendez-vous est obligatoire.',
             'heure_rdv.date_format' => 'L\'heure doit être au format HH:MM.',
@@ -300,7 +301,8 @@ class Simulateur extends Component
                 'phone_souscripteur' => 'required|string',
                 'email_souscripteur' => 'required|email',
                 'liste_voyageurs.*.passeport_assure' => 'required|string',
-                'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+                'liste_voyageurs.*.url_passeport_assure' => 'required|image|max:10240',
+                'liste_voyageurs.*.url_billet_voyage' => 'nullable|image|max:10240',
                 'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
                 'liste_voyageurs.*.date_naissance_assure' => 'required|date',
                 'liste_voyageurs.*.email_assure' => 'required|email',
@@ -308,39 +310,39 @@ class Simulateur extends Component
         }
     }
 
-    // Met à jour l'URL collective pour tous les voyageurs
-    public function updatedUrlBilletCollectif($value)
-    {
-        if ($this->isCollectif) {
-            foreach ($this->liste_voyageurs as $index => $voyageur) {
-                $this->liste_voyageurs[$index]['url_billet_voyage'] = $value;
-            }
-        }
-    }
+    // // Met à jour l'URL collective pour tous les voyageurs
+    // public function updatedUrlBilletCollectif($value)
+    // {
+    //     if ($this->isCollectif) {
+    //         foreach ($this->liste_voyageurs as $index => $voyageur) {
+    //             $this->liste_voyageurs[$index]['url_billet_voyage'] = $value;
+    //         }
+    //     }
+    // }
 
-    public function updatedIsCollectif()
-    {
-        if ($this->isCollectif) {
-            // Si le billet est collectif, applique l'URL du billet du premier voyageur à tous les autres
-            $urlCollectif = $this->liste_voyageurs[0]['url_billet_voyage'] ?? '';
-            foreach ($this->liste_voyageurs as $index => &$voyageur) {
-                if ($index > 0) {
-                    $voyageur['url_billet_voyage'] = $urlCollectif;
-                }
-            }
-        }
-    }
+    // public function updatedIsCollectif()
+    // {
+    //     if ($this->isCollectif) {
+    //         // Si le billet est collectif, applique l'URL du billet du premier voyageur à tous les autres
+    //         $urlCollectif = $this->liste_voyageurs[0]['url_billet_voyage'] ?? '';
+    //         foreach ($this->liste_voyageurs as $index => &$voyageur) {
+    //             if ($index > 0) {
+    //                 $voyageur['url_billet_voyage'] = $urlCollectif;
+    //             }
+    //         }
+    //     }
+    // }
 
-    public function updatedListeVoyageurs($value, $key)
-    {
-        // Si le billet est collectif, synchronise l'URL entre tous les voyageurs
-        if ($this->isCollectif && str_contains($key, '.url_billet_voyage')) {
-            $urlCollectif = $this->liste_voyageurs[0]['url_billet_voyage'] ?? '';
-            foreach ($this->liste_voyageurs as $index => &$voyageur) {
-                $voyageur['url_billet_voyage'] = $urlCollectif;
-            }
-        }
-    }
+    // public function updatedListeVoyageurs($value, $key)
+    // {
+    //     // Si le billet est collectif, synchronise l'URL entre tous les voyageurs
+    //     if ($this->isCollectif && str_contains($key, '.url_billet_voyage')) {
+    //         $urlCollectif = $this->liste_voyageurs[0]['url_billet_voyage'] ?? '';
+    //         foreach ($this->liste_voyageurs as $index => &$voyageur) {
+    //             $voyageur['url_billet_voyage'] = $urlCollectif;
+    //         }
+    //     }
+    // }
 
 
     // Fonction pour créer une souscription
@@ -378,7 +380,7 @@ class Simulateur extends Component
             'montant' => $this->montant,
         ]);
 
-        $isCollectifOn= $this->isCollectif;
+        $isCollectifOn = $this->isCollectif;
 
         foreach ($this->liste_voyageurs as &$voyageur) {
             if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
@@ -386,23 +388,13 @@ class Simulateur extends Component
                 $voyageur['url_passeport_assure'] = $path;
             }
             if (isset($voyageur['url_billet_voyage']) && $voyageur['url_billet_voyage']) {
-                $path = $voyageur['url_billet_voyage']->store('billets', 'public');
-                $voyageur['url_billet_voyage'] = $path;
+                $path2 = $voyageur['url_billet_voyage']->store('billets', 'public');
+                $voyageur['url_billet_voyage'] = $path2;
             }
 
             if ($isCollectifOn) {
-                foreach ($this->liste_voyageurs as $index => $voyageur) {
-                    // Déterminer l'URL du billet de voyage (individuel ou collectif)
-                    $urlBilletVoyage = $this->isCollectif && isset($this->liste_voyageurs[0]['url_billet_voyage'])
-                        ? $this->liste_voyageurs[0]['url_billet_voyage'] // Utiliser le billet du premier voyageur si collectif
-                        : ($voyageur['url_billet_voyage'] ?? null); // Sinon, billet individuel ou null
-                
-                    // Vérifier que les données obligatoires sont présentes
-                    if (empty($voyageur['nom_prenom_assure']) || empty($voyageur['date_naissance_assure']) || empty($voyageur['email_assure'])) {
-                        throw new \Exception("Données manquantes pour le voyageur à l'index $index");
-                    }
-                
-                    // Créer une souscription pour chaque voyageur
+                $urlBilletVoyage = $this->liste_voyageurs[0]['url_billet_voyage'];
+                    // Créer une souscription pour chaque voyageur en mode collectif
                     $souscription = Souscription::create([
                         'cotation_id' => $cotation->id,
                         'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
@@ -416,19 +408,17 @@ class Simulateur extends Component
                         'phone_souscripteur' => $this->phone_souscripteur,
                         'email_souscripteur' => $this->email_souscripteur,
                     ]);
-                
-                    // Créer un rendez-vous pour chaque souscription
-                    $rdv = Rdv::create([
-                        'souscription_id' => $souscription->id,
-                        'date_rdv' => $this->date_rdv,
-                        'agence_id' => $this->agence_id,
-                        'heure_rdv' => $this->heure_rdv,
-                    ]);
-                
-                    // Envoyer la confirmation par email
-                    EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
-                }
-                
+
+                // Créer un rendez-vous pour chaque souscription
+                $rdv = Rdv::create([
+                    'souscription_id' => $souscription->id,
+                    'date_rdv' => $this->date_rdv,
+                    'agence_id' => $this->agence_id,
+                    'heure_rdv' => $this->heure_rdv,
+                ]);
+
+                // Envoyer la confirmation par email
+                EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
 
             } else {
                 $souscription = Souscription::create([
@@ -574,6 +564,8 @@ class Simulateur extends Component
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
                 'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                'url_billet_voyage' => $voyageur['url_billet_voyage'],
+
                 'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
                 'adresse_souscripteur' => $this->adresse_souscripteur,
                 'phone_souscripteur' => $this->phone_souscripteur,

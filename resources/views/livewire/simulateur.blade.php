@@ -376,7 +376,7 @@
                                                 class="block text-sm font-medium text-black">
                                                 Image du billet collectif
                                             </label>
-                                            <input type="file" wire:model="url_billet_voyage"
+                                            <input type="file" wire:model="liste_voyageurs.{{ $index }}.url_billet_voyage"
                                                 id="url_billet_voyage_{{ $index }}"
                                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                                 required />
