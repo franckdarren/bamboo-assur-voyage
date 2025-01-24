@@ -402,51 +402,32 @@ class Simulateur extends Component
         $isCollectifOn = $this->isCollectif;
 
         foreach ($this->liste_voyageurs as &$voyageur) {
-            try {
-                // Gestion du passeport
-                if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
-                    // Valider le type MIME
-                    if (!in_array($voyageur['url_passeport_assure']->getMimeType(), ['image/jpeg', 'image/png', 'application/pdf'])) {
-                        throw new \Exception("Type de fichier non autorisé pour le passeport");
-                    }
-            
-                    // Stocker le fichier
-                    $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
-                    $voyageur['url_passeport_assure'] = $path;
-                }
-            
-                // Gestion du billet
-                if (isset($voyageur['url_billet_voyage']) && $voyageur['url_billet_voyage']) {
-                    // Valider le type MIME
-                    if (!in_array($voyageur['url_billet_voyage']->getMimeType(), ['image/jpeg', 'image/png', 'application/pdf'])) {
-                        throw new \Exception("Type de fichier non autorisé pour le billet");
-                    }
-            
-                    // Stocker le fichier
-                    $path2 = $voyageur['url_billet_voyage']->store('billets', 'public');
-                    $voyageur['url_billet_voyage'] = $path2;
-                }
-            } catch (\Exception $e) {
-                throw new \Exception("Erreur lors de l'enregistrement des fichiers : " . $e->getMessage());
+            if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
+                $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
+                $voyageur['url_passeport_assure'] = $path;
             }
-            
+            if (isset($voyageur['url_billet_voyage']) && $voyageur['url_billet_voyage']) {
+                $path2 = $voyageur['url_billet_voyage']->store('billets', 'public');
+                $voyageur['url_billet_voyage'] = $path2;
+            }
+
 
             if ($isCollectifOn) {
                 $urlBilletVoyage = $this->liste_voyageurs[0]['url_billet_voyage'];
-                    // Créer une souscription pour chaque voyageur en mode collectif
-                    $souscription = Souscription::create([
-                        'cotation_id' => $cotation->id,
-                        'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
-                        'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                        'email_assure' => $voyageur['email_assure'],
-                        'passeport_assure' => $voyageur['passeport_assure'],
-                        'url_passeport_assure' => $voyageur['url_passeport_assure'],
-                        'url_billet_voyage' => $urlBilletVoyage, // Utiliser l'URL déterminée
-                        'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
-                        'adresse_souscripteur' => $this->adresse_souscripteur,
-                        'phone_souscripteur' => $this->phone_souscripteur,
-                        'email_souscripteur' => $this->email_souscripteur,
-                    ]);
+                // Créer une souscription pour chaque voyageur en mode collectif
+                $souscription = Souscription::create([
+                    'cotation_id' => $cotation->id,
+                    'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                    'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                    'email_assure' => $voyageur['email_assure'],
+                    'passeport_assure' => $voyageur['passeport_assure'],
+                    'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                    'url_billet_voyage' => $urlBilletVoyage, // Utiliser l'URL déterminée
+                    'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                    'adresse_souscripteur' => $this->adresse_souscripteur,
+                    'phone_souscripteur' => $this->phone_souscripteur,
+                    'email_souscripteur' => $this->email_souscripteur,
+                ]);
 
                 // Créer un rendez-vous pour chaque souscription
                 $rdv = Rdv::create([
