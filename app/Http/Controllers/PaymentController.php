@@ -28,7 +28,6 @@ class PaymentController extends Controller
             'cotation_id' => $validated['cotation_id'],
             'status' => 'created',
         ]);
-
         try {
             $response = Http::withBasicAuth('FranckDarren', '46363079-3caf-4cf9-ba59-dcf40b4cd53a')
                 ->withHeaders([
@@ -53,10 +52,10 @@ class PaymentController extends Controller
                 // Rediriger le client vers la plateforme eBilling avec les bons paramètres
                 $redirectUrl = 'https://test.billing-easy.net?invoice_number='
                     . $data['e_bill']['bill_id']
-                    . '&merchant_redirect_url='
+                    . '&redirect_url='
                     . urlencode(route('payment.success'));
 
-                    dd($redirectUrl);
+                // dd($redirectUrl);
 
                 return redirect()->away($redirectUrl);
 

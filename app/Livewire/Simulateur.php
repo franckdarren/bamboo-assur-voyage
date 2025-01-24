@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Livewire\WithValidation;
 use Livewire\WithFileUploads;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmationSouscription;
 use Illuminate\Support\Facades\Storage;
@@ -494,7 +493,6 @@ class Simulateur extends Component
 
     public function createSouscriptionWithPaiement()
     {
-
         $this->validate([
             'destination' => 'required|string',
             'voyageurs' => 'required|integer|min:1',
@@ -508,13 +506,13 @@ class Simulateur extends Component
             'email_souscripteur' => 'required|email',
             'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
             'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-            'liste_voyageurs.*.adresse_assure' => 'required|string',
-            'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
             'liste_voyageurs.*.passeport_assure' => 'required|string',
-            'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+            'liste_voyageurs.*.url_passeport_assure' => 'required|image|max:10240',
+            'liste_voyageurs.*.url_billet_voyage' => 'nullable|image|max:10240',
         ]);
 
+        // Créer une nouvelle cotation
         $cotation = Cotation::create([
             'destination' => $this->destination,
             'voyageurs' => $this->voyageurs,
@@ -524,36 +522,72 @@ class Simulateur extends Component
             'montant' => $this->montant,
         ]);
 
+        $isCollectifOn = $this->isCollectif;
+
+        // Créer les souscriptions pour chaque voyageur
         foreach ($this->liste_voyageurs as &$voyageur) {
             if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
                 $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
                 $voyageur['url_passeport_assure'] = $path;
             }
+            if (isset($voyageur['url_billet_voyage']) && $voyageur['url_billet_voyage']) {
+                $path2 = $voyageur['url_billet_voyage']->store('billets', 'public');
+                $voyageur['url_billet_voyage'] = $path2;
+            }
 
-            $souscription = Souscription::create([
+            if ($isCollectifOn) {
+                $urlBilletVoyage = $this->liste_voyageurs[0]['url_billet_voyage'];
+                // Créer une souscription pour chaque voyageur en mode collectif
+                $souscription = Souscription::create([
+                    'cotation_id' => $cotation->id,
+                    'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                    'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                    'email_assure' => $voyageur['email_assure'],
+                    'passeport_assure' => $voyageur['passeport_assure'],
+                    'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                    'url_billet_voyage' => $urlBilletVoyage, // Utiliser l'URL déterminée
+                    'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                    'adresse_souscripteur' => $this->adresse_souscripteur,
+                    'phone_souscripteur' => $this->phone_souscripteur,
+                    'email_souscripteur' => $this->email_souscripteur,
+                ]);
+
+                // Envoyer la confirmation par email
+                // EnvoyerConfirmationSouscription::dispatch($souscription, $cotation);
+
+            } else {
+                $souscription = Souscription::create([
+                    'cotation_id' => $cotation->id,
+                    'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                    'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                    'email_assure' => $voyageur['email_assure'],
+                    'passeport_assure' => $voyageur['passeport_assure'],
+                    'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                    'url_billet_voyage' => $voyageur['url_billet_voyage'],
+                    'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                    'adresse_souscripteur' => $this->adresse_souscripteur,
+                    'phone_souscripteur' => $this->phone_souscripteur,
+                    'email_souscripteur' => $this->email_souscripteur,
+                ]);
+            }
+
+            // Appel à l'API pour le paiement
+
+            $response = app(\App\Http\Controllers\PaymentController::class)->checkout(new Request([
                 'cotation_id' => $cotation->id,
-                'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
-                'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'email_assure' => $voyageur['email_assure'],
-                'passeport_assure' => $voyageur['passeport_assure'],
-                'url_passeport_assure' => $voyageur['url_passeport_assure'],
-                'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
-                'adresse_souscripteur' => $this->adresse_souscripteur,
-                'phone_souscripteur' => $this->phone_souscripteur,
+                'name' => $this->nom_prenom_souscripteur,
+                'email' => $this->email_souscripteur,
+                'amount' => $this->montant,
+                'phone' => $this->phone_souscripteur,
                 'email_souscripteur' => $this->email_souscripteur,
-            ]);
-        }
+            ]));
 
-        // Appel à l'API pour le paiement
-        
-        $response = app(\App\Http\Controllers\PaymentController::class)->checkout(new Request([
-            'cotation_id' => $cotation->id,
-            'name' => $this->nom_prenom_souscripteur,
-            'email' => $this->email_souscripteur,
-            'amount' => $this->montant,
-            'phone' => $this->phone_souscripteur,
-            'email_souscripteur' => $this->email_souscripteur,
-        ]));
+
+            // Message de succès
+            // session()->flash('success', 'Souscription(s) créées avec succès. Verifier la boite mail du souscripteur.');
+
+            $this->resetInputFields();
+        }
     }
 
     public function imprimerDevis()
