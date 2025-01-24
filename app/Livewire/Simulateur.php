@@ -45,6 +45,10 @@ class Simulateur extends Component
     public $email_assure;
     public $passeport_assure;
     public $url_passeport_assure;
+    public $url_billet_voyage;
+
+    public $urlBilletCollectif = null; // Pour l'URL collective
+
     public $statut;
     public $mode_paiement;
 
@@ -54,7 +58,7 @@ class Simulateur extends Component
     public $agence_id;
     public $souscription_id;
 
-
+    public $isCollectif = false; // Par défaut, individuel
 
     public $liste_voyageurs = [];
 
@@ -112,18 +116,16 @@ class Simulateur extends Component
             'email_souscripteur.required' => 'L\'email du souscripteur est obligatoire.',
             'liste_voyageurs.*.nom_prenom_assure.required' => 'Le nom et prénom du voyageur est requis.',
             'liste_voyageurs.*.date_naissance_assure.required' => 'La date de naissance du voyageur est obligatoire.',
-            'liste_voyageurs.*.adresse_assure.required' => 'L\'adresse du voyageur est requise.',
-            'liste_voyageurs.*.phone_assure.required' => 'Le téléphone du voyageur est requis.',
             'liste_voyageurs.*.email_assure.required' => 'L\'email du voyageur est obligatoire.',
             'liste_voyageurs.*.passeport_assure.required' => 'Le numéro de passeport est requis.',
             'liste_voyageurs.*.url_passeport_assure.required' => 'L\'image du passeport est obligatoire.',
+            'liste_voyageurs.*.url_billet_voyage.required' => 'L\'image du billet de voyage est obligatoire.',
             'date_rdv.required' => 'La date de rendez-vous est obligatoire.',
             'heure_rdv.required' => 'L\'heure de rendez-vous est obligatoire.',
             'heure_rdv.date_format' => 'L\'heure doit être au format HH:MM.',
             'agence_id.required' => 'L\'agence est obligatoire.',
         ];
     }
-
 
     protected function getCategorieByDestination($destination)
     {
@@ -173,11 +175,11 @@ class Simulateur extends Component
         $this->liste_voyageurs = array_fill(0, $value, [
             'nom_prenom_assure' => '',
             'date_naissance_assure' => '',
-            'adresse_assure' => '',
-            'phone_assure' => '',
             'email_assure' => '',
             'passeport_assure' => '',
             'url_passeport_assure' => '',
+            'url_billet_voyage' => '',
+
         ]);
     }
 
@@ -279,6 +281,23 @@ class Simulateur extends Component
         $this->currentStep++;
     }
 
+    public function stepResume()
+    {
+        $this->validateStep();
+        $this->currentStep = 5;
+    }
+
+    public function stepPayer()
+    {
+        $this->validateStep();
+        $this->currentStep = 3;
+    }
+
+    public function returnResume()
+    {
+        $this->currentStep = 2;
+    }
+
     public function previousStep()
     {
         $this->currentStep--;
@@ -301,15 +320,48 @@ class Simulateur extends Component
                 'phone_souscripteur' => 'required|string',
                 'email_souscripteur' => 'required|email',
                 'liste_voyageurs.*.passeport_assure' => 'required|string',
-                'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+                'liste_voyageurs.*.url_passeport_assure' => 'required|image|max:10240',
+                'liste_voyageurs.*.url_billet_voyage' => 'nullable|image|max:10240',
                 'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
                 'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-                'liste_voyageurs.*.adresse_assure' => 'required|string',
-                'liste_voyageurs.*.phone_assure' => 'required|string',
                 'liste_voyageurs.*.email_assure' => 'required|email',
             ]);
         }
     }
+
+    // // Met à jour l'URL collective pour tous les voyageurs
+    // public function updatedUrlBilletCollectif($value)
+    // {
+    //     if ($this->isCollectif) {
+    //         foreach ($this->liste_voyageurs as $index => $voyageur) {
+    //             $this->liste_voyageurs[$index]['url_billet_voyage'] = $value;
+    //         }
+    //     }
+    // }
+
+    // public function updatedIsCollectif()
+    // {
+    //     if ($this->isCollectif) {
+    //         // Si le billet est collectif, applique l'URL du billet du premier voyageur à tous les autres
+    //         $urlCollectif = $this->liste_voyageurs[0]['url_billet_voyage'] ?? '';
+    //         foreach ($this->liste_voyageurs as $index => &$voyageur) {
+    //             if ($index > 0) {
+    //                 $voyageur['url_billet_voyage'] = $urlCollectif;
+    //             }
+    //         }
+    //     }
+    // }
+
+    // public function updatedListeVoyageurs($value, $key)
+    // {
+    //     // Si le billet est collectif, synchronise l'URL entre tous les voyageurs
+    //     if ($this->isCollectif && str_contains($key, '.url_billet_voyage')) {
+    //         $urlCollectif = $this->liste_voyageurs[0]['url_billet_voyage'] ?? '';
+    //         foreach ($this->liste_voyageurs as $index => &$voyageur) {
+    //             $voyageur['url_billet_voyage'] = $urlCollectif;
+    //         }
+    //     }
+    // }
 
 
     // Fonction pour créer une souscription
@@ -328,11 +380,11 @@ class Simulateur extends Component
             'email_souscripteur' => 'required|email',
             'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
             'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-            'liste_voyageurs.*.adresse_assure' => 'required|string',
-            'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
             'liste_voyageurs.*.passeport_assure' => 'required|string',
-            'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+            'liste_voyageurs.*.url_passeport_assure' => 'required|image|max:10240',
+            'liste_voyageurs.*.url_billet_voyage' => 'nullable|image|max:10240',
+
             'date_rdv' => 'required|date',
             'heure_rdv' => 'required|date_format:H:i',
             'agence_id' => 'required',
@@ -347,42 +399,100 @@ class Simulateur extends Component
             'montant' => $this->montant,
         ]);
 
+        $isCollectifOn = $this->isCollectif;
+
         foreach ($this->liste_voyageurs as &$voyageur) {
-            if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
-                $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
-                $voyageur['url_passeport_assure'] = $path;
+            try {
+                // Gestion du passeport
+                if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
+                    // Valider le type MIME
+                    if (!in_array($voyageur['url_passeport_assure']->getMimeType(), ['image/jpeg', 'image/png', 'application/pdf'])) {
+                        throw new \Exception("Type de fichier non autorisé pour le passeport");
+                    }
+            
+                    // Stocker le fichier
+                    $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
+                    $voyageur['url_passeport_assure'] = $path;
+                }
+            
+                // Gestion du billet
+                if (isset($voyageur['url_billet_voyage']) && $voyageur['url_billet_voyage']) {
+                    // Valider le type MIME
+                    if (!in_array($voyageur['url_billet_voyage']->getMimeType(), ['image/jpeg', 'image/png', 'application/pdf'])) {
+                        throw new \Exception("Type de fichier non autorisé pour le billet");
+                    }
+            
+                    // Stocker le fichier
+                    $path2 = $voyageur['url_billet_voyage']->store('billets', 'public');
+                    $voyageur['url_billet_voyage'] = $path2;
+                }
+            } catch (\Exception $e) {
+                throw new \Exception("Erreur lors de l'enregistrement des fichiers : " . $e->getMessage());
+            }
+            
+
+            if ($isCollectifOn) {
+                $urlBilletVoyage = $this->liste_voyageurs[0]['url_billet_voyage'];
+                    // Créer une souscription pour chaque voyageur en mode collectif
+                    $souscription = Souscription::create([
+                        'cotation_id' => $cotation->id,
+                        'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                        'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                        'email_assure' => $voyageur['email_assure'],
+                        'passeport_assure' => $voyageur['passeport_assure'],
+                        'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                        'url_billet_voyage' => $urlBilletVoyage, // Utiliser l'URL déterminée
+                        'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                        'adresse_souscripteur' => $this->adresse_souscripteur,
+                        'phone_souscripteur' => $this->phone_souscripteur,
+                        'email_souscripteur' => $this->email_souscripteur,
+                    ]);
+
+                // Créer un rendez-vous pour chaque souscription
+                $rdv = Rdv::create([
+                    'souscription_id' => $souscription->id,
+                    'date_rdv' => $this->date_rdv,
+                    'agence_id' => $this->agence_id,
+                    'heure_rdv' => $this->heure_rdv,
+                ]);
+
+                // Envoyer la confirmation par email
+                EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+
+            } else {
+                $souscription = Souscription::create([
+                    'cotation_id' => $cotation->id,
+                    'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                    'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                    'email_assure' => $voyageur['email_assure'],
+                    'passeport_assure' => $voyageur['passeport_assure'],
+                    'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                    'url_billet_voyage' => $voyageur['url_billet_voyage'],
+                    'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                    'adresse_souscripteur' => $this->adresse_souscripteur,
+                    'phone_souscripteur' => $this->phone_souscripteur,
+                    'email_souscripteur' => $this->email_souscripteur,
+                ]);
+
+                $rdv = Rdv::create([
+                    'souscription_id' => $souscription->id,
+                    'date_rdv' => $this->date_rdv,
+                    'agence_id' => $this->agence_id,
+                    'heure_rdv' => $this->heure_rdv,
+                ]);
+
+                // Envoyer les confirmation par mail
+                EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
             }
 
-            $souscription = Souscription::create([
-                'cotation_id' => $cotation->id,
-                'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
-                'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'adresse_assure' => $voyageur['adresse_assure'],
-                'phone_assure' => $voyageur['phone_assure'],
-                'email_assure' => $voyageur['email_assure'],
-                'passeport_assure' => $voyageur['passeport_assure'],
-                'url_passeport_assure' => $voyageur['url_passeport_assure'],
-                'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
-                'adresse_souscripteur' => $this->adresse_souscripteur,
-                'phone_souscripteur' => $this->phone_souscripteur,
-                'email_souscripteur' => $this->email_souscripteur,
-            ]);
 
-            $rdv = Rdv::create([
-                'souscription_id' => $souscription->id,
-                'date_rdv' => $this->date_rdv,
-                'agence_id' => $this->agence_id,
-                'heure_rdv' => $this->heure_rdv,
-            ]);
-
-            // Envoyer les confirmation par mail
-            EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
         }
 
         session()->flash('success', 'Souscription(s) créées avec succès. Vérifiez la boîte mail du souscripteur.');
 
         $this->resetInputFields();
     }
+
 
     private function resetInputFields()
     {
@@ -443,8 +553,6 @@ class Simulateur extends Component
                 'cotation_id' => $cotation->id,
                 'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
                 'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'adresse_assure' => $voyageur['adresse_assure'],
-                'phone_assure' => $voyageur['phone_assure'],
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
                 'url_passeport_assure' => $voyageur['url_passeport_assure'],
@@ -483,8 +591,6 @@ class Simulateur extends Component
             'email_souscripteur' => 'required|email',
             'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
             'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-            'liste_voyageurs.*.adresse_assure' => 'required|string',
-            'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
             'liste_voyageurs.*.passeport_assure' => 'required|string',
             // 'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
@@ -502,11 +608,11 @@ class Simulateur extends Component
 
                 'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
                 'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'adresse_assure' => $voyageur['adresse_assure'],
-                'phone_assure' => $voyageur['phone_assure'],
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
                 'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                'url_billet_voyage' => $voyageur['url_billet_voyage'],
+
                 'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
                 'adresse_souscripteur' => $this->adresse_souscripteur,
                 'phone_souscripteur' => $this->phone_souscripteur,
@@ -531,6 +637,7 @@ class Simulateur extends Component
 
         return view('livewire.simulateur', [
             'agences' => $agences,
+            'isButtonDisabled' => $this->nombreJours > 366 || $this->montant == 0,
         ]);
     }
 }
