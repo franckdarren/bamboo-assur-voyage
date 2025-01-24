@@ -278,7 +278,7 @@
                     <label for="phone_souscripteur" class="block text-sm font-medium text-black">Téléphone</label>
                     <input type="text" wire:model.live="phone_souscripteur" id="phone_souscripteur"
                         class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
-                        required />
+                        required placeholder="000 00 00 00" />
                     @error('phone_souscripteur')
                         <span class="text-red-500 text-xs">{{ $message }}</span>
                     @enderror
@@ -328,6 +328,9 @@
                                             id="nom_prenom_assure_{{ $index }}"
                                             class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                             required />
+                                        @error('liste_voyageurs.' . $index . '.nom_prenom_assure')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <!-- Date de naissance -->
@@ -341,6 +344,9 @@
                                             id="date_naissance_assure_{{ $index }}"
                                             class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                             required />
+                                        @error('liste_voyageurs.' . $index . '.date_naissance_assure')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <!-- Passeport -->
@@ -354,6 +360,9 @@
                                             id="passeport_assure_{{ $index }}"
                                             class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                             required />
+                                        @error('liste_voyageurs.' . $index . '.passeport_assure')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <!-- URL Passeport -->
@@ -367,6 +376,9 @@
                                             id="url_passeport_assure_{{ $index }}"
                                             class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                             required />
+                                        @error('liste_voyageurs.' . $index . '.url_passeport_assure')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <!-- URL Billet (affiché uniquement pour le premier voyageur si collectif) -->
@@ -393,6 +405,9 @@
                                                 id="url_billet_voyage_{{ $index }}"
                                                 class="mt-1 block w-full p-3 shadow-sm sm:text-sm border-gray-300 rounded-lg focus:ring-[#4996D1] focus:border-[#4996D1] text-black"
                                                 required />
+                                            @error('liste_voyageurs.' . $index . '.url_billet_voyage')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                     @endif
 
