@@ -279,6 +279,23 @@ class Simulateur extends Component
         $this->currentStep++;
     }
 
+    public function stepResume()
+    {
+        $this->validateStep();
+        $this->currentStep = 5;
+    }
+
+    public function stepPayer()
+    {
+        $this->validateStep();
+        $this->currentStep = 3;
+    }
+
+    public function returnResume()
+    {
+        $this->currentStep = 2;
+    }
+
     public function previousStep()
     {
         $this->currentStep--;
@@ -383,14 +400,34 @@ class Simulateur extends Component
         $isCollectifOn = $this->isCollectif;
 
         foreach ($this->liste_voyageurs as &$voyageur) {
-            if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
-                $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
-                $voyageur['url_passeport_assure'] = $path;
+            try {
+                // Gestion du passeport
+                if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
+                    // Valider le type MIME
+                    if (!in_array($voyageur['url_passeport_assure']->getMimeType(), ['image/jpeg', 'image/png', 'application/pdf'])) {
+                        throw new \Exception("Type de fichier non autorisé pour le passeport");
+                    }
+            
+                    // Stocker le fichier
+                    $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
+                    $voyageur['url_passeport_assure'] = $path;
+                }
+            
+                // Gestion du billet
+                if (isset($voyageur['url_billet_voyage']) && $voyageur['url_billet_voyage']) {
+                    // Valider le type MIME
+                    if (!in_array($voyageur['url_billet_voyage']->getMimeType(), ['image/jpeg', 'image/png', 'application/pdf'])) {
+                        throw new \Exception("Type de fichier non autorisé pour le billet");
+                    }
+            
+                    // Stocker le fichier
+                    $path2 = $voyageur['url_billet_voyage']->store('billets', 'public');
+                    $voyageur['url_billet_voyage'] = $path2;
+                }
+            } catch (\Exception $e) {
+                throw new \Exception("Erreur lors de l'enregistrement des fichiers : " . $e->getMessage());
             }
-            if (isset($voyageur['url_billet_voyage']) && $voyageur['url_billet_voyage']) {
-                $path2 = $voyageur['url_billet_voyage']->store('billets', 'public');
-                $voyageur['url_billet_voyage'] = $path2;
-            }
+            
 
             if ($isCollectifOn) {
                 $urlBilletVoyage = $this->liste_voyageurs[0]['url_billet_voyage'];
