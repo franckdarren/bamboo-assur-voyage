@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -24,7 +23,7 @@ return new class extends Migration
             $table->string('email_assure')->nullable();
             $table->string('passeport_assure');
             $table->string('url_passeport_assure');
-            $table->string('url_billet_voyage');
+            $table->string('url_billet_voyage')->nullable();
 
             $table->string('statut')->default('En attente de paiement');
             $table->string('mode_paiement')->default('En agence');
