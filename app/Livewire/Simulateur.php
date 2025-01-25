@@ -316,18 +316,30 @@ class Simulateur extends Component
             ]);
         } elseif ($this->currentStep == 2) {
             // dd($this->liste_voyageurs);
-            $this->validate([
+            $rules = [
                 'nom_prenom_souscripteur' => 'required|string',
                 'adresse_souscripteur' => 'required|string',
                 'phone_souscripteur' => 'required|string|regex:/^\d{9}$/',
                 'email_souscripteur' => 'required|email',
                 'liste_voyageurs.*.passeport_assure' => 'required|string',
                 'liste_voyageurs.*.url_passeport_assure' => 'required|image|max:10240',
-                'liste_voyageurs.*.url_billet_voyage' => 'nullable|image|max:10240',
                 'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
                 'liste_voyageurs.*.date_naissance_assure' => 'required|date',
                 'liste_voyageurs.*.email_assure' => 'required|email',
+            ];
+            
+            // Ajout de la règle conditionnelle pour `url_billet_voyage`
+            $rules['liste_voyageurs.*.url_billet_voyage'] = $this->isCollectif
+                ? 'nullable|image|max:10240' // Si isCollective est vrai, le champ est nullable
+                : 'required|image|max:10240'; // Sinon, le champ est requis
+            
+            // Validation avec les règles mises à jour
+            $this->validate($rules, [
+                'liste_voyageurs.*.url_billet_voyage.required' => 'Le billet de voyage est requis si le voyage n’est pas collectif.',
+                'liste_voyageurs.*.url_billet_voyage.image' => 'Le fichier doit être une image.',
+                'liste_voyageurs.*.url_billet_voyage.max' => 'L’image ne doit pas dépasser 10 Mo.',
             ]);
+            
         }
     }
 
@@ -385,12 +397,24 @@ class Simulateur extends Component
             'liste_voyageurs.*.email_assure' => 'required|email',
             'liste_voyageurs.*.passeport_assure' => 'required|string',
             'liste_voyageurs.*.url_passeport_assure' => 'required|image|max:10240',
-            'liste_voyageurs.*.url_billet_voyage' => 'nullable|image|max:10240',
-
             'date_rdv' => 'required|date',
             'heure_rdv' => 'required|date_format:H:i',
             'agence_id' => 'required',
         ]);
+        
+        // Ajouter une validation conditionnelle pour url_billet_voyage
+        $rules = [
+            'liste_voyageurs.*.url_billet_voyage' => $this->isCollectif
+                ? 'nullable|image|max:10240'
+                : 'required|image|max:10240',
+        ];
+        
+        $this->validate($rules, [
+            'liste_voyageurs.*.url_billet_voyage.required' => 'Le billet de voyage est requis si le voyage n’est pas collectif.',
+            'liste_voyageurs.*.url_billet_voyage.image' => 'Le fichier doit être une image.',
+            'liste_voyageurs.*.url_billet_voyage.max' => 'L’image ne doit pas dépasser 10 Mo.',
+        ]);
+        
 
         $cotation = Cotation::create([
             'destination' => $this->destination,
