@@ -598,8 +598,6 @@ class Simulateur extends Component
                 ]);
             }
 
-            // Appel à l'API pour le paiement
-
             $response = app(\App\Http\Controllers\PaymentController::class)->checkout(new Request([
                 'cotation_id' => $cotation->id,
                 'name' => $this->nom_prenom_souscripteur,
@@ -608,7 +606,7 @@ class Simulateur extends Component
                 'phone' => $this->phone_souscripteur,
                 'email_souscripteur' => $this->email_souscripteur,
             ]));
-
+            
 
             // Message de succès
             // session()->flash('success', 'Souscription(s) créées avec succès. Verifier la boite mail du souscripteur.');

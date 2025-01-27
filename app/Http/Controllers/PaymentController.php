@@ -35,6 +35,7 @@ class PaymentController extends Controller
                     'Content-Type' => 'application/json',
                 ])
                 ->post('https://lab.billing-easy.net/api/v1/merchant/e_bills', [
+                    'reference' => $transaction->reference,
                     'amount' => $transaction->amount,
                     'payer_email' => $transaction->customer_email,
                     'payer_msisdn' => $transaction->customer_msisdn,
@@ -50,12 +51,26 @@ class PaymentController extends Controller
                 ]);
 
                 // Rediriger le client vers la plateforme eBilling avec les bons paramètres
-                $redirectUrl = 'https://test.billing-easy.net?invoice_number='
+                $redirectUrl = 'https://test.billing-easy.net?invoice='
                     . $data['e_bill']['bill_id']
                     . '&redirect_url='
                     . urlencode(route('payment.success'));
 
+                $bill_id = $data['e_bill']['bill_id'];
+                $eb_callbackurl = urlencode(route('payment.success'));
+
+
                 // dd($redirectUrl);
+                // Redirect to E-Billing portal
+                // echo "<form action='" . env('POST_URL', 'https://test.billing-easy.net') . "' method='post' name='frm'>";
+                // echo "<input type='hidden' name='invoice_number' value='" . $bill_id . "'>";
+                // echo "<input type='hidden' name='eb_callbackurl' value='" . $eb_callbackurl . "'>";
+                // echo "</form>";
+                // echo "<script language='JavaScript'>";
+                // echo "document.frm.submit();";
+                // echo "</script>";
+
+                // exit();
 
                 return redirect()->away($redirectUrl);
 
