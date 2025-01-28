@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
-    <title>Payment réussi - {{ config('app.name', 'Bamboo Assur Voyage') }}</title>
+    <title>Paiement annulé - {{ config('app.name', 'Bamboo Assur Voyage') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -40,23 +40,37 @@
                     <div class="bg-white shadow-lg rounded-2xl p-6 max-w-lg text-center">
                         <div class="flex justify-center items-center mb-4">
                             <div
-                                class="bg-green-100 text-green-600 w-16 h-16 flex items-center justify-center rounded-full">
+                                class="bg-red-100 text-red-600 w-16 h-16 flex items-center justify-center rounded-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20"
                                     fill="currentColor">
                                     <path fill-rule="evenodd"
                                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1.293-6.707a1 1 0 011.414 0L14 13.586l4.293-4.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0L9 13.414l-2.293 2.293a1 1 0 11-1.414-1.414l3-3z"
                                         clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d="M9 11a1 1 0 112 0v2a1 1 0 01-2 0v-2z"
+                                        clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </div>
-                        <h1 class="text-2xl font-bold text-gray-800">Paiement réussi !</h1>
-                        <p class="text-gray-600 mt-2">Merci pour votre achat. Votre paiement a été traité avec succès.
+                        <h1 class="text-2xl font-bold text-gray-800">Erreur de paiement</h1>
+                        <p class="text-gray-600 mt-2">Une erreur s'est produite lors du traitement de votre paiement.
                         </p>
+                        <p class="text-gray-600 mt-1">Voulez-vous réessayer ?</p>
 
-                        <div class="mt-6">
+                        <div class="mt-6 flex flex-col sm:flex-row justify-center gap-4">
+                            @if ($transaction->transaction_id != null)
+                                <form action="{{ route('relancer.payement', ['id' => $transaction->transaction_id]) }}"
+                                    method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="px-6 py-2 bg-[#4996d1] text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+                                        Réessayer le paiement
+                                    </button>
+                                </form>
+                            @endif
+
                             <a href="{{ url('/') }}"
-                                class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 shadow-lg transition duration-300 ease-in-out">
-                                Accueil
+                                class="px-6 py-2 bg-gray-100 text-gray-700 font-semibold rounded-lg shadow-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75">
+                                Retour à l'accueil
                             </a>
                         </div>
                     </div>

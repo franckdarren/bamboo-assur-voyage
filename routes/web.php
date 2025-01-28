@@ -9,7 +9,10 @@ Route::get('/', function () {
 
 Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
 Route::post('/payment-callback', [PaymentController::class, 'callback'])->name('payment.callback');
-Route::get('/payment-success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment-success/{id}', [PaymentController::class, 'success'])->name('payment.success');
+
+Route::post('/relancer_payement/{id}', [PaymentController::class, 'relancer_payement'])->name('relancer.payement');
+
 
 
 

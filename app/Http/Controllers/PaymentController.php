@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -28,8 +29,11 @@ class PaymentController extends Controller
             'cotation_id' => $validated['cotation_id'],
             'status' => 'created',
         ]);
+
+        $idRef = $transaction->reference;
         try {
             $response = Http::withBasicAuth('FranckDarren', '46363079-3caf-4cf9-ba59-dcf40b4cd53a')
+                ->timeout(30)
                 ->withHeaders([
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
@@ -41,7 +45,7 @@ class PaymentController extends Controller
                     'payer_msisdn' => $transaction->customer_msisdn,
                     'due_date' => now()->addDay()->toDateString(),
                     'short_description' => 'Payment for Souscription',
-                    'merchant_redirect_url' => route('payment.success'),
+                    'merchant_redirect_url' => url('/payment-success/' . $transaction->reference),
                 ]);
             if ($response->successful() && isset($response->json()['e_bill']['bill_id'])) {
                 $data = $response->json();
@@ -54,10 +58,11 @@ class PaymentController extends Controller
                 $redirectUrl = 'https://test.billing-easy.net?invoice='
                     . $data['e_bill']['bill_id']
                     . '&redirect_url='
-                    . urlencode(route('payment.success'));
+                    . urlencode(url('/payment-success/' . $transaction->reference));
 
                 $bill_id = $data['e_bill']['bill_id'];
-                $eb_callbackurl = urlencode(route('payment.success'));
+                $eb_callbackurl = urlencode(route('payment.success', ['id' => $transaction->reference]));
+
 
 
                 // dd($redirectUrl);
@@ -102,10 +107,59 @@ class PaymentController extends Controller
         return response()->json(['message' => 'Transaction not found'], 404);
     }
 
-    public function success()
+    public function success(string $id)
     {
-        return view('payment.success', ['message' => 'Your payment was successful!']);
+        if ($transaction = Transaction::where('transaction_id', $id)->first()) {
+            if ($transaction && $transaction->status == 'paid') {
+                return view('payment.success', [
+                    'message' => 'Your payment was successful!',
+                    'transaction' => $transaction
+                ]);
+            } else {
+                return view('payment.error', [
+                    'message' => 'Your payment was err!',
+                    'transaction' => $transaction
+                ]);
+            }
+        }
+
+        if ($transaction = Transaction::where('reference', $id)->first()) {
+            if ($transaction && $transaction->status == 'paid') {
+                return view('payment.success', [
+                    'message' => 'Your payment was successful!',
+                    'transaction' => $transaction
+                ]);
+            } else {
+                return view('payment.error', [
+                    'message' => 'Payment failed. Please try again.',
+                    'transaction' => $transaction
+                ]);
+            }
+        }
+
+
+
     }
+
+    public function relancer_payement(string $id)
+    {
+        $transaction = Transaction::where('transaction_id', $id)->first();
+
+        // Vérifier si la différence en heures est inférieure à 1
+        if ($transaction->created_at->diffInMinutes(Carbon::now()) < 60) {
+            $redirectUrl = 'https://test.billing-easy.net?invoice='
+                . $id
+                . '&redirect_url='
+                . urlencode(url('/payment-success/' . $transaction->transaction_id));
+
+            // Rediriger vers l'URL externe
+            return redirect()->away($redirectUrl);
+        } else {
+            // Rediriger vers la page d'accueil ou une autre URL interne
+            return redirect(url('/'));
+        }
+    }
+
 
 
 
