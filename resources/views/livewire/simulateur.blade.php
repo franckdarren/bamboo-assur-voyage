@@ -458,9 +458,8 @@
 
             <!-- Étape 3: Choisir moyen de payement -->
             @if ($currentStep == 3)
-                <!-- Informations de prise de rendez-vous -->
+                <!-- Informations de paiement -->
                 <div class="">
-                    {{-- <h3 class="text-lg font-semibold text-black mb-4">Informations du rendez-vous</h3> --}}
                     <div class="flex justify-center gap-4 mt-6">
                         <!-- Bouton Payer en agence -->
                         <button type="button"
@@ -469,12 +468,28 @@
                             Payer en Agence
                         </button>
 
-                        <!-- Bouton Payer en ligne -->
-                        <button type="button"
-                            class="px-6 py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
-                            wire:click="createSouscriptionWithPaiement">
-                            Payer en Ligne
-                        </button>
+                        <!-- Conteneur pour le bouton et le loader -->
+                        <div class="relative">
+                            <!-- Bouton Payer en ligne -->
+                            <button type="button"
+                                class="px-6 py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
+                                wire:click="createSouscriptionWithPaiement" wire:loading.attr="disabled">
+                                Payer en Ligne
+                            </button>
+
+                            <!-- Afficher le spinner lorsque l'action est en cours (après avoir cliqué sur le bouton) -->
+                            <div wire:loading class="absolute inset-0 bg-black bg-opacity-50 flex z-10">
+                                <!-- Spinner (apparaît en remplacement du bouton) -->
+                                <svg class="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                        stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v8h8a8 8 0 11-8-8z"></path>
+                                </svg>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -484,12 +499,9 @@
                         class="px-5 py-3 bg-gray-300 text-black font-bold rounded-md hover:scale-105 active:scale-95">
                         Précédent
                     </button>
-                    {{-- <button type="button" wire:click="nextStep"
-                        class="px-5 py-3 bg-[#4996d1] text-white font-bold rounded-md">
-                        Suivant
-                    </button> --}}
                 </div>
             @endif
+
 
             <!-- Étape 4: Prise de rendez-vous -->
             @if ($currentStep == 4)
