@@ -480,13 +480,15 @@
                             <!-- Afficher le spinner lorsque l'action est en cours (après avoir cliqué sur le bouton) -->
                             <div wire:loading class="absolute inset-0 bg-black bg-opacity-50 flex z-10">
                                 <!-- Spinner (apparaît en remplacement du bouton) -->
-                                <svg class="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                        stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor"
-                                        d="M4 12a8 8 0 018-8v8h8a8 8 0 11-8-8z"></path>
-                                </svg>
+                                <div class="mx-auto">
+                                    <svg class="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                            stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v8h8a8 8 0 11-8-8z"></path>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
 
