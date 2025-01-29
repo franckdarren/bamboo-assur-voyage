@@ -64,11 +64,14 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->searchable(),
 
                 TextColumn::make('passeport_assure')
-                    ->label('Passeport')
+                    ->label('Numéro passeport')
                     ->searchable(),
 
                 ImageColumn::make('url_passeport_assure')
-                    ->label('Image'),
+                    ->label('Passeport'),
+
+                ImageColumn::make('url_billet_voyage')
+                    ->label('Billet voyage'),
 
 
                 TextColumn::make('cotation.destination')
@@ -178,6 +181,18 @@ class ListSouscription extends Component implements HasForms, HasTable
                         ->modalFooterActionsAlignment('right')
                         ->modalCancelAction(fn(StaticAction $action) => $action),
 
+                    //Affichage du billet de voyage
+                    Action::make('url_billet_voyage')
+                        ->label('Voir le billet de voyage')
+                        ->modalContent(fn(Souscription $record) => new HtmlString(
+                            '<iframe src="' . Storage::disk('public')->url($record->url_billet_voyage) . '" width="100%" height="600px"></iframe>'
+                        ))
+                        ->modalWidth('6xl')
+                        ->requiresConfirmation(false)
+                        ->modalSubmitAction(false)
+                        ->modalFooterActionsAlignment('right')
+                        ->modalCancelAction(fn(StaticAction $action) => $action),
+
                     // Bouton personnalisé "Modifier"
                     Action::make('modifier')
                         ->label('Modifier')
@@ -224,43 +239,43 @@ class ListSouscription extends Component implements HasForms, HasTable
                                         // TextInput::make('cotation.destination')
                                         //     ->required()
                                         //     ->default(fn() => $record->cotation?->destination),
-
+                
                                         // TextInput::make('cotation.depart')
                                         //     ->required()
                                         //     ->default(fn() => $record->cotation?->depart),
-
+                
                                         // TextInput::make('cotation.retour')
                                         //     ->required()
                                         //     ->default(fn() => $record->cotation?->retour),
-
+                
                                         // TextInput::make('cotation.nombre_jours')
                                         //     ->required()
                                         //     ->default(fn() => $record->cotation?->nombre_jours),
-
+                
                                         // TextInput::make('montant_par_voyageur')
                                         //     ->required()
                                         //     ->default(fn() => $record->montant_par_voyageur),
-
+                
                                         // TextInput::make('cotation.voyageurs')
                                         //     ->required()
                                         //     ->default(fn() => $record->cotation?->voyageurs),
-
+                
                                         // TextInput::make('nom_prenom_souscripteur')
                                         //     ->required()
                                         //     ->default(fn() => $record->nom_prenom_souscripteur),
-
+                
                                         // TextInput::make('phone_souscripteur')
                                         //     ->required()
                                         //     ->default(fn() => $record->phone_souscripteur),
-
+                
                                         // TextInput::make('rendezvous.date_rdv')
                                         //     ->required()
                                         //     ->default(fn() => $record->rendezvous?->date_rdv),
-
+                
                                         // TextInput::make('rendezvous.heure_rdv')
                                         //     ->required()
                                         //     ->default(fn() => $record->rendezvous?->heure_rdv),
-
+                
                                         // TextInput::make('rendezvous.agence')
                                         //     ->required()
                                         //     ->default(fn() => $record->rendezvous?->agence),

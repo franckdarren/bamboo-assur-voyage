@@ -43,6 +43,10 @@ class Simulateur extends Component
     public $email_assure;
     public $passeport_assure;
     public $url_passeport_assure;
+    public $url_billet_voyage;
+
+    public $urlBilletCollectif = null; // Pour l'URL collective
+
     public $statut;
     public $mode_paiement;
 
@@ -52,13 +56,13 @@ class Simulateur extends Component
     public $agence_id;
     public $souscription_id;
 
-
+    public $isCollectif = false; // Par défaut, individuel
 
     public $liste_voyageurs = [];
 
     protected $tarifs = [
         'afrique-shengen' => [
-            'pays' => ['Afrique du Sud',  'Algérie', 'Allemagne', 'Angola', 'Autriche', 'Belgique', 'Bénin', 'Burkina Faso', 'Burundi', 'Cameroun', 'Cap-Vert', 'République Centrafricaine', 'Tchad', 'Comores', 'Congo', 'République Démocratique du Congo', "Côte d'Ivoire", 'Djibouti', 'Danemark', 'Égypte', 'Érythrée', 'Espagne', 'Estonie', 'Eswatini', 'Éthiopie', 'Finlande', 'France', 'Gabon', 'Gambie', 'Ghana', 'Grèce', 'Guinée', 'Guinée-Bissau', 'Guinée Equatoriale', 'Hongrie', 'Islande', 'Italie', 'Kenya', 'Lesotho', 'Lettonie', 'Lituanie', 'Luxembourg', 'Madagascar',  'Malawi', 'Mali', 'Malte', 'Maroc', 'Maurice', 'Mauritanie', 'Mozambique', 'Namibie', 'Niger', 'Nigéria', 'Norvège', 'Ouganda', 'Pays-Bas', 'Portugal', 'Rwanda', 'Sénégal', 'Seychelles', 'Sierra Leone', 'Slovaquie', 'Slovénie', 'Somalie', 'Soudan', 'Suède', 'Suisse', 'Tanzanie', 'Togo', 'Tunisie', 'Zambie', 'Zimbabwe'], // Ajoutez les pays concernés
+            'pays' => ['Afrique du Sud', 'Algérie', 'Allemagne', 'Angola', 'Autriche', 'Belgique', 'Bénin', 'Burkina Faso', 'Burundi', 'Cameroun', 'Cap-Vert', 'République Centrafricaine', 'Tchad', 'Comores', 'Congo', 'République Démocratique du Congo', "Côte d'Ivoire", 'Djibouti', 'Danemark', 'Égypte', 'Érythrée', 'Espagne', 'Estonie', 'Eswatini', 'Éthiopie', 'Finlande', 'France', 'Gabon', 'Gambie', 'Ghana', 'Grèce', 'Guinée', 'Guinée-Bissau', 'Guinée Equatoriale', 'Hongrie', 'Islande', 'Italie', 'Kenya', 'Lesotho', 'Lettonie', 'Lituanie', 'Luxembourg', 'Madagascar', 'Malawi', 'Mali', 'Malte', 'Maroc', 'Maurice', 'Mauritanie', 'Mozambique', 'Namibie', 'Niger', 'Nigéria', 'Norvège', 'Ouganda', 'Pays-Bas', 'Portugal', 'Rwanda', 'Sénégal', 'Seychelles', 'Sierra Leone', 'Slovaquie', 'Slovénie', 'Somalie', 'Soudan', 'Suède', 'Suisse', 'Tanzanie', 'Togo', 'Tunisie', 'Zambie', 'Zimbabwe'], // Ajoutez les pays concernés
             'tarifs' => [
                 [1, 7, 13000],
                 [8, 10, 16000],
@@ -92,6 +96,7 @@ class Simulateur extends Component
     protected $rules = [
         'depart' => 'required|date|after_or_equal:today',
         'retour' => 'required|date|after:depart',
+        'phone_souscripteur' => ['required', 'regex:/^\d{9}$/'], // Validation avec regex pour 9 chiffres
     ];
 
     public function messages()
@@ -110,18 +115,18 @@ class Simulateur extends Component
             'email_souscripteur.required' => 'L\'email du souscripteur est obligatoire.',
             'liste_voyageurs.*.nom_prenom_assure.required' => 'Le nom et prénom du voyageur est requis.',
             'liste_voyageurs.*.date_naissance_assure.required' => 'La date de naissance du voyageur est obligatoire.',
-            'liste_voyageurs.*.adresse_assure.required' => 'L\'adresse du voyageur est requise.',
-            'liste_voyageurs.*.phone_assure.required' => 'Le téléphone du voyageur est requis.',
             'liste_voyageurs.*.email_assure.required' => 'L\'email du voyageur est obligatoire.',
             'liste_voyageurs.*.passeport_assure.required' => 'Le numéro de passeport est requis.',
             'liste_voyageurs.*.url_passeport_assure.required' => 'L\'image du passeport est obligatoire.',
+            'liste_voyageurs.*.url_billet_voyage.required' => 'L\'image du billet de voyage est obligatoire.',
             'date_rdv.required' => 'La date de rendez-vous est obligatoire.',
             'heure_rdv.required' => 'L\'heure de rendez-vous est obligatoire.',
             'heure_rdv.date_format' => 'L\'heure doit être au format HH:MM.',
             'agence_id.required' => 'L\'agence est obligatoire.',
+
+            'phone_souscripteur.regex' => 'Le champ téléphone doit contenir exactement 9 chiffres.',
         ];
     }
-
 
     protected function getCategorieByDestination($destination)
     {
@@ -171,11 +176,11 @@ class Simulateur extends Component
         $this->liste_voyageurs = array_fill(0, $value, [
             'nom_prenom_assure' => '',
             'date_naissance_assure' => '',
-            'adresse_assure' => '',
-            'phone_assure' => '',
             'email_assure' => '',
             'passeport_assure' => '',
             'url_passeport_assure' => '',
+            'url_billet_voyage' => '',
+
         ]);
     }
 
@@ -277,6 +282,23 @@ class Simulateur extends Component
         $this->currentStep++;
     }
 
+    public function stepResume()
+    {
+        $this->validateStep();
+        $this->currentStep = 5;
+    }
+
+    public function stepPayer()
+    {
+        $this->validateStep();
+        $this->currentStep = 3;
+    }
+
+    public function returnResume()
+    {
+        $this->currentStep = 2;
+    }
+
     public function previousStep()
     {
         $this->currentStep--;
@@ -293,21 +315,66 @@ class Simulateur extends Component
             ]);
         } elseif ($this->currentStep == 2) {
             // dd($this->liste_voyageurs);
-            $this->validate([
+            $rules = [
                 'nom_prenom_souscripteur' => 'required|string',
                 'adresse_souscripteur' => 'required|string',
-                'phone_souscripteur' => 'required|string',
+                'phone_souscripteur' => 'required|string|regex:/^\d{9}$/',
                 'email_souscripteur' => 'required|email',
                 'liste_voyageurs.*.passeport_assure' => 'required|string',
-                'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+                'liste_voyageurs.*.url_passeport_assure' => 'required|image|max:10240',
                 'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
                 'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-                'liste_voyageurs.*.adresse_assure' => 'required|string',
-                'liste_voyageurs.*.phone_assure' => 'required|string',
                 'liste_voyageurs.*.email_assure' => 'required|email',
+            ];
+            
+            // Ajout de la règle conditionnelle pour `url_billet_voyage`
+            $rules['liste_voyageurs.*.url_billet_voyage'] = $this->isCollectif
+                ? 'nullable|image|max:10240' // Si isCollective est vrai, le champ est nullable
+                : 'required|image|max:10240'; // Sinon, le champ est requis
+            
+            // Validation avec les règles mises à jour
+            $this->validate($rules, [
+                'liste_voyageurs.*.url_billet_voyage.required' => 'Le billet de voyage est requis si le voyage n’est pas collectif.',
+                'liste_voyageurs.*.url_billet_voyage.image' => 'Le fichier doit être une image.',
+                'liste_voyageurs.*.url_billet_voyage.max' => 'L’image ne doit pas dépasser 10 Mo.',
             ]);
+            
         }
     }
+
+    // // Met à jour l'URL collective pour tous les voyageurs
+    // public function updatedUrlBilletCollectif($value)
+    // {
+    //     if ($this->isCollectif) {
+    //         foreach ($this->liste_voyageurs as $index => $voyageur) {
+    //             $this->liste_voyageurs[$index]['url_billet_voyage'] = $value;
+    //         }
+    //     }
+    // }
+
+    // public function updatedIsCollectif()
+    // {
+    //     if ($this->isCollectif) {
+    //         // Si le billet est collectif, applique l'URL du billet du premier voyageur à tous les autres
+    //         $urlCollectif = $this->liste_voyageurs[0]['url_billet_voyage'] ?? '';
+    //         foreach ($this->liste_voyageurs as $index => &$voyageur) {
+    //             if ($index > 0) {
+    //                 $voyageur['url_billet_voyage'] = $urlCollectif;
+    //             }
+    //         }
+    //     }
+    // }
+
+    // public function updatedListeVoyageurs($value, $key)
+    // {
+    //     // Si le billet est collectif, synchronise l'URL entre tous les voyageurs
+    //     if ($this->isCollectif && str_contains($key, '.url_billet_voyage')) {
+    //         $urlCollectif = $this->liste_voyageurs[0]['url_billet_voyage'] ?? '';
+    //         foreach ($this->liste_voyageurs as $index => &$voyageur) {
+    //             $voyageur['url_billet_voyage'] = $urlCollectif;
+    //         }
+    //     }
+    // }
 
 
     // Fonction pour créer une souscription
@@ -326,15 +393,27 @@ class Simulateur extends Component
             'email_souscripteur' => 'required|email',
             'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
             'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-            'liste_voyageurs.*.adresse_assure' => 'required|string',
-            'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
             'liste_voyageurs.*.passeport_assure' => 'required|string',
-            'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
+            'liste_voyageurs.*.url_passeport_assure' => 'required|image|max:10240',
             'date_rdv' => 'required|date',
             'heure_rdv' => 'required|date_format:H:i',
             'agence_id' => 'required',
         ]);
+        
+        // Ajouter une validation conditionnelle pour url_billet_voyage
+        $rules = [
+            'liste_voyageurs.*.url_billet_voyage' => $this->isCollectif
+                ? 'nullable|image|max:10240'
+                : 'required|image|max:10240',
+        ];
+        
+        $this->validate($rules, [
+            'liste_voyageurs.*.url_billet_voyage.required' => 'Le billet de voyage est requis si le voyage n’est pas collectif.',
+            'liste_voyageurs.*.url_billet_voyage.image' => 'Le fichier doit être une image.',
+            'liste_voyageurs.*.url_billet_voyage.max' => 'L’image ne doit pas dépasser 10 Mo.',
+        ]);
+        
 
         $cotation = Cotation::create([
             'destination' => $this->destination,
@@ -345,42 +424,81 @@ class Simulateur extends Component
             'montant' => $this->montant,
         ]);
 
+        $isCollectifOn = $this->isCollectif;
+
         foreach ($this->liste_voyageurs as &$voyageur) {
             if (isset($voyageur['url_passeport_assure']) && $voyageur['url_passeport_assure']) {
                 $path = $voyageur['url_passeport_assure']->store('passeports', 'public');
                 $voyageur['url_passeport_assure'] = $path;
             }
+            if (isset($voyageur['url_billet_voyage']) && $voyageur['url_billet_voyage']) {
+                $path2 = $voyageur['url_billet_voyage']->store('billets', 'public');
+                $voyageur['url_billet_voyage'] = $path2;
+            }
 
-            $souscription = Souscription::create([
-                'cotation_id' => $cotation->id,
-                'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
-                'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'adresse_assure' => $voyageur['adresse_assure'],
-                'phone_assure' => $voyageur['phone_assure'],
-                'email_assure' => $voyageur['email_assure'],
-                'passeport_assure' => $voyageur['passeport_assure'],
-                'url_passeport_assure' => $voyageur['url_passeport_assure'],
-                'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
-                'adresse_souscripteur' => $this->adresse_souscripteur,
-                'phone_souscripteur' => $this->phone_souscripteur,
-                'email_souscripteur' => $this->email_souscripteur,
-            ]);
 
-            $rdv = Rdv::create([
-                'souscription_id' => $souscription->id,
-                'date_rdv' => $this->date_rdv,
-                'agence_id' => $this->agence_id,
-                'heure_rdv' => $this->heure_rdv,
-            ]);
+            if ($isCollectifOn) {
+                $urlBilletVoyage = $this->liste_voyageurs[0]['url_billet_voyage'];
+                // Créer une souscription pour chaque voyageur en mode collectif
+                $souscription = Souscription::create([
+                    'cotation_id' => $cotation->id,
+                    'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                    'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                    'email_assure' => $voyageur['email_assure'],
+                    'passeport_assure' => $voyageur['passeport_assure'],
+                    'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                    'url_billet_voyage' => $urlBilletVoyage, // Utiliser l'URL déterminée
+                    'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                    'adresse_souscripteur' => $this->adresse_souscripteur,
+                    'phone_souscripteur' => $this->phone_souscripteur,
+                    'email_souscripteur' => $this->email_souscripteur,
+                ]);
 
-            // Envoyer les confirmation par mail
-            EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+                // Créer un rendez-vous pour chaque souscription
+                $rdv = Rdv::create([
+                    'souscription_id' => $souscription->id,
+                    'date_rdv' => $this->date_rdv,
+                    'agence_id' => $this->agence_id,
+                    'heure_rdv' => $this->heure_rdv,
+                ]);
+
+                // Envoyer la confirmation par email
+                EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+
+            } else {
+                $souscription = Souscription::create([
+                    'cotation_id' => $cotation->id,
+                    'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
+                    'date_naissance_assure' => $voyageur['date_naissance_assure'],
+                    'email_assure' => $voyageur['email_assure'],
+                    'passeport_assure' => $voyageur['passeport_assure'],
+                    'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                    'url_billet_voyage' => $voyageur['url_billet_voyage'],
+                    'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
+                    'adresse_souscripteur' => $this->adresse_souscripteur,
+                    'phone_souscripteur' => $this->phone_souscripteur,
+                    'email_souscripteur' => $this->email_souscripteur,
+                ]);
+
+                $rdv = Rdv::create([
+                    'souscription_id' => $souscription->id,
+                    'date_rdv' => $this->date_rdv,
+                    'agence_id' => $this->agence_id,
+                    'heure_rdv' => $this->heure_rdv,
+                ]);
+
+                // Envoyer les confirmation par mail
+                EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+            }
+
+
         }
 
         session()->flash('success', 'Souscription(s) créées avec succès. Vérifiez la boîte mail du souscripteur.');
 
         $this->resetInputFields();
     }
+
 
     private function resetInputFields()
     {
@@ -418,8 +536,6 @@ class Simulateur extends Component
                 'cotation_id' => $cotation->id,  // Lier la souscription à la cotation
                 'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
                 'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'adresse_assure' => $voyageur['adresse_assure'],
-                'phone_assure' => $voyageur['phone_assure'],
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
 
@@ -473,8 +589,6 @@ class Simulateur extends Component
             'email_souscripteur' => 'required|email',
             'liste_voyageurs.*.nom_prenom_assure' => 'required|string',
             'liste_voyageurs.*.date_naissance_assure' => 'required|date',
-            'liste_voyageurs.*.adresse_assure' => 'required|string',
-            'liste_voyageurs.*.phone_assure' => 'required|string',
             'liste_voyageurs.*.email_assure' => 'required|email',
             'liste_voyageurs.*.passeport_assure' => 'required|string',
             // 'liste_voyageurs.*.url_passeport_assure' => 'nullable|image|max:10240',
@@ -492,24 +606,24 @@ class Simulateur extends Component
 
                 'nom_prenom_assure' => $voyageur['nom_prenom_assure'],
                 'date_naissance_assure' => $voyageur['date_naissance_assure'],
-                'adresse_assure' => $voyageur['adresse_assure'],
-                'phone_assure' => $voyageur['phone_assure'],
                 'email_assure' => $voyageur['email_assure'],
                 'passeport_assure' => $voyageur['passeport_assure'],
                 'url_passeport_assure' => $voyageur['url_passeport_assure'],
+                'url_billet_voyage' => $voyageur['url_billet_voyage'],
+
                 'nom_prenom_souscripteur' => $this->nom_prenom_souscripteur,
                 'adresse_souscripteur' => $this->adresse_souscripteur,
                 'phone_souscripteur' => $this->phone_souscripteur,
                 'email_souscripteur' => $this->email_souscripteur,
 
-                'liste_voyageurs' => $this->liste_voyageurs, 
+                'liste_voyageurs' => $this->liste_voyageurs,
             ];
 
             $pdf = Pdf::loadView('devis', $data);
 
             return response()->streamDownload(function () use ($pdf) {
                 echo $pdf->stream();
-                }, 'devis.pdf');
+            }, 'devis.pdf');
         }
     }
 
@@ -521,6 +635,7 @@ class Simulateur extends Component
 
         return view('livewire.simulateur', [
             'agences' => $agences,
+            'isButtonDisabled' => $this->nombreJours > 366 || $this->montant == 0,
         ]);
     }
 }

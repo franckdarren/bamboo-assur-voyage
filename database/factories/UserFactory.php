@@ -68,5 +68,5 @@ class UserFactory extends Factory
                 ->when(is_callable($callback), $callback),
             'ownedTeams'
         );
-    }
+    }   
 }

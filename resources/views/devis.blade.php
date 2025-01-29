@@ -69,8 +69,6 @@
                     <tr>
                         <th>Nom et Prénom</th>
                         <th>Date de Naissance</th>
-                        <th>Adresse</th>
-                        <th>Téléphone</th>
                         <th>Email</th>
                         <th>Passeport</th>
                     </tr>
@@ -79,9 +77,8 @@
                     @foreach ($liste_voyageurs as $voyageur)
                         <tr>
                             <td>{{ $voyageur['nom_prenom_assure'] }}</td>
-                            <td>{{ \Carbon\Carbon::parse($voyageur['date_naissance_assure'])->locale('fr')->format('d/m/Y') }}</td>
-                            <td>{{ $voyageur['adresse_assure'] }}</td>
-                            <td>{{ $voyageur['phone_assure'] }}</td>
+                            <td>{{ \Carbon\Carbon::parse($voyageur['date_naissance_assure'])->locale('fr')->format('d/m/Y') }}
+                            </td>
                             <td>{{ $voyageur['email_assure'] }}</td>
                             <td>{{ $voyageur['passeport_assure'] }}</td>
                         </tr>
