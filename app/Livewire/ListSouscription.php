@@ -18,6 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
@@ -163,11 +164,20 @@ class ListSouscription extends Component implements HasForms, HasTable
                 ActionGroup::make([
                     Action::make('marquerPayee')
                         ->label('Marquer comme payée')
-                        ->action(fn(Souscription $record) => $record->update(['statut' => 'Payée']))
+                        ->action(function (Souscription $record) {
+                            $record->update(['statut' => 'Payée']);
+
+                            Notification::make()
+                                ->title('Souscription mise à jour')
+                                ->body('La souscription a été marquée comme payée avec succès.')
+                                ->success()
+                                ->send();
+                        })
                         ->requiresConfirmation()
                         ->color('success')
                         ->icon('heroicon-o-check-circle')
                         ->visible(fn(Souscription $record) => $record->statut !== 'Payée'),
+
 
                     //Affichage du passport
                     Action::make('url_passeport_assure')
@@ -199,6 +209,12 @@ class ListSouscription extends Component implements HasForms, HasTable
                         // ->icon('heroicon-o-pencil')
                         ->action(function (Souscription $record, array $data): void {
                             $record->update($data); // Met à jour l'enregistrement
+                            // Envoi d'une notification de succès
+                            Notification::make()
+                                ->title('Souscription mise à jour')
+                                ->body('La souscription a été mise à jour avec succès.')
+                                ->success()
+                                ->send();
                         })
                         ->form(function (Souscription $record) {
                             return [
@@ -211,16 +227,6 @@ class ListSouscription extends Component implements HasForms, HasTable
                                         TextInput::make('date_naissance_assure')
                                             ->required()
                                             ->default(fn() => $record->date_naissance_assure),
-
-                                        TextInput::make('adresse_assure')
-                                            ->label('Adresse')
-                                            ->required()
-                                            ->default(fn() => $record->adresse_assure),
-
-                                        TextInput::make('phone_assure')
-                                            ->label('Phone')
-                                            ->required()
-                                            ->default(fn() => $record->phone_assure),
 
                                         TextInput::make('email_assure')
                                             ->email()
