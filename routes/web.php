@@ -27,14 +27,10 @@ Route::middleware([
 ])->group(function () {
 
     //Routes Administrateurs
-    Route::group(['middleware' => ['role:Administrateur']], function () {
-        Route::get('/validations-offres', function () {
-            return view('validations-offres');
-        })->name('validations-offres');
+    Route::group(['middleware' => ['role:admin']], function () {
+        
 
-        Route::get('/transactions', function () {
-            return view('transaction');
-        })->name('transaction');
+
     });
 
 
@@ -53,4 +49,7 @@ Route::middleware([
     Route::get('/users', action: function () {
         return view('users');
     })->name('users');
+    Route::get('/transactions', function () {
+        return view('transaction');
+    })->name('transactions');
 });
