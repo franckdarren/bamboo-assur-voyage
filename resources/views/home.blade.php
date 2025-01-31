@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>BambooAssur-voyage</title>
+    <title>Bamboo Assur Voyage</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
