@@ -28,8 +28,15 @@ Route::middleware([
 
     //Routes Administrateurs
     Route::group(['middleware' => ['role:admin']], function () {
-        
-
+        Route::get('/transactions', function () {
+            return view('transaction');
+        })->name('transactions');
+        Route::get('/agences', function () {
+            return view('agences');
+        })->name('agences');
+        Route::get('/users', action: function () {
+            return view('users');
+        })->name('users');
 
     });
 
@@ -43,13 +50,6 @@ Route::middleware([
     Route::get('/rdv', function () {
         return view('rdv');
     })->name('rdv');
-    Route::get('/agences', function () {
-        return view('agences');
-    })->name('agences');
-    Route::get('/users', action: function () {
-        return view('users');
-    })->name('users');
-    Route::get('/transactions', function () {
-        return view('transaction');
-    })->name('transactions');
+
+
 });
