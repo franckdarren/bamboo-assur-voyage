@@ -584,6 +584,8 @@ class Simulateur extends Component
                         'adresse_souscripteur' => $this->adresse_souscripteur,
                         'phone_souscripteur' => $this->phone_souscripteur,
                         'email_souscripteur' => $this->email_souscripteur,
+                        'mode_paiement' => 'En ligne',
+
                     ]);
 
                     // Envoyer la confirmation par email
@@ -602,6 +604,7 @@ class Simulateur extends Component
                         'adresse_souscripteur' => $this->adresse_souscripteur,
                         'phone_souscripteur' => $this->phone_souscripteur,
                         'email_souscripteur' => $this->email_souscripteur,
+                        'mode_paiement' => 'En ligne',
                     ]);
                 }
 

@@ -99,6 +99,11 @@ class PaymentController extends Controller
                 'paid_at' => now(),
                 'operator' => $request->input('paymentsystem'),
                 'transaction_id' => $request->input('transactionid'),
+
+                //Mettre a jour le statut de la souscription
+                $transaction->cotation->souscription->update([
+                    'statut' => 'Payée',
+                ])
             ]);
 
             return response()->json(['message' => 'Callback processed successfully'], 200);

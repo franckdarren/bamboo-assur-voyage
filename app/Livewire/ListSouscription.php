@@ -151,6 +151,13 @@ class ListSouscription extends Component implements HasForms, HasTable
                         'En cours de traitement' => 'En cours de traitement',
                         'Payée' => 'Payée',
                     ]),
+
+                \Filament\Tables\Filters\SelectFilter::make('mode_paiement')
+                    ->label('Mode paiement')
+                    ->options([
+                        'En agence' => 'En agence',
+                        'En ligne' => 'En ligne',
+                    ]),
             ])
             ->actions([
                 ActionGroup::make([
