@@ -52,14 +52,6 @@ class ListSouscription extends Component implements HasForms, HasTable
                     ->date('d-m-Y')
                     ->searchable(),
 
-                TextColumn::make('adresse_assure')
-                    ->label('Adresse')
-                    ->searchable(),
-
-                TextColumn::make('phone_assure')
-                    ->label('Telephone')
-                    ->searchable(),
-
                 TextColumn::make('email_assure')
                     ->label('Email')
                     ->searchable(),
