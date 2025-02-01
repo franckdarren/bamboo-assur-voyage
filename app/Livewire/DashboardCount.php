@@ -21,7 +21,7 @@ class DashboardCount extends Component
         $this->souscription_jour = Souscription::whereDate('created_at', now()->toDateString())->count();
         $this->souscription_attentes = Souscription::where('statut', 'En attente de paiement')->count();
         $this->souscription_payees = Souscription::where('statut', 'Payée')->count();
-        $this->souscription_encours_traitement = Souscription::where('statut', 'En cours de traitement')->count();
+        // $this->souscription_encours_traitement = Souscription::where('statut', 'En cours de traitement')->count();
         $this->souscription_totales = Souscription::count();
 
         return view('livewire.dashboard-count', [
