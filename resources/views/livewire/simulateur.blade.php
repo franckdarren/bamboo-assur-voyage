@@ -1,4 +1,4 @@
-<div class="mt-8 md:mt-10 max-w-xl lg:w-[36rem] mx-auto p-8 bg-white shadow-lg rounded-lg border border-gray-200">
+<div class="mt-8 md:mt-10 max-w-xl w-full lg:w-[36rem] mx-auto p-8 bg-white shadow-lg rounded-lg border border-gray-200">
     <!-- Afficher un message de succès -->
     <div>
         @if (session('success'))
@@ -235,8 +235,8 @@
                         Réinitialiser
                     </button>
                     <button type="button" wire:click="nextStep"
-                        class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform active:scale-95 
-    {{ $isButtonDisabled ? 'opacity-50 cursor-not-allowed' : '' }}"
+                        class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold  rounded-lg shadow-lg transform transition-transform active:scale-95 
+                        {{ $isButtonDisabled ? 'opacity-50 cursor-not-allowed' : '' }}"
                         @disabled($isButtonDisabled)>
                         Remplir la souscription
                     </button>
@@ -437,23 +437,9 @@
                     Précédent
                 </button>
                 <button type="button" wire:click="stepResume"
-                    class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
+                    class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
                     Voir le résumé
                 </button>
-                {{-- <div class="flex justify-center mt-6 gap-2">
-                    <button type="button" wire:click="previousStep"
-                        class="px-5 py-3 bg-gray-300 text-black font-bold rounded-md hover:scale-105 active:scale-95">
-                        Précédent
-                    </button>
-                    <button type="button" wire:click="imprimerDevis"
-                        class="px-5 py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
-                        Imprimer devis
-                    </button>
-                    <button type="button" wire:click="nextStep"
-                        class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
-                        Payer
-                    </button>
-                </div> --}}
             @endif
 
             <!-- Étape 3: Choisir moyen de payement -->
@@ -509,7 +495,7 @@
             <!-- Étape 4: Prise de rendez-vous -->
             @if ($currentStep == 4)
                 <!-- Informations de prise de rendez-vous -->
-                <div class="p-6 bg-white rounded-lg">
+                <div class=" bg-white rounded-lg">
                     <h3 class="text-lg font-semibold text-black mb-4">Informations du rendez-vous</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -566,7 +552,7 @@
                         Précédent
                     </button>
                     <button type="submit"
-                        class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
+                        class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold  rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
                         Souscrire
                     </button>
                 </div>
@@ -896,11 +882,11 @@
                         Précédent
                     </button>
                     <button type="button" wire:click="imprimerDevis"
-                        class="px-5 py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
+                        class="px-5 py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold  rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
                         Imprimer devis
                     </button>
                     <button type="button" wire:click="stepPayer"
-                        class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
+                        class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold  rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95">
                         Payer
                     </button>
                 </div>
