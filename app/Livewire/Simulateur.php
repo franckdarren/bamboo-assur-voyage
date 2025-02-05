@@ -612,7 +612,7 @@ class Simulateur extends Component
                     'cotation_id' => $cotation->id,
                     'name' => $this->nom_prenom_souscripteur,
                     'email' => $this->email_souscripteur,
-                    'amount' => $this->montant,
+                    'amount' => ceil($this->montant / 0.975),
                     'phone' => $this->phone_souscripteur,
                     'email_souscripteur' => $this->email_souscripteur,
                 ]));
