@@ -446,7 +446,7 @@
             @if ($currentStep == 3)
                 <!-- Informations de paiement -->
                 <div class="">
-                    <div class="flex justify-center gap-4 mt-6">
+                    <div class="flex flex-col md:flex-row justify-center gap-4 mt-6">
                         <!-- Bouton Payer en agence -->
                         <button type="button"
                             class="h-min px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
