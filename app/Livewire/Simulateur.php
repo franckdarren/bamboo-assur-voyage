@@ -31,7 +31,7 @@ class Simulateur extends Component
     public $montant = 0;
     public $nombreJoursStocke = 0;
 
-    public $currentStep = 3;
+    public $currentStep = 1;
 
     public $nom_prenom_souscripteur;
     public $adresse_souscripteur;
