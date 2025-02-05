@@ -463,7 +463,7 @@
                     <div class="flex justify-center gap-4 mt-6">
                         <!-- Bouton Payer en agence -->
                         <button type="button"
-                            class="px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
+                            class="h-min px-5 py-3 text-white bg-[#4996d1] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
                             wire:click="nextStep">
                             Payer en Agence
                         </button>
@@ -472,10 +472,11 @@
                         <div class="relative">
                             <!-- Bouton Payer en ligne -->
                             <button type="button"
-                                class="px-6 py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
+                                class="px-6 w-full py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
                                 wire:click="createSouscriptionWithPaiement" wire:loading.attr="disabled">
                                 Payer en Ligne
                             </button>
+                            <div class="text-sm mt-1">*"Frais en sus"</div>
 
                             <!-- Afficher le spinner lorsque l'action est en cours (après avoir cliqué sur le bouton) -->
                             <div wire:loading class="absolute inset-0 bg-black bg-opacity-50 flex z-10">
