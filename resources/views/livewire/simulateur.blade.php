@@ -455,7 +455,7 @@
                         </button>
 
                         <!-- Conteneur pour le bouton et le loader -->
-                        {{-- <div class="relative">
+                        <div class="relative">
                             <!-- Bouton Payer en ligne -->
                             <button type="button"
                                 class="px-6 w-full py-3 text-white bg-[#313436] hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold text-lg rounded-lg shadow-lg transform transition-transform hover:scale-105 active:scale-95"
@@ -465,9 +465,9 @@
                             <div class="text-sm mt-1">*"Frais en sus"</div>
 
                             <!-- Afficher le spinner lorsque l'action est en cours (après avoir cliqué sur le bouton) -->
-                            <div wire:loading class="absolute inset-0 bg-black bg-opacity-50 flex z-10">
+                            <div wire:loading class="h-min absolute inset-0 bg-black bg-opacity-50 flex z-10">
                                 <!-- Spinner (apparaît en remplacement du bouton) -->
-                                <div class="mx-auto">
+                                <div class="mx-auto ">
                                     <svg class="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg"
                                         fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10"
@@ -477,7 +477,7 @@
                                     </svg>
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
 
                     </div>
                 </div>
