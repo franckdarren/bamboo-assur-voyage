@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\EnvoyerConfirmationPaiementSouscriptionEnLigne;
 use Carbon\Carbon;
 use App\Models\Transaction;
+use App\Models\Souscription;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ConfirmationPaiementSouscriptionEnLigne;
+use App\Jobs\EnvoyerConfirmationPaiementSouscriptionEnLigne;
 
 class PaymentController extends Controller
 {
@@ -95,26 +99,57 @@ class PaymentController extends Controller
         $transaction = Transaction::where('reference', $request->input('reference'))->first();
 
         if ($transaction) {
+            // Mettre à jour la transaction
             $transaction->update([
                 'status' => 'paid',
                 'paid_at' => now(),
                 'operator' => $request->input('paymentsystem'),
                 'transaction_id' => $request->input('transactionid'),
             ]);
-
-            //Mettre a jour le statut de la souscription
-            $transaction->cotation->souscription->update([
-                'statut' => 'Payée',
-            ]);
-
+        
+            // Mettre à jour le statut de la souscription
             $souscription = $transaction->cotation->souscription;
+            $souscription->update(['statut' => 'Payée']);
+        
             $cotation = $transaction->cotation;
-
-            // Envoyer la confirmation par email
-            EnvoyerConfirmationPaiementSouscriptionEnLigne::dispatch($souscription, $cotation);
-
+        
+            // Récupérer toutes les souscriptions associées à la cotation
+            $souscriptions = Souscription::where('cotation_id', $cotation->id)->get();
+        
+            // Parcourir chaque souscription pour envoyer l'e-mail avec le PDF en pièce jointe
+            foreach ($souscriptions as $souscription) {
+                $data = [
+                    'destination' => $cotation->destination,
+                    'voyageurs' => $cotation->voyageurs,
+                    'depart' => $cotation->depart,
+                    'retour' => $cotation->retour,
+                    'nombre_jours' => $cotation->nombreJours,
+                    'montant' => $cotation->montant,
+                    'nom_prenom_assure' => $souscription->nom_prenom_assure,
+                    'date_naissance_assure' => $souscription->date_naissance_assure,
+                    'email_assure' => $souscription->email_assure,
+                    'passeport_assure' => $souscription->passeport_assure,
+                    'url_passeport_assure' => $souscription->url_passeport_assure,
+                    'url_billet_voyage' => $souscription->url_billet_voyage,
+                    'nom_prenom_souscripteur' => $souscription->nom_prenom_souscripteur,
+                    'adresse_souscripteur' => $souscription->adresse_souscripteur,
+                    'phone_souscripteur' => $souscription->phone_souscripteur,
+                    'email_souscripteur' => $souscription->email_souscripteur,
+                    'liste_voyageurs' => $souscription->liste_voyageurs,
+                ];
+        
+                // Génération du PDF en mémoire
+                $pdf = Pdf::loadView('billet', $data);
+                $pdfContent = $pdf->output();
+        
+                // Envoi de l'e-mail avec le PDF en pièce jointe
+                Mail::to($souscription->email_souscripteur)
+                    ->send(new ConfirmationPaiementSouscriptionEnLigne($souscription, $cotation, $pdfContent));
+            }
+        
             return response()->json(['message' => 'Callback processed successfully'], 200);
         }
+        
 
         return response()->json(['message' => 'Transaction not found'], 404);
     }
