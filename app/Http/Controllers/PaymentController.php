@@ -99,24 +99,24 @@ class PaymentController extends Controller
         $transaction = Transaction::where('reference', $request->input('reference'))->first();
 
         if ($transaction) {
-            // Mettre à jour la transaction
+            // Mise à jour de la transaction
             $transaction->update([
                 'status' => 'paid',
                 'paid_at' => now(),
                 'operator' => $request->input('paymentsystem'),
                 'transaction_id' => $request->input('transactionid'),
             ]);
-        
-            // Mettre à jour le statut de la souscription
-            $souscription = $transaction->cotation->souscription;
-            $souscription->update(['statut' => 'Payée']);
-        
+
+            // Récupération de la cotation associée à la transaction
             $cotation = $transaction->cotation;
-        
-            // Récupérer toutes les souscriptions associées à la cotation
-            $souscriptions = Souscription::where('cotation_id', $cotation->id)->get();
-        
-            // Parcourir chaque souscription pour envoyer l'e-mail avec le PDF en pièce jointe
+
+            // Récupération de toutes les souscriptions associées à cette cotation
+            $souscriptions = $cotation->souscriptions;
+
+            // Mise à jour du statut de toutes les souscriptions en une seule requête
+            $souscriptions->each->update(['statut' => 'Payée']);
+
+            // Préparation des données pour l'e-mail et le PDF
             foreach ($souscriptions as $souscription) {
                 $data = [
                     'destination' => $cotation->destination,
@@ -137,19 +137,18 @@ class PaymentController extends Controller
                     'email_souscripteur' => $souscription->email_souscripteur,
                     'liste_voyageurs' => $souscription->liste_voyageurs,
                 ];
-        
+
                 // Génération du PDF en mémoire
                 $pdf = Pdf::loadView('billet', $data);
                 $pdfContent = $pdf->output();
-        
+
                 // Envoi de l'e-mail avec le PDF en pièce jointe
                 Mail::to($souscription->email_souscripteur)
                     ->send(new ConfirmationPaiementSouscriptionEnLigne($souscription, $cotation, $pdfContent));
             }
-        
+
             return response()->json(['message' => 'Callback processed successfully'], 200);
         }
-        
 
         return response()->json(['message' => 'Transaction not found'], 404);
     }
