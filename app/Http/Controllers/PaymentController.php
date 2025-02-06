@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\EnvoyerConfirmationPaiementSouscriptionEnLigne;
 use Carbon\Carbon;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -99,12 +100,18 @@ class PaymentController extends Controller
                 'paid_at' => now(),
                 'operator' => $request->input('paymentsystem'),
                 'transaction_id' => $request->input('transactionid'),
-
-                //Mettre a jour le statut de la souscription
-                $transaction->cotation->souscription->update([
-                    'statut' => 'Payée',
-                ])
             ]);
+
+            //Mettre a jour le statut de la souscription
+            $transaction->cotation->souscription->update([
+                'statut' => 'Payée',
+            ]);
+
+            $souscription = $transaction->cotation->souscription;
+            $cotation = $transaction->cotation;
+
+            // Envoyer la confirmation par email
+            EnvoyerConfirmationPaiementSouscriptionEnLigne::dispatch($souscription, $cotation);
 
             return response()->json(['message' => 'Callback processed successfully'], 200);
         }

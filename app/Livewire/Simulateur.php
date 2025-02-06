@@ -490,6 +490,8 @@ class Simulateur extends Component
                     'heure_rdv' => $this->heure_rdv,
                 ]);
 
+                
+
                 // Envoyer les confirmation par mail
                 EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
             }
