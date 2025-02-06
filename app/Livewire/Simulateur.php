@@ -466,7 +466,9 @@ class Simulateur extends Component
                 ]);
 
                 // Envoyer la confirmation par email
-                EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+                // EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+                Mail::to($souscription->email_souscripteur)
+                    ->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
 
             } else {
                 $souscription = Souscription::create([
@@ -490,10 +492,10 @@ class Simulateur extends Component
                     'heure_rdv' => $this->heure_rdv,
                 ]);
 
-                
-
                 // Envoyer les confirmation par mail
-                EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+                // EnvoyerConfirmationSouscription::dispatch($souscription, $cotation, $rdv);
+                Mail::to($souscription->email_souscripteur)
+                    ->send(new ConfirmationSouscription($souscription, $cotation, $rdv));
             }
 
 
