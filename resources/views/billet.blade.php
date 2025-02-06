@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devis Assurance Voyage</title>
+    <title>Assurance Voyage</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,31 +60,6 @@
             <p><strong>Adresse :</strong> {{ $adresse_souscripteur }}</p>
             <p><strong>Téléphone :</strong> {{ $phone_souscripteur }}</p>
             <p><strong>Email :</strong> {{ $email_souscripteur }}</p>
-        </div>
-
-        <div class="section">
-            <h2>Liste des Voyageurs</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nom et Prénom</th>
-                        <th>Date de Naissance</th>
-                        <th>Email</th>
-                        <th>Passeport</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($liste_voyageurs as $voyageur)
-                        <tr>
-                            <td>{{ $voyageur['nom_prenom_assure'] }}</td>
-                            <td>{{ \Carbon\Carbon::parse($voyageur['date_naissance_assure'])->locale('fr')->format('d/m/Y') }}
-                            </td>
-                            <td>{{ $voyageur['email_assure'] }}</td>
-                            <td>{{ $voyageur['passeport_assure'] }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
         </div>
     </div>
 </body>

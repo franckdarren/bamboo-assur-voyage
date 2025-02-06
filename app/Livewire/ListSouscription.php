@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Filament\Tables\Table;
 use App\Models\Souscription;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Actions\StaticAction;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Grid;
@@ -12,6 +13,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Mail;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Columns\TextColumn;
@@ -30,6 +32,7 @@ use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Tables\Concerns\InteractsWithTable;
+use App\Mail\ConfirmationPaiementSouscriptionEnLigne;
 
 class ListSouscription extends Component implements HasForms, HasTable
 {
@@ -166,6 +169,39 @@ class ListSouscription extends Component implements HasForms, HasTable
                         ->action(function (Souscription $record) {
                             $record->update(['statut' => 'Payée']);
 
+                            // Génération du PDF
+                            $data = [
+                                'destination' => $record->cotation->destination,
+                                'voyageurs' => $record->cotation->voyageurs,
+                                'depart' => $record->cotation->depart,
+                                'retour' => $record->cotation->retour,
+                                'nombre_jours' => $record->cotation->nombreJours,
+                                'montant' => $record->cotation->montant,
+                                'nom_prenom_assure' => $record['nom_prenom_assure'],
+                                'date_naissance_assure' => $record['date_naissance_assure'],
+                                'email_assure' => $record['email_assure'],
+                                'passeport_assure' => $record['passeport_assure'],
+                                'url_passeport_assure' => $record['url_passeport_assure'],
+                                'url_billet_voyage' => $record['url_billet_voyage'],
+                                'nom_prenom_souscripteur' => $record->nom_prenom_souscripteur,
+                                'adresse_souscripteur' => $record->adresse_souscripteur,
+                                'phone_souscripteur' => $record->phone_souscripteur,
+                                'email_souscripteur' => $record->email_souscripteur,
+                                'liste_voyageurs' => $record->liste_voyageurs,
+                            ];
+
+                            // Génération du PDF en mémoire
+                            $pdf = Pdf::loadView('billet', $data);
+                            $pdfContent = $pdf->output(); // Contenu du PDF en mémoire
+                
+
+                            // Transmission des données au job
+                            $cotation = $record->cotation;
+                            $souscription = $record;
+                            // Envoi de l'e-mail avec le PDF en pièce jointe
+                            Mail::to($souscription->email_souscripteur)
+                                ->send(new ConfirmationPaiementSouscriptionEnLigne($souscription, $cotation, $pdfContent));
+                                
                             Notification::make()
                                 ->title('Souscription mise à jour')
                                 ->body('La souscription a été marquée comme payée avec succès.')

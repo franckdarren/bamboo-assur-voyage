@@ -14,14 +14,17 @@ class ConfirmationPaiementSouscriptionEnLigne extends Mailable
     use Queueable, SerializesModels;
     public $souscription;
     public $cotation;
+    protected $pdfContent;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($souscription, $cotation)
+    public function __construct($souscription, $cotation, $pdfContent)
     {
         $this->souscription = $souscription;
         $this->cotation = $cotation;
+        $this->pdfContent = $pdfContent;
+
     }
 
     /**
@@ -30,7 +33,7 @@ class ConfirmationPaiementSouscriptionEnLigne extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirmation Paiement Souscription En Ligne',
+            subject: 'Confirmation Paiement Souscription',
         );
     }
 
@@ -51,6 +54,9 @@ class ConfirmationPaiementSouscriptionEnLigne extends Mailable
                 'souscription' => $this->souscription,
                 'cotation' => $this->cotation,
                 'montantParAssure' => $this->cotation->montant / $this->cotation->voyageurs
+            ])
+            ->attachData($this->pdfContent, 'document.pdf', [
+                'mime' => 'application/pdf',
             ]);
     }
 
